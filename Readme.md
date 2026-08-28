@@ -123,21 +123,14 @@ AI 能力工程总纲
 
 这篇文章面向生产级 Agent 的可观测性建设，讲清一次任务的 Goal、Plan、Step、Tool Call、Observation、Interpretation、Validation、Output、Cost 如何形成证据链。文章给出结构化事件、Trace、Replay、指标阈值、存储开销估算和埋点代码，帮助定位目标误解、工具错误、观察误读、验证缺失和成本失控等问题。
 
-### [原文链接](cn/原文链接.md)
 
-这个文档保存已发布文章的外部链接，便于从本地 Markdown 跳转到 CSDN 原文。它不承担正文内容，但适合作为发布记录和外部引用索引使用。
-
-### [后续行文](后续行文.md)
-
-这个文档记录后续选题路线和知识体系缺口，包含概念溯源、执行闭环、工程治理、安全协作等方向的规划。它更像系列的创作路线图，用来决定下一步补哪些主题，以及如何让已有文章形成更完整的知识网络。
 
 ## Repository Structure
 
 ```text
 .
 ├── Readme.md
-├── 后续行文.md
-└── cn/
+├── cn/
     ├── AI能力工程：从Skill、MCP到Agent.md
     ├── Agent的第一性原理：从概念到范式演进.md
     ├── Agent工程实践指南：从最小闭环到生产级系统.md
@@ -147,9 +140,6 @@ AI 能力工程总纲
     ├── Agent的任务拆解艺术：从目标到可执行子任务.md
     ├── Agent记忆系统设计：从上下文管理到长期经验复用.md
     ├── Agent可观测性实战：从日志、Trace到Replay.md
-    └── 原文链接.md
+    
 ```
 
-## Suggested Topics
-
-`ai-agent` `mcp` `model-context-protocol` `skill` `llm` `ai-engineering` `agent-engineering` `tool-calling` `observability` `replay`
