@@ -3144,6 +3144,8 @@ MCP Server 版本要和外部资产版本绑定，否则很容易出现“代码
 
 可观测性让你在出问题时知道“发生了什么、慢在哪里、影响谁”。MCP Server 至少需要结构化日志、指标和追踪三类信号。
 
+需要注意的是，本章讨论的是 MCP 工具层可观测性，重点回答“Tool 是否可发现、可调用、参数是否合法、Worker 是否稳定、返回是否符合契约”。如果要继续回答“Agent 为什么选择这个工具、工具结果是否支撑用户目标、结论是否经过验证、失败能否 Replay”，需要进入 Agent 层可观测性。可以对照《Agent 可观测性实战：从日志、Trace 到 Replay》阅读，两者通过 `trace_id`、`request_id`、`tool_name` 和 `raw_result_ref` 串起来。
+
 ## 17.1 结构化日志
 
 日志必须带 `request_id`、`tool_name`、`status`、`duration_ms`。不要只打印自然语言。
@@ -4134,6 +4136,7 @@ Worker 版本：MeshCheck 2.7.1
 | Safety | https://github.com/pyupio/safety |
 | LangChain Tools | https://python.langchain.com/docs/concepts/tools |
 | OpenTelemetry Python | https://opentelemetry.io/docs/languages/python |
+| Agent 可观测性实战 | ./Agent可观测性实战：从日志、Trace到Replay.md |
 | RFC 6570 URI Template | https://www.rfc-editor.org/rfc/rfc6570 |
 | AutoGen | https://microsoft.github.io/autogen |
 | Dify | https://docs.dify.ai |
