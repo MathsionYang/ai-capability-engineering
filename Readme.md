@@ -39,6 +39,7 @@ AI 能力工程总纲
        -> 任务拆解：把目标变成可执行子任务
        -> 记忆系统：让经验跨任务复用
        -> 可观测性：让执行过程可追踪、可回放、可治理
+            -> Tracing 专项：看清 Thought / Action / Observation 的现场决策链
        -> 自我纠错：让结果可校验、事实可核查、经验可沉淀
 ```
 
@@ -51,7 +52,7 @@ AI 能力工程总纲
 | 能力层 | 把工具、资源、协议、部署、安全和运维标准化 | 《MCP 的第一性原理》 |
 | Agent 基础层 | 讲清 Agent 的定义、边界、等级和核心闭环 | 《Agent 的第一性原理》《Agent 工程实践指南》 |
 | 执行增强层 | 讲清规划、拆解、记忆这些核心执行能力 | 《Agent 规划范式进化论》《Agent 的任务拆解艺术》《Agent 记忆系统设计》 |
-| 生产治理层 | 讲清日志、Trace、Replay、验证、纠错和成本治理 | 《Agent 可观测性实战》《Agent 自我纠错与验证机制设计》 |
+| 生产治理层 | 讲清日志、Trace、Replay、验证、纠错和成本治理 | 《Agent 可观测性实战》《Agent 的可观测性实战：用 Tracing 看清你的 Agent“大脑”》《Agent 自我纠错与验证机制设计》 |
 
 ## 推荐阅读顺序
 
@@ -94,6 +95,11 @@ AI 能力工程总纲
 如果要开发 MCP Server，可以重点读 1、4、6、10。  
 如果要做生产级 Agent，可以按 1 到 11 顺序完整阅读。
 
+## 专项实战补充
+
+- [《Agent 的可观测性实战：用 Tracing 看清你的 Agent“大脑”》](cn/Agent的可观测性实战：用Tracing看清你的Agent“大脑”.md)
+  作为《Agent 可观测性实战：从日志、Trace 到 Replay》的专项实战补充，聚焦 Thought / Action / Observation 链路埋点、`trace_id` 跨 Agent / MCP / Tool 贯穿、Langfuse / Phoenix 接入映射、DuckDB 轻量查询和失败 Trace 回流 Evals。
+
 ## 文档逐篇摘要
 
 ### [AI 能力工程：从 Skill、MCP 到 Agent](https://blog.csdn.net/sinat_28228747/article/details/164061172?spm=1001.2014.3001.5501)
@@ -112,7 +118,7 @@ AI 能力工程总纲
 
 这篇文章讲 Skill 如何把专家经验、工作流、工具使用方式和质量标准沉淀为可复用能力包。它覆盖 Skill 的触发条件、标准结构、资源组织、七步设计流程、多 Skill 协同、失败处理和验证闭环，是理解“怎么做”这一方法层的核心文章。
 
-### 从 Prompt 到 Skill：专家经验的标准化封装指南
+### [从 Prompt 到 Skill：专家经验的标准化封装指南](https://blog.csdn.net/sinat_28228747/article/details/164209755?spm=1011.2415.3001.5331)
 
 这篇文章是《Skill 设计方法论》的实战姊妹篇，重点回答一个更具体的问题：团队已有的高频 Prompt 如何升级为可复用 Skill。文章用财报分析案例贯穿，从任务识别、专家流程抽取、IPO-B 定义、Skill 包结构、`SKILL.md` 编写、测试样本到失败迭代，展示 Prompt 如何变成标准化工程资产。
 
