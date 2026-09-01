@@ -41,6 +41,7 @@ AI 能力工程总纲
        -> 可观测性：让执行过程可追踪、可回放、可治理
             -> Tracing 专项：看清 Thought / Action / Observation 的现场决策链
        -> 自我纠错：让结果可校验、事实可核查、经验可沉淀
+       -> 自动化评估：把测试集、指标、评分器和发布门禁标准化
 ```
 
 也可以按工程分层理解：
@@ -52,7 +53,7 @@ AI 能力工程总纲
 | 能力层 | 把工具、资源、协议、部署、安全和运维标准化 | 《MCP 的第一性原理》 |
 | Agent 基础层 | 讲清 Agent 的定义、边界、等级和核心闭环 | 《Agent 的第一性原理》《Agent 工程实践指南》 |
 | 执行增强层 | 讲清规划、拆解、记忆这些核心执行能力 | 《Agent 规划范式进化论》《Agent 的任务拆解艺术》《Agent 记忆系统设计》 |
-| 生产治理层 | 讲清日志、Trace、Replay、验证、纠错和成本治理 | 《Agent 可观测性实战》《Agent 的可观测性实战：用 Tracing 看清你的 Agent“大脑”》《Agent 自我纠错与验证机制设计》 |
+| 生产治理层 | 讲清日志、Trace、Replay、验证、纠错、评测和成本治理 | 《Agent 可观测性实战》《Agent 的可观测性实战：用 Tracing 看清你的 Agent“大脑”》《Agent 自我纠错与验证机制设计》《Agent 的自动化评估体系》 |
 
 ## 推荐阅读顺序
 
@@ -91,14 +92,20 @@ AI 能力工程总纲
 11. [《Agent 自我纠错与验证机制设计：从自信回答到可验证执行》](cn/Agent自我纠错与验证机制设计.md)  
    进一步理解 Validator、事实核查和 Reflection 如何让 Agent 从“看起来完成”走向“能够证明自己做对”。
 
+12. [《Agent 的自动化评估体系（Evals）：从单元测试到集成评测》](cn/Agent的自动化评估体系（Evals）：从单元测试到集成评测.md)
+   把测试集、评分器、Trace 回流、CI/CD 门禁和版本对比组织成可持续运行的 Agent 评测体系。
+
 如果只想快速建立认知，可以读 1、2、3。  
 如果要开发 MCP Server，可以重点读 1、4、6、10。  
-如果要做生产级 Agent，可以按 1 到 11 顺序完整阅读。
+如果要做生产级 Agent，可以按 1 到 12 顺序完整阅读。
 
 ## 专项实战补充
 
 - [《Agent 的可观测性实战：用 Tracing 看清你的 Agent“大脑”》](cn/Agent的可观测性实战：用Tracing看清你的Agent“大脑”.md)
   作为《Agent 可观测性实战：从日志、Trace 到 Replay》的专项实战补充，聚焦 Thought / Action / Observation 链路埋点、`trace_id` 跨 Agent / MCP / Tool 贯穿、Langfuse / Phoenix 接入映射、DuckDB 轻量查询和失败 Trace 回流 Evals。
+
+- [《Agent 的自动化评估体系（Evals）：从单元测试到集成评测》](cn/Agent的自动化评估体系（Evals）：从单元测试到集成评测.md)
+  作为生产治理层的 Evals 专项实战补充，聚焦 Eval Case、评分器、Runner、CI/CD 门禁、历史 Trace 回归和测试集版本管理。
 
 ## 文档逐篇摘要
 
@@ -146,7 +153,13 @@ AI 能力工程总纲
 
 这篇文章讨论如何让 Agent 具备工程化的“自我怀疑”能力。文章从业务分析场景切入，讲解 Validator 步骤校验、事实核查证据绑定、Reflection 经验沉淀，以及失败后的重试、重规划、降级和人工确认机制，帮助 Agent 从流畅回答走向可验证执行。
 
+### [Agent 的可观测性实战：用 Tracing 看清你的 Agent“大脑”](https://blog.csdn.net/sinat_28228747/article/details/164260799?spm=1001.2014.3001.5501)
 
+这篇文章是可观测性方向的专项实战补充，重点把 Thought / Action / Observation 拆成可查询、可复盘、可回流评测的 Trace 数据。文章围绕代码修复 Agent 的排障场景展开，讲清 Trace / Span / Event 建模、跨 Agent / MCP / Tool 的 `trace_id` 贯穿、轻量存储查询、可视化接入和失败 Trace 回流 Evals。
+
+### [Agent 的自动化评估体系（Evals）：从单元测试到集成评测](https://blog.csdn.net/sinat_28228747/article/details/164260648?spm=1001.2014.3001.5501)
+
+这篇文章系统讲解如何像评估软件系统一样评估 Agent。它从退款 Agent 的失败场景切入，覆盖 Eval Case 测试集、结果 / 过程 / 效率 / 安全 / 稳定性指标、规则评分器、LLM Judge、最小 Eval Runner、CI/CD 门禁、测试集版本管理和线上 Trace 回归闭环。
 
 ## Repository Structure
 
@@ -164,6 +177,8 @@ AI 能力工程总纲
     ├── Agent的任务拆解艺术：从目标到可执行子任务.md
     ├── Agent记忆系统设计：从上下文管理到长期经验复用.md
     ├── Agent可观测性实战：从日志、Trace到Replay.md
+    ├── Agent的可观测性实战：用Tracing看清你的Agent“大脑”.md
     ├── Agent自我纠错与验证机制设计.md
+    ├── Agent的自动化评估体系（Evals）：从单元测试到集成评测.md
     
 ```
