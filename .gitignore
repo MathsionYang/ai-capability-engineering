@@ -1,2 +1,14 @@
+# MkDocs 构建产物（部署时由 GitHub Actions 自动重建）
+site/
+
+# 预览缓存
+.preview/
+
+# Python
+__pycache__/
+*.pyc
+
+# 本地草稿（如需同步到仓库请自行取舍）
 Agent规划范式演进 (3).png
 后续行文.md
+原文链接.md

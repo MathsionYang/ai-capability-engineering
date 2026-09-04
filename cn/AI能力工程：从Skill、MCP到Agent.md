@@ -1007,7 +1007,7 @@ Host
 
 也可以画成更接近工程实现的图：
 
-![图 6-1 MCP Host / Client / Server 架构](assets/figures/fig-06-01-mcp-host-client-server.png)
+![图 6-1 MCP Host / Client / Server 架构](assets/figures/fig-06-01-mcp-host-client-server.svg)
 
 ## 6.4 Tools、Resources、Prompts 三种能力
 
@@ -1132,7 +1132,7 @@ Server 执行后再按相反方向返回结果
 
 四层关系可以用一张分层图表示：
 
-![图 6-2 MCP 四层调用结构](assets/figures/fig-06-02-mcp-four-layer.png)
+![图 6-2 MCP 四层调用结构](assets/figures/fig-06-02-mcp-four-layer.svg)
 
 这套分层在排障时很有用：
 
@@ -1580,7 +1580,7 @@ MCP Server 不应把所有业务复杂度都塞进协议入口。推荐拆成：
 | 错误处理 | 结构化错误码、是否可重试 | 具体异常原因和恢复动作 |
 | 结果交接 | `structuredContent`、Artifact、分页 | 原始结果生成和持久化 |
 
-![图 10-1 MCP 层与 Worker 层边界](assets/figures/fig-10-01-mcp-worker-boundary.png)
+![图 10-1 MCP 层与 Worker 层边界](assets/figures/fig-10-01-mcp-worker-boundary.svg)
 
 反模式是把 MCP Tool 写成一个巨大函数：既解析协议，又查数据库，又跑模型，还拼最终报告。这样短期能跑，长期会让测试、复用、权限和性能优化都变困难。更稳的结构是 MCP 层薄、业务层清楚、Worker 可替换。
 
@@ -2197,7 +2197,7 @@ Agent 不是“会调用工具的大模型”，而是在目标约束下规划�
 
 MCP 与 Agent 的衔接点就在这里：MCP 提供工具契约，Agent 根据目标和 Skill 流程选择工具。没有 MCP 这类契约层，Agent 只能依赖自然语言说明调用外部能力，稳定性会明显下降。
 
-![图 13-1 Agent 最小闭环](assets/figures/fig-13-01-agent-minimal-loop.png)
+![图 13-1 Agent 最小闭环](assets/figures/fig-13-01-agent-minimal-loop.svg)
 
 ## 13.5 执行
 
@@ -2593,7 +2593,7 @@ L1 工具增强助手
 
 演进路线可以理解为能力、风险和治理要求一起上升：
 
-![图 15-1 Agent L1 到 L4 演进路线](assets/figures/fig-15-01-agent-l1-l4.png)
+![图 15-1 Agent L1 到 L4 演进路线](assets/figures/fig-15-01-agent-l1-l4.svg)
 
 每一级都应先稳定再扩展。
 
@@ -2729,7 +2729,7 @@ Skill 应规定验证方法，Agent 按照这些方法确认结果可靠。
 
 完整调用链可以画成三层协作：
 
-![图 16-1 Skill / MCP / Agent 完整调用链](assets/figures/fig-16-01-skill-mcp-agent-chain.png)
+![图 16-1 Skill / MCP / Agent 完整调用链](assets/figures/fig-16-01-skill-mcp-agent-chain.svg)
 
 ## 本章小结
 

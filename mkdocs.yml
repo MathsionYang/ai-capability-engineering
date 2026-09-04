@@ -1,0 +1,111 @@
+# AI 能力工程：从 Skill、MCP 到 Agent
+# 基于 MkDocs + Material for MkDocs 构建
+
+site_name: AI 能力工程：从 Skill、MCP 到 Agent
+site_description: 构建可复用、可调用、可验证的 AI 执行系统 —— Skill · MCP · Agent 三层知识链路
+site_author: ai-capability-engineering
+docs_dir: cn
+use_directory_urls: true
+
+# 部署到 GitHub Pages 后，将下面的注释取消并填上真实地址：
+# site_url: https://<your-github-username>.github.io/<your-repo>/
+
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.indexes
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+  palette:
+    - scheme: default
+      primary: blue
+      accent: cyan
+      toggle:
+        icon: material/weather-sunny
+        name: 切换到深色模式
+    - scheme: slate
+      primary: blue
+      accent: cyan
+      toggle:
+        icon: material/weather-night
+        name: 切换到浅色模式
+  icon:
+    logo: material/robot-industrial
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      use_pygments: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.arithmatex:
+      generic: true
+
+plugins:
+  - search:
+      lang:
+        - zh
+        - en
+
+extra_javascript:
+  - https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js
+
+extra_css:
+  - assets/custom.css
+
+nav:
+  - 首页: index.md
+  - 总纲:
+      - AI 能力工程：从 Skill、MCP 到 Agent: 'AI能力工程：从Skill、MCP到Agent.md'
+  - Skill 方法层:
+      - Skill 设计方法论：从专家经验到可复用能力: 'Skill设计方法论：从专家经验到可复用能力.md'
+      - 从 Prompt 到 Skill：专家经验的标准化封装: '从Prompt到Skill：专家经验的标准化封装指南.md'
+  - MCP 能力层:
+      - MCP 的第一性原理：从工具调用到能力协议: 'MCP的第一性原理：从工具调用到能力协议.md'
+  - 模型效率:
+      - 模型量化与蒸馏：原理、取舍与可跑实例: '模型量化与蒸馏：原理、取舍与可跑实例.md'
+  - Agent 基础:
+      - Agent 的第一性原理：从概念到范式演进: 'Agent的第一性原理：从概念到范式演进.md'
+      - Agent 工程实践指南：从最小闭环到生产级系统: 'Agent工程实践指南：从最小闭环到生产级系统.md'
+  - 执行能力:
+      - Agent 规划范式进化论：从 CoT 到 Plan-and-Execute: 'Agent规划范式进化论：从CoT到Plan-and-Execute.md'
+      - Agent 的任务拆解艺术：从目标到可执行子任务: 'Agent的任务拆解艺术：从目标到可执行子任务.md'
+      - Agent 记忆系统设计：从上下文管理到长期经验复用: 'Agent记忆系统设计：从上下文管理到长期经验复用.md'
+  - 协作编排:
+      - 多 Agent 协作模式深度解析：层级、流水线与群组: '多Agent协作模式深度解析：层级、流水线与群组.md'
+  - 安全治理:
+      - Agent 安全护栏设计：权限控制、对抗鲁棒性与人工确认环: 'Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环.md'
+  - 生产治理:
+      - Agent 可观测性实战：从日志、Trace 到 Replay: 'Agent可观测性实战：从日志、Trace到Replay.md'
+      - Tracing 专项：看清 Agent 的“大脑”: 'Agent的可观测性实战：用Tracing看清你的Agent“大脑”.md'
+      - Agent 状态管理与断点续传：Checkpointer 机制: 'Agent状态管理与断点续传：Checkpointer机制深度解析.md'
+      - Agent 自我纠错与验证机制设计: 'Agent自我纠错与验证机制设计.md'
+      - Agent 自动化评估体系（Evals）: 'Agent的自动化评估体系（Evals）：从单元测试到集成评测.md'
