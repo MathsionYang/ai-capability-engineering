@@ -1,0 +1,2547 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="构建可复用、可调用、可验证的 AI 执行系统 —— Skill · MCP · Agent 三层知识链路">
+      
+      
+        <meta name="author" content="ai-capability-engineering">
+      
+      
+      
+        <link rel="prev" href="../Agent%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E4%BB%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%88%B0%E9%95%BF%E6%9C%9F%E7%BB%8F%E9%AA%8C%E5%A4%8D%E7%94%A8/">
+      
+      
+        <link rel="next" href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>多 Agent 协作模式深度解析：层级、流水线与群组 - AI 能力工程：从 Skill、MCP 到 Agent</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agent" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="AI 能力工程：从 Skill、MCP 到 Agent" class="md-header__button md-logo" aria-label="AI 能力工程：从 Skill、MCP 到 Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.41 4 16 6.41v.18L18.41 9H22v2h-4.41L16 9.41V12h-1a2 2 0 0 1-2-2V7.5H9.86c-.09.37-.24.72-.44 1.05L15.18 19H20a2 2 0 0 1 2 2v1H2v-1a2 2 0 0 1 2-2h6.61l-4.69-8.5a4.006 4.006 0 0 1-3.81-3A4 4 0 0 1 5 2.63c2.13-.55 4.31.73 4.86 2.87H13V3a2 2 0 0 1 2-2h1v2.59L17.59 2H22v2zM6 4.5a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AI 能力工程：从 Skill、MCP 到 Agent
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              多 Agent 协作模式深度解析：层级、流水线与群组
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%EF%BC%9A%E4%BB%8ESkill%E3%80%81MCP%E5%88%B0Agent/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  总纲
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Skill%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%9A%E4%BB%8E%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E5%88%B0%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Skill 方法层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../MCP%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%88%B0%E8%83%BD%E5%8A%9B%E5%8D%8F%E8%AE%AE/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  MCP 能力层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%8E%E8%92%B8%E9%A6%8F%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%8F%96%E8%88%8D%E4%B8%8E%E5%8F%AF%E8%B7%91%E5%AE%9E%E4%BE%8B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  模型效率
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E6%A6%82%E5%BF%B5%E5%88%B0%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Agent 基础
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E8%A7%84%E5%88%92%E8%8C%83%E5%BC%8F%E8%BF%9B%E5%8C%96%E8%AE%BA%EF%BC%9A%E4%BB%8ECoT%E5%88%B0Plan-and-Execute/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  执行能力
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+    
+  
+  协作编排
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  安全治理
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E4%BB%8E%E6%97%A5%E5%BF%97%E3%80%81Trace%E5%88%B0Replay/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  生产治理
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="AI 能力工程：从 Skill、MCP 到 Agent" class="md-nav__button md-logo" aria-label="AI 能力工程：从 Skill、MCP 到 Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.41 4 16 6.41v.18L18.41 9H22v2h-4.41L16 9.41V12h-1a2 2 0 0 1-2-2V7.5H9.86c-.09.37-.24.72-.44 1.05L15.18 19H20a2 2 0 0 1 2 2v1H2v-1a2 2 0 0 1 2-2h6.61l-4.69-8.5a4.006 4.006 0 0 1-3.81-3A4 4 0 0 1 5 2.63c2.13-.55 4.31.73 4.86 2.87H13V3a2 2 0 0 1 2-2h1v2.59L17.59 2H22v2zM6 4.5a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg>
+
+    </a>
+    AI 能力工程：从 Skill、MCP 到 Agent
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    总纲
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    总纲
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%EF%BC%9A%E4%BB%8ESkill%E3%80%81MCP%E5%88%B0Agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 能力工程：从 Skill、MCP 到 Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill 方法层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Skill 方法层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Skill%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%9A%E4%BB%8E%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E5%88%B0%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill 设计方法论：从专家经验到可复用能力
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E4%BB%8EPrompt%E5%88%B0Skill%EF%BC%9A%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96%E5%B0%81%E8%A3%85%E6%8C%87%E5%8D%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从 Prompt 到 Skill：专家经验的标准化封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP 能力层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MCP 能力层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MCP%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%88%B0%E8%83%BD%E5%8A%9B%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP 的第一性原理：从工具调用到能力协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模型效率
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模型效率
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%8E%E8%92%B8%E9%A6%8F%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%8F%96%E8%88%8D%E4%B8%8E%E5%8F%AF%E8%B7%91%E5%AE%9E%E4%BE%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模型量化与蒸馏：原理、取舍与可跑实例
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 基础
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Agent 基础
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E6%A6%82%E5%BF%B5%E5%88%B0%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的第一性原理：从概念到范式演进
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E6%9C%80%E5%B0%8F%E9%97%AD%E7%8E%AF%E5%88%B0%E7%94%9F%E4%BA%A7%E7%BA%A7%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 工程实践指南：从最小闭环到生产级系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    执行能力
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    执行能力
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%A7%84%E5%88%92%E8%8C%83%E5%BC%8F%E8%BF%9B%E5%8C%96%E8%AE%BA%EF%BC%9A%E4%BB%8ECoT%E5%88%B0Plan-and-Execute/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 规划范式进化论：从 CoT 到 Plan-and-Execute
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E4%BB%BB%E5%8A%A1%E6%8B%86%E8%A7%A3%E8%89%BA%E6%9C%AF%EF%BC%9A%E4%BB%8E%E7%9B%AE%E6%A0%87%E5%88%B0%E5%8F%AF%E6%89%A7%E8%A1%8C%E5%AD%90%E4%BB%BB%E5%8A%A1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的任务拆解艺术：从目标到可执行子任务
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E4%BB%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%88%B0%E9%95%BF%E6%9C%9F%E7%BB%8F%E9%AA%8C%E5%A4%8D%E7%94%A8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 记忆系统设计：从上下文管理到长期经验复用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    协作编排
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    协作编排
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多 Agent 协作模式深度解析：层级、流水线与群组
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多 Agent 协作模式深度解析：层级、流水线与群组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#agent_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、先看一个真实问题：为什么单 Agent 做着做着就散了
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、层级协作：一个人拍板，其他人执行
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、层级协作：一个人拍板，其他人执行">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 适合什么任务
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 典型流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 这种模式的坑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 设计要点
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、流水线协作：上一环产物，下一环只消费这个产物
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、流水线协作：上一环产物，下一环只消费这个产物">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 适合什么任务
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 为什么流水线比“自由协作”稳
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 这种模式的坑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 设计要点
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、群组辩论：让多个角色对同一个结论互相打架
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、群组辩论：让多个角色对同一个结论互相打架">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 适合什么任务
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 这个模式为什么有用
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 这种模式的坑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 设计要点
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、怎么选：三种模式不是替代关系，而是主结构不同
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、怎么选：三种模式不是替代关系，而是主结构不同">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 一个更实用的判断法
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、把三种模式混着用，才更像生产系统
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、一个完整实例：新功能上线前，怎么把三种模式串起来
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、一个完整实例：新功能上线前，怎么把三种模式串起来">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 先用层级协作定问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 再用流水线把事实跑干净
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 再把争议点丢给辩论组
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 最后由主管做裁决
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、工程上最容易忽略的三件事
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="八、工程上最容易忽略的三件事">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 交接协议
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 状态边界
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 验证入口
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、结尾：多 Agent 的重点，不是角色数量，而是协作形状
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    安全治理
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    安全治理
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 安全护栏设计：权限控制、对抗鲁棒性与人工确认环
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    生产治理
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    生产治理
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E4%BB%8E%E6%97%A5%E5%BF%97%E3%80%81Trace%E5%88%B0Replay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 可观测性实战：从日志、Trace 到 Replay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E7%94%A8Tracing%E7%9C%8B%E6%B8%85%E4%BD%A0%E7%9A%84Agent%E2%80%9C%E5%A4%A7%E8%84%91%E2%80%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tracing 专项：看清 Agent 的“大脑”
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E4%B8%8E%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%EF%BC%9ACheckpointer%E6%9C%BA%E5%88%B6%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 状态管理与断点续传：Checkpointer 机制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%87%AA%E6%88%91%E7%BA%A0%E9%94%99%E4%B8%8E%E9%AA%8C%E8%AF%81%E6%9C%BA%E5%88%B6%E8%AE%BE%E8%AE%A1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 自我纠错与验证机制设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E8%AF%84%E4%BC%B0%E4%BD%93%E7%B3%BB%EF%BC%88Evals%EF%BC%89%EF%BC%9A%E4%BB%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%88%B0%E9%9B%86%E6%88%90%E8%AF%84%E6%B5%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 自动化评估体系（Evals）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="agent">多Agent协作模式深度解析：层级、流水线与群组<a class="headerlink" href="#agent" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>多 Agent 不是“把几个模型拉进群聊”。
+真正有用的，是把复杂任务拆成不同协作结构，让每个角色只做自己最擅长的那一段。</p>
+</blockquote>
+<hr />
+<h2 id="agent_1">一、先看一个真实问题：为什么单 Agent 做着做着就散了<a class="headerlink" href="#agent_1" title="Permanent link">&para;</a></h2>
+<p>有些任务，单个 Agent 一开始看起来完全能做。</p>
+<p>比如用户说：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>帮我做一份竞品分析，顺手把结论整理成汇报稿，最后给出下一步动作建议。
+</code></pre></div>
+<p>单 Agent 也许能查资料、写总结、输出建议，但一旦任务变长，问题就会开始出现：</p>
+<ul>
+<li>前半段搜集的信息，后半段已经忘了</li>
+<li>中间结论没有人复核，最后写得很顺</li>
+<li>一边查资料一边下结论，证据和推断混在一起</li>
+<li>任务越复杂，越容易在“继续做”还是“先确认”之间摇摆</li>
+</ul>
+<p>这时候，多 Agent 的价值就出来了。</p>
+<p>它不是为了“更高级”，而是为了把复杂任务拆成更稳定的协作结构：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>一个人统筹
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>一个人串行处理
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>几个人互相校验
+</code></pre></div>
+<p>这篇文章只讲三种最常见、也最容易落地的模式：</p>
+<ol>
+<li>主管-员工式层级协作</li>
+<li>数据流水线式协作</li>
+<li>多角色辩论式协作</li>
+</ol>
+<p>它们不是互斥的，很多生产系统会混着用。关键是先选对主结构，再谈优化。</p>
+<p>和前面几篇文章的边界也要先说清楚：</p>
+<ul>
+<li><code>Agent的任务拆解艺术</code> 讲的是“怎么拆”</li>
+<li><code>Agent规划范式进化论</code> 讲的是“怎么排”</li>
+<li>这篇讲的是“拆完以后，谁负责什么，怎么交接，怎么收敛”</li>
+</ul>
+<hr />
+<h2 id="_1">二、层级协作：一个人拍板，其他人执行<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h3 id="21">2.1 适合什么任务<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
+<p>层级协作最像真实团队。</p>
+<p>有一个主管 Agent 负责拆任务、排优先级、做最终决策；下面几个执行 Agent 各做各的事，比如查资料、写草稿、补证据、做检查。</p>
+<p>这种模式最适合：</p>
+<ul>
+<li>任务目标明确，但路径不固定</li>
+<li>中间会出现多次重规划</li>
+<li>不同子任务之间有依赖关系</li>
+<li>最后需要一个统一出口</li>
+</ul>
+<p>典型场景包括：</p>
+<ul>
+<li>市场分析</li>
+<li>方案设计</li>
+<li>代码修复</li>
+<li>复杂报告撰写</li>
+</ul>
+<h3 id="22">2.2 典型流程<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>用户目标
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  -&gt; 主管 Agent 解析目标
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  -&gt; 拆成子任务
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  -&gt; 分派给执行 Agent
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  -&gt; 汇总中间结果
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  -&gt; 发现冲突就重排
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  -&gt; 最终输出
+</code></pre></div>
+<p>比如“竞品分析”可以拆成：</p>
+<ol>
+<li>执行 Agent A：收集竞品基础信息</li>
+<li>执行 Agent B：整理产品差异点</li>
+<li>执行 Agent C：提炼结论风险</li>
+<li>主管 Agent：合并、取舍、定稿</li>
+</ol>
+<p>这里最重要的不是“多”，而是“有主次”。</p>
+<p>主管 Agent 负责三件事：</p>
+<ul>
+<li>任务切分</li>
+<li>冲突裁决</li>
+<li>最终交付</li>
+</ul>
+<p>执行 Agent 只负责一件事：</p>
+<ul>
+<li>把某个子任务做深做实</li>
+</ul>
+<h3 id="23">2.3 这种模式的坑<a class="headerlink" href="#23" title="Permanent link">&para;</a></h3>
+<p>层级协作最大的问题，不是分工不清，而是主管什么都想管。</p>
+<p>常见失败方式有三种：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">问题</th>
+<th style="text-align: left;">表现</th>
+<th style="text-align: left;">结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">过度调度</td>
+<td style="text-align: left;">每一步都要主管确认</td>
+<td style="text-align: left;">成本高，速度慢</td>
+</tr>
+<tr>
+<td style="text-align: left;">过度放权</td>
+<td style="text-align: left;">执行 Agent 自己改目标</td>
+<td style="text-align: left;">输出开始跑偏</td>
+</tr>
+<tr>
+<td style="text-align: left;">汇总失真</td>
+<td style="text-align: left;">主管只看摘要，不看证据</td>
+<td style="text-align: left;">最终结论看着完整，其实不稳</td>
+</tr>
+</tbody>
+</table>
+<p>所以层级协作要守住一个原则：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>主管负责决策，执行负责事实。
+</code></pre></div>
+<h3 id="24">2.4 设计要点<a class="headerlink" href="#24" title="Permanent link">&para;</a></h3>
+<p>这类系统里，交接协议比模型本身更重要。</p>
+<p>至少要定义这些字段：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">"task_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cmp_20260904_001"</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"researcher"</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">"input_goal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"分析竞品差异"</span><span class="p">,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">"expected_output"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"source_list"</span><span class="p">,</span><span class="w"> </span><span class="s2">"key_findings"</span><span class="p">,</span><span class="w"> </span><span class="s2">"open_questions"</span><span class="p">],</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nt">"evidence_required"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="nt">"handoff_to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"manager"</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="p">}</span>
+</code></pre></div>
+<p>如果没有结构化交接，层级协作很容易退化成：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>一个 Agent 说完，另一个 Agent 接着猜。
+</code></pre></div>
+<p>那就不是协作，是接力式幻觉。</p>
+<hr />
+<h2 id="_2">三、流水线协作：上一环产物，下一环只消费这个产物<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h3 id="31">3.1 适合什么任务<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
+<p>流水线协作更像工厂。</p>
+<p>每个 Agent 只负责一段固定工序，前一段输出什么，后一段就吃什么。它的核心不是“讨论”，而是“稳定传递”。</p>
+<p>最适合这类任务：</p>
+<ul>
+<li>输入固定</li>
+<li>中间步骤清晰</li>
+<li>每一步都能检查</li>
+<li>对顺序要求强</li>
+</ul>
+<p>比如：</p>
+<ul>
+<li>数据清洗 -&gt; 特征提取 -&gt; 分析 -&gt; 报告生成</li>
+<li>长文摘要 -&gt; 结构化提纲 -&gt; 初稿 -&gt; 校对</li>
+<li>工单分类 -&gt; 根因判断 -&gt; 解决方案 -&gt; 回写</li>
+</ul>
+<h3 id="32">3.2 为什么流水线比“自由协作”稳<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
+<p>因为它把不确定性关在每一段里。</p>
+<p>自由协作最怕的不是慢，而是边做边改目标。流水线则相反，它强迫每一步只做一件事。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Stage 1: 只负责提取
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Stage 2: 只负责转换
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Stage 3: 只负责判断
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>Stage 4: 只负责输出
+</code></pre></div>
+<p>这样做的好处很现实：</p>
+<ul>
+<li>容易测试</li>
+<li>容易重放</li>
+<li>容易定位问题</li>
+<li>容易替换某一环</li>
+</ul>
+<h3 id="33">3.3 这种模式的坑<a class="headerlink" href="#33" title="Permanent link">&para;</a></h3>
+<p>流水线也不是万能药。</p>
+<p>它最大的问题是“早期错误会层层放大”。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">问题</th>
+<th style="text-align: left;">表现</th>
+<th style="text-align: left;">典型后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">上游脏数据</td>
+<td style="text-align: left;">第一环抽错</td>
+<td style="text-align: left;">后面每一环都在错的基础上继续</td>
+</tr>
+<tr>
+<td style="text-align: left;">过细切分</td>
+<td style="text-align: left;">每一步都太窄</td>
+<td style="text-align: left;">语义在中间丢失</td>
+</tr>
+<tr>
+<td style="text-align: left;">过长链路</td>
+<td style="text-align: left;">步骤很多</td>
+<td style="text-align: left;">延迟和成本一起涨</td>
+</tr>
+<tr>
+<td style="text-align: left;">中间格式不稳</td>
+<td style="text-align: left;">字段经常变</td>
+<td style="text-align: left;">下游总是适配失败</td>
+</tr>
+</tbody>
+</table>
+<p>所以流水线最怕两件事：</p>
+<ol>
+<li>每一环都不愿意承担清晰责任</li>
+<li>中间数据没有稳定 schema</li>
+</ol>
+<h3 id="34">3.4 设计要点<a class="headerlink" href="#34" title="Permanent link">&para;</a></h3>
+<p>流水线要优先设计“中间产物”，不是先设计角色名。</p>
+<p>比如一条文档生产流水线，可以定义成：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>输入 -&gt; 证据提取 -&gt; 观点归纳 -&gt; 结构生成 -&gt; 草稿写作 -&gt; 事实检查 -&gt; 最终发布
+</code></pre></div>
+<p>这里每一步都应该有明确产物：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">产物</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">证据提取</td>
+<td style="text-align: left;">引用列表</td>
+</tr>
+<tr>
+<td style="text-align: left;">观点归纳</td>
+<td style="text-align: left;">结论卡片</td>
+</tr>
+<tr>
+<td style="text-align: left;">结构生成</td>
+<td style="text-align: left;">章节树</td>
+</tr>
+<tr>
+<td style="text-align: left;">草稿写作</td>
+<td style="text-align: left;">文本草稿</td>
+</tr>
+<tr>
+<td style="text-align: left;">事实检查</td>
+<td style="text-align: left;">风险清单</td>
+</tr>
+</tbody>
+</table>
+<p>如果产物不清楚，流水线就会变成“多人轮流加工同一段话”。</p>
+<hr />
+<h2 id="_3">四、群组辩论：让多个角色对同一个结论互相打架<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h3 id="41">4.1 适合什么任务<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
+<p>辩论式协作最适合“答案不唯一，但风险很高”的问题。</p>
+<p>它不是为了热闹，而是为了逼出不同视角。</p>
+<p>典型场景：</p>
+<ul>
+<li>方案选型</li>
+<li>风险评审</li>
+<li>证据冲突</li>
+<li>结论不确定但又必须给建议</li>
+</ul>
+<p>常见角色可以是：</p>
+<ul>
+<li>研究员：负责找证据</li>
+<li>怀疑者：专门挑漏洞</li>
+<li>审稿人：负责看表达和边界</li>
+<li>裁决者：负责最终拍板</li>
+</ul>
+<h3 id="42">4.2 这个模式为什么有用<a class="headerlink" href="#42" title="Permanent link">&para;</a></h3>
+<p>因为很多 Agent 的最大问题不是不会说，而是太容易“顺着自己刚才的想法说下去”。</p>
+<p>辩论模式的作用，是把隐含前提拎出来。</p>
+<p>比如一个结论是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>这个方案成本更低，所以应该优先采用。
+</code></pre></div>
+<p>辩论角色会追问：</p>
+<ul>
+<li>成本低是一次性成本，还是长期成本？</li>
+<li>有没有把维护成本算进去？</li>
+<li>失败后的回滚代价是多少？</li>
+<li>这个判断有没有被最新数据推翻？</li>
+</ul>
+<p>这类追问，单 Agent 也能做，但很容易自己放过自己。</p>
+<h3 id="43">4.3 这种模式的坑<a class="headerlink" href="#43" title="Permanent link">&para;</a></h3>
+<p>辩论式协作最怕两种退化：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">问题</th>
+<th style="text-align: left;">表现</th>
+<th style="text-align: left;">结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">变成闲聊</td>
+<td style="text-align: left;">每个角色都在补充观点</td>
+<td style="text-align: left;">没有收敛</td>
+</tr>
+<tr>
+<td style="text-align: left;">变成表演</td>
+<td style="text-align: left;">角色互相附和</td>
+<td style="text-align: left;">看起来热闹，实则没有校验</td>
+</tr>
+</tbody>
+</table>
+<p>真正有效的辩论，必须有明确的裁决标准：</p>
+<ul>
+<li>证据权重</li>
+<li>来源可信度</li>
+<li>反例覆盖率</li>
+<li>风险优先级</li>
+<li>是否需要人工确认</li>
+</ul>
+<p>没有裁决标准，辩论只会把噪音放大。</p>
+<h3 id="44">4.4 设计要点<a class="headerlink" href="#44" title="Permanent link">&para;</a></h3>
+<p>辩论模式最关键的是“问题定义”。</p>
+<p>不要让几个角色泛泛而谈，要让它们围绕同一组材料输出不同判断。</p>
+<p>可以这样约束：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">"topic"</span><span class="p">:</span><span class="w"> </span><span class="s2">"是否采用方案A"</span><span class="p">,</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">"evidence_pack"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"doc_1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"metric_3"</span><span class="p">,</span><span class="w"> </span><span class="s2">"log_7"</span><span class="p">],</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">"roles"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"proposer"</span><span class="p">,</span><span class="w"> </span><span class="s2">"skeptic"</span><span class="p">,</span><span class="w"> </span><span class="s2">"reviewer"</span><span class="p">,</span><span class="w"> </span><span class="s2">"judge"</span><span class="p">],</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">"decision_rule"</span><span class="p">:</span><span class="w"> </span><span class="s2">"judge must cite at least 2 evidence sources"</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="p">}</span>
+</code></pre></div>
+<p>如果没有共享证据包，辩论就会变成各说各话。</p>
+<hr />
+<h2 id="_4">五、怎么选：三种模式不是替代关系，而是主结构不同<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>很多团队一上来就问：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>到底该用层级、流水线，还是群组？
+</code></pre></div>
+<p>更好的问法是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>这件事最难的部分，究竟是组织、传递，还是判断？
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">任务特征</th>
+<th style="text-align: left;">更适合的模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">需要统一调度、动态拆解</td>
+<td style="text-align: left;">层级协作</td>
+</tr>
+<tr>
+<td style="text-align: left;">步骤稳定、输入输出清晰</td>
+<td style="text-align: left;">流水线协作</td>
+</tr>
+<tr>
+<td style="text-align: left;">结论有争议、需要交叉验证</td>
+<td style="text-align: left;">群组辩论</td>
+</tr>
+</tbody>
+</table>
+<p>再简单一点：</p>
+<ul>
+<li>组织问题，用层级</li>
+<li>传递问题，用流水线</li>
+<li>判断问题，用辩论</li>
+</ul>
+<h3 id="51">5.1 一个更实用的判断法<a class="headerlink" href="#51" title="Permanent link">&para;</a></h3>
+<p>如果你发现任务里有这三类信号，基本就该考虑多 Agent：</p>
+<ol>
+<li>子任务之间依赖复杂</li>
+<li>单个角色很难同时兼顾事实、推理和校验</li>
+<li>中间结果需要不同视角复核</li>
+</ol>
+<p>反过来，如果任务只是简单查询、固定格式生成、一次性总结，单 Agent 往往更省。</p>
+<hr />
+<h2 id="_5">六、把三种模式混着用，才更像生产系统<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>真正落地时，最常见的其实是组合拳。</p>
+<p>一个比较稳的结构是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>主管 Agent
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>  -&gt; 任务拆分
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>  -&gt; 派发给流水线
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>      -&gt; 事实提取
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>      -&gt; 结构整理
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>      -&gt; 初稿生成
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>  -&gt; 关键结论进入辩论组复核
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>  -&gt; 主管做最终裁决
+</code></pre></div>
+<p>这比“纯多 Agent 群聊”强很多，因为每一层都解决自己的问题：</p>
+<ul>
+<li>主管解决整体方向</li>
+<li>流水线解决稳定产出</li>
+<li>辩论解决关键争议</li>
+</ul>
+<p>这也更接近真实团队。</p>
+<p>不是所有人都要一起开会。</p>
+<p>有些人负责跑腿，有些人负责加工，有些人负责挑错，最后只需要一个人拍板。</p>
+<hr />
+<h2 id="_6">七、一个完整实例：新功能上线前，怎么把三种模式串起来<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>假设现在要做一件事：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>评审一个新功能上线方案，输出决策建议、风险清单和回滚预案。
+</code></pre></div>
+<p>这类任务很适合混合结构。</p>
+<h3 id="71">7.1 先用层级协作定问题<a class="headerlink" href="#71" title="Permanent link">&para;</a></h3>
+<p>主管 Agent 先把目标拆清楚：</p>
+<ul>
+<li>需要哪些输入</li>
+<li>哪些结论必须有证据</li>
+<li>哪些风险必须人工确认</li>
+<li>最终要交付什么格式</li>
+</ul>
+<p>它不直接写结论，只做任务裁定。</p>
+<h3 id="72">7.2 再用流水线把事实跑干净<a class="headerlink" href="#72" title="Permanent link">&para;</a></h3>
+<p>流水线可以这样走：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>需求文档 -&gt; 依赖梳理 -&gt; 历史事故检索 -&gt; 指标影响分析 -&gt; 草稿生成
+</code></pre></div>
+<p>每一环都只输出自己的结果：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">环节</th>
+<th style="text-align: left;">输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">依赖梳理</td>
+<td style="text-align: left;">依赖清单</td>
+</tr>
+<tr>
+<td style="text-align: left;">历史事故检索</td>
+<td style="text-align: left;">风险案例</td>
+</tr>
+<tr>
+<td style="text-align: left;">指标影响分析</td>
+<td style="text-align: left;">指标变化预测</td>
+</tr>
+<tr>
+<td style="text-align: left;">草稿生成</td>
+<td style="text-align: left;">初版评审稿</td>
+</tr>
+</tbody>
+</table>
+<h3 id="73">7.3 再把争议点丢给辩论组<a class="headerlink" href="#73" title="Permanent link">&para;</a></h3>
+<p>把最容易吵起来的地方交给辩论组：</p>
+<ul>
+<li>成本是否被低估</li>
+<li>风险是否只看了短期</li>
+<li>回滚条件是否足够明确</li>
+<li>有没有忽略边缘用户</li>
+</ul>
+<p>这一步不追求热闹，只追求把模糊结论打散。</p>
+<h3 id="74">7.4 最后由主管做裁决<a class="headerlink" href="#74" title="Permanent link">&para;</a></h3>
+<p>主管 Agent 不是复读，而是合并结果：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">{</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="nt">"decision"</span><span class="p">:</span><span class="w"> </span><span class="s2">"approve_with_changes"</span><span class="p">,</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span><span class="nt">"required_changes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span><span class="s2">"补充回滚预案"</span><span class="p">,</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">    </span><span class="s2">"明确灰度阈值"</span><span class="p">,</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="s2">"补一条人工确认规则"</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">  </span><span class="nt">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.82</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="p">}</span>
+</code></pre></div>
+<p>这时的交付才算完整。</p>
+<p>因为它不是“写了一份方案”，而是：</p>
+<ul>
+<li>事实链是干净的</li>
+<li>争议点是被逼出来的</li>
+<li>决策是可追踪的</li>
+<li>风险是可回退的</li>
+</ul>
+<p>这就是多 Agent 真正值得上的地方。</p>
+<hr />
+<h2 id="_7">八、工程上最容易忽略的三件事<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h3 id="71_1">7.1 交接协议<a class="headerlink" href="#71_1" title="Permanent link">&para;</a></h3>
+<p>没有交接协议，多 Agent 就会变成消息接力。</p>
+<p>建议每次交接至少包含：</p>
+<ul>
+<li>当前任务</li>
+<li>已知事实</li>
+<li>未解决问题</li>
+<li>下一步动作</li>
+<li>失败回退方式</li>
+</ul>
+<h3 id="72_1">7.2 状态边界<a class="headerlink" href="#72_1" title="Permanent link">&para;</a></h3>
+<p>谁能改目标，谁只能读结果，谁能发起重试，要提前写清楚。</p>
+<p>否则每个 Agent 都在“帮忙”，最后没人对结果负责。</p>
+<h3 id="73_1">7.3 验证入口<a class="headerlink" href="#73_1" title="Permanent link">&para;</a></h3>
+<p>关键结论不能只靠“看起来合理”。</p>
+<p>最好把验证点前置：</p>
+<ul>
+<li>数据是否存在</li>
+<li>引用是否对齐</li>
+<li>推断是否超出了证据</li>
+<li>高风险动作是否需要人工确认</li>
+</ul>
+<p>这部分可以直接和前面的自我纠错、Evals、Tracing 章节串起来。</p>
+<hr />
+<h2 id="agent_2">九、结尾：多 Agent 的重点，不是角色数量，而是协作形状<a class="headerlink" href="#agent_2" title="Permanent link">&para;</a></h2>
+<p>多 Agent 最容易被误解成“模型越多越强”。</p>
+<p>其实正好相反。</p>
+<p>它真正考验的是：</p>
+<ul>
+<li>你能不能把任务组织成合理结构</li>
+<li>你能不能定义稳定的交接协议</li>
+<li>你能不能让每个角色只做该做的事</li>
+<li>你能不能让结果可验证、可回放、可收敛</li>
+</ul>
+<p>所以，多 Agent 不是炫技题，而是工程题。</p>
+<p>先选对协作形状，再谈角色数量。
+先让流程可控，再让智能上场。</p>
+<p>这才是它真正有价值的地方。</p>
+<p>你也可以把它压成一个最小编排器：</p>
+<pre class="mermaid"><code>flowchart TD
+    A[输入目标] --&gt; B{主要难点是什么?}
+    B -- 组织 --&gt; C[层级协作]
+    B -- 传递 --&gt; D[流水线协作]
+    B -- 判断 --&gt; E[群组辩论]
+    C --&gt; F[主管拆分与裁决]
+    D --&gt; G[固定工序传递]
+    E --&gt; H[多角色复核]
+    F --&gt; I[统一输出]
+    G --&gt; I
+    H --&gt; I</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">route</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>    <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">needs_dynamic_decomposition</span><span class="p">:</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>        <span class="k">return</span> <span class="s2">"hierarchy"</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>    <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">has_stable_stages</span><span class="p">:</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>        <span class="k">return</span> <span class="s2">"pipeline"</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>    <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">contains_conflicting_claims</span><span class="p">:</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>        <span class="k">return</span> <span class="s2">"debate"</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>    <span class="k">return</span> <span class="s2">"single_agent"</span>
+</code></pre></div>
+<p>这段逻辑不复杂，但它比“先上多 Agent 再说”靠谱得多。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.indexes", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

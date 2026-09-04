@@ -1,0 +1,3300 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="构建可复用、可调用、可验证的 AI 执行系统 —— Skill · MCP · Agent 三层知识链路">
+      
+      
+        <meta name="author" content="ai-capability-engineering">
+      
+      
+      
+        <link rel="prev" href="../%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%8E%E8%92%B8%E9%A6%8F%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%8F%96%E8%88%8D%E4%B8%8E%E5%8F%AF%E8%B7%91%E5%AE%9E%E4%BE%8B/">
+      
+      
+        <link rel="next" href="../Agent%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E6%9C%80%E5%B0%8F%E9%97%AD%E7%8E%AF%E5%88%B0%E7%94%9F%E4%BA%A7%E7%BA%A7%E7%B3%BB%E7%BB%9F/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Agent 的第一性原理：从概念到范式演进 - AI 能力工程：从 Skill、MCP 到 Agent</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agent" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="AI 能力工程：从 Skill、MCP 到 Agent" class="md-header__button md-logo" aria-label="AI 能力工程：从 Skill、MCP 到 Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.41 4 16 6.41v.18L18.41 9H22v2h-4.41L16 9.41V12h-1a2 2 0 0 1-2-2V7.5H9.86c-.09.37-.24.72-.44 1.05L15.18 19H20a2 2 0 0 1 2 2v1H2v-1a2 2 0 0 1 2-2h6.61l-4.69-8.5a4.006 4.006 0 0 1-3.81-3A4 4 0 0 1 5 2.63c2.13-.55 4.31.73 4.86 2.87H13V3a2 2 0 0 1 2-2h1v2.59L17.59 2H22v2zM6 4.5a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AI 能力工程：从 Skill、MCP 到 Agent
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Agent 的第一性原理：从概念到范式演进
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%EF%BC%9A%E4%BB%8ESkill%E3%80%81MCP%E5%88%B0Agent/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  总纲
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Skill%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%9A%E4%BB%8E%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E5%88%B0%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Skill 方法层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../MCP%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%88%B0%E8%83%BD%E5%8A%9B%E5%8D%8F%E8%AE%AE/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  MCP 能力层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%8E%E8%92%B8%E9%A6%8F%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%8F%96%E8%88%8D%E4%B8%8E%E5%8F%AF%E8%B7%91%E5%AE%9E%E4%BE%8B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  模型效率
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Agent 基础
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E8%A7%84%E5%88%92%E8%8C%83%E5%BC%8F%E8%BF%9B%E5%8C%96%E8%AE%BA%EF%BC%9A%E4%BB%8ECoT%E5%88%B0Plan-and-Execute/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  执行能力
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E6%A8%A1%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B1%82%E7%BA%A7%E3%80%81%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E7%BE%A4%E7%BB%84/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  协作编排
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  安全治理
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E4%BB%8E%E6%97%A5%E5%BF%97%E3%80%81Trace%E5%88%B0Replay/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  生产治理
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="AI 能力工程：从 Skill、MCP 到 Agent" class="md-nav__button md-logo" aria-label="AI 能力工程：从 Skill、MCP 到 Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.41 4 16 6.41v.18L18.41 9H22v2h-4.41L16 9.41V12h-1a2 2 0 0 1-2-2V7.5H9.86c-.09.37-.24.72-.44 1.05L15.18 19H20a2 2 0 0 1 2 2v1H2v-1a2 2 0 0 1 2-2h6.61l-4.69-8.5a4.006 4.006 0 0 1-3.81-3A4 4 0 0 1 5 2.63c2.13-.55 4.31.73 4.86 2.87H13V3a2 2 0 0 1 2-2h1v2.59L17.59 2H22v2zM6 4.5a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg>
+
+    </a>
+    AI 能力工程：从 Skill、MCP 到 Agent
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    总纲
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    总纲
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%EF%BC%9A%E4%BB%8ESkill%E3%80%81MCP%E5%88%B0Agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 能力工程：从 Skill、MCP 到 Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill 方法层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Skill 方法层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Skill%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%9A%E4%BB%8E%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E5%88%B0%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill 设计方法论：从专家经验到可复用能力
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E4%BB%8EPrompt%E5%88%B0Skill%EF%BC%9A%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96%E5%B0%81%E8%A3%85%E6%8C%87%E5%8D%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从 Prompt 到 Skill：专家经验的标准化封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP 能力层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MCP 能力层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MCP%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%88%B0%E8%83%BD%E5%8A%9B%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP 的第一性原理：从工具调用到能力协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模型效率
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模型效率
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%8E%E8%92%B8%E9%A6%8F%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%8F%96%E8%88%8D%E4%B8%8E%E5%8F%AF%E8%B7%91%E5%AE%9E%E4%BE%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模型量化与蒸馏：原理、取舍与可跑实例
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 基础
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Agent 基础
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的第一性原理：从概念到范式演进
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的第一性原理：从概念到范式演进
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#agent_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、为什么要从第一性原理理解 Agent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、Agent 的第一性结构：目标闭环
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、Agent 的范式演进：从符号系统到 LLM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、Agent 的范式演进：从符号系统到 LLM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 符号主义时代：智能是规则推理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 反应式与行为主义：智能来自环境耦合
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 强化学习时代：智能来自试错和奖励
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 传统自动化与工作流时代：智能被压缩进流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 LLM 时代：语言模型成为通用认知引擎
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llm-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、LLM Agent 为什么成立
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、LLM Agent 为什么成立">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-llm-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 LLM 是认知引擎，不是完整 Agent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-tool-calling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Tool Calling 把语言意图转成外部动作
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 上下文与记忆让任务可以连续推进
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 验证机制让 Agent 从“像完成”变成“真的完成”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 权限边界让自主性可用
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llm-agent_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、LLM Agent 与传统自动化脚本的本质区别
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、LLM Agent 与传统自动化脚本的本质区别">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 驱动方式不同：规则驱动 vs 目标驱动
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 任务形态不同：确定流程 vs 开放问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 错误处理不同：报错退出 vs 反馈重规划
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 抽象层级不同：动作自动化 vs 决策自动化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 它们不是替代关系，而是能级关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agentchatgptrpaworkflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、Agent、ChatGPT、RPA、Workflow 的位置关系
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent-l0-l4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、Agent 的能力等级：从 L0 到 L4
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、Agent 的能力等级：从 L0 到 L4">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#l0-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L0：普通 LLM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#l1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1：工具增强助手
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#l2-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2：工作流 Agent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#l3-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L3：目标型 Agent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#l4-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L4：多 Agent 系统
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llm-agent_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、LLM Agent 的典型架构
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="八、LLM Agent 的典型架构">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 任务解释器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 上下文构建器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 规划器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 工具注册表与执行器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 验证器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 记忆系统
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#87" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.7 权限、安全与观测
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、从 Prompt 到 Agent：范式层级的变化
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="九、从 Prompt 到 Agent：范式层级的变化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Prompt：一次性生成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-prompt-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Prompt Chain：把复杂任务拆成固定链路
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 Workflow：把模型放进业务流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 Agent：运行时决策
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-multi-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 Multi-Agent：复杂任务的组织形态
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、Agent 的边界：什么场景不该用 Agent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、Agent 的核心矛盾：自主性与可控性
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、未来趋势：Agent 会走向哪里
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十二、未来趋势：Agent 会走向哪里">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 从聊天入口走向任务入口
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2 从工具调用走向环境操作
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3 从单次任务走向长期记忆
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#124-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.4 从单 Agent 走向组织化协作
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#125" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.5 从演示效果走向可评估工程
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、一个统一的理解框架
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        结语
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        参考与延伸
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E6%9C%80%E5%B0%8F%E9%97%AD%E7%8E%AF%E5%88%B0%E7%94%9F%E4%BA%A7%E7%BA%A7%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 工程实践指南：从最小闭环到生产级系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    执行能力
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    执行能力
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%A7%84%E5%88%92%E8%8C%83%E5%BC%8F%E8%BF%9B%E5%8C%96%E8%AE%BA%EF%BC%9A%E4%BB%8ECoT%E5%88%B0Plan-and-Execute/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 规划范式进化论：从 CoT 到 Plan-and-Execute
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E4%BB%BB%E5%8A%A1%E6%8B%86%E8%A7%A3%E8%89%BA%E6%9C%AF%EF%BC%9A%E4%BB%8E%E7%9B%AE%E6%A0%87%E5%88%B0%E5%8F%AF%E6%89%A7%E8%A1%8C%E5%AD%90%E4%BB%BB%E5%8A%A1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的任务拆解艺术：从目标到可执行子任务
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E4%BB%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%88%B0%E9%95%BF%E6%9C%9F%E7%BB%8F%E9%AA%8C%E5%A4%8D%E7%94%A8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 记忆系统设计：从上下文管理到长期经验复用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    协作编排
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    协作编排
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E6%A8%A1%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B1%82%E7%BA%A7%E3%80%81%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E7%BE%A4%E7%BB%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多 Agent 协作模式深度解析：层级、流水线与群组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    安全治理
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    安全治理
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 安全护栏设计：权限控制、对抗鲁棒性与人工确认环
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    生产治理
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    生产治理
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E4%BB%8E%E6%97%A5%E5%BF%97%E3%80%81Trace%E5%88%B0Replay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 可观测性实战：从日志、Trace 到 Replay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E7%94%A8Tracing%E7%9C%8B%E6%B8%85%E4%BD%A0%E7%9A%84Agent%E2%80%9C%E5%A4%A7%E8%84%91%E2%80%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tracing 专项：看清 Agent 的“大脑”
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E4%B8%8E%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%EF%BC%9ACheckpointer%E6%9C%BA%E5%88%B6%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 状态管理与断点续传：Checkpointer 机制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%87%AA%E6%88%91%E7%BA%A0%E9%94%99%E4%B8%8E%E9%AA%8C%E8%AF%81%E6%9C%BA%E5%88%B6%E8%AE%BE%E8%AE%A1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 自我纠错与验证机制设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E8%AF%84%E4%BC%B0%E4%BD%93%E7%B3%BB%EF%BC%88Evals%EF%BC%89%EF%BC%9A%E4%BB%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%88%B0%E9%9B%86%E6%88%90%E8%AF%84%E6%B5%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 自动化评估体系（Evals）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="agent">Agent 的第一性原理：从概念到范式演进<a class="headerlink" href="#agent" title="Permanent link">&para;</a></h1>
+<hr />
+<h2 id="agent_1">一、为什么要从第一性原理理解 Agent<a class="headerlink" href="#agent_1" title="Permanent link">&para;</a></h2>
+<p>过去几年，Agent 这个词被大量使用：AI Agent、LLM Agent、AutoGPT、Multi-Agent、GUI Agent、Coding Agent、Personal Agent、Workflow Agent。概念越热，越容易被泛化成一句话：只要大模型能调用工具，就是 Agent。</p>
+<p>这个说法太粗糙。</p>
+<p>如果从第一性原理出发，Agent 不是某个框架、某种 Prompt 写法，也不是“模型 + 工具调用”的简单拼装。Agent 的底层问题是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>一个系统如何在环境中围绕目标持续感知、决策、行动、反馈，并在边界内调整自己的行为？
+</code></pre></div>
+<p>这句话里有五个不能再拆的基本元素：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">第一性元素</th>
+<th style="text-align: left;">核心问题</th>
+<th style="text-align: left;">工程含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">目标</td>
+<td style="text-align: left;">系统要完成什么</td>
+<td style="text-align: left;">任务定义、成功标准、停止条件</td>
+</tr>
+<tr>
+<td style="text-align: left;">环境</td>
+<td style="text-align: left;">系统面对什么世界</td>
+<td style="text-align: left;">外部信息、工具结果、用户约束、运行状态</td>
+</tr>
+<tr>
+<td style="text-align: left;">决策</td>
+<td style="text-align: left;">下一步该做什么</td>
+<td style="text-align: left;">推理、规划、工具选择、重规划</td>
+</tr>
+<tr>
+<td style="text-align: left;">行动</td>
+<td style="text-align: left;">如何影响环境</td>
+<td style="text-align: left;">API、文件、代码、浏览器、数据库、消息系统</td>
+</tr>
+<tr>
+<td style="text-align: left;">反馈</td>
+<td style="text-align: left;">怎么知道做得对不对</td>
+<td style="text-align: left;">验证、观测、错误处理、人工确认</td>
+</tr>
+</tbody>
+</table>
+<p>所以，Agent 的最小定义可以写成：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Agent 是一个在给定边界内，为了完成目标而自主规划、调用工具、执行动作、检查结果并持续调整的系统。
+</code></pre></div>
+<p>更工程化地说：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Agent = 目标 + 状态 + 计划 + 工具 + 执行 + 验证 + 权限 + 记忆 + 观测
+</code></pre></div>
+<p>这个定义有意把“模型”放在组件层，而不是本体层。因为模型只是 Agent 的认知核心，Agent 真正成立依赖的是一个闭环系统。</p>
+<hr />
+<h2 id="agent_2">二、Agent 的第一性结构：目标闭环<a class="headerlink" href="#agent_2" title="Permanent link">&para;</a></h2>
+<p>一个 Agent 的最小闭环可以概括为：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>目标 -&gt; 上下文 -&gt; 计划 -&gt; 工具 -&gt; 执行 -&gt; 反馈 -&gt; 状态更新 -&gt; 输出或继续
+</code></pre></div>
+<p>如果执行结果不满足目标，就进入下一轮：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>反馈 -&gt; 调整计划 -&gt; 再次执行 -&gt; 再次验证
+</code></pre></div>
+<p>这就是 Agent 与普通问答系统的根本区别。普通聊天系统通常是一次性生成：用户输入，模型输出。Agent 则是一个带状态的任务推进系统：它会把目标拆成步骤，选择动作，读取结果，更新状态，再决定是否继续。</p>
+<p>可以把最小闭环拆成六个动作：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">动作</th>
+<th style="text-align: left;">说明</th>
+<th style="text-align: left;">失败时会发生什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Observe</td>
+<td style="text-align: left;">观察上下文、环境和工具结果</td>
+<td style="text-align: left;">信息不足，需要询问或检索</td>
+</tr>
+<tr>
+<td style="text-align: left;">Orient</td>
+<td style="text-align: left;">理解目标、约束和当前状态</td>
+<td style="text-align: left;">误解目标，后续计划会偏航</td>
+</tr>
+<tr>
+<td style="text-align: left;">Plan</td>
+<td style="text-align: left;">形成下一步或多步计划</td>
+<td style="text-align: left;">步骤过大、顺序错误、遗漏验证</td>
+</tr>
+<tr>
+<td style="text-align: left;">Act</td>
+<td style="text-align: left;">调用工具或执行动作</td>
+<td style="text-align: left;">参数错误、权限不足、工具失败</td>
+</tr>
+<tr>
+<td style="text-align: left;">Verify</td>
+<td style="text-align: left;">检查结果是否达标</td>
+<td style="text-align: left;">输出看似完成但不可用</td>
+</tr>
+<tr>
+<td style="text-align: left;">Update</td>
+<td style="text-align: left;">记录进度、经验和状态</td>
+<td style="text-align: left;">无法连续推进或复盘</td>
+</tr>
+</tbody>
+</table>
+<p>从这个角度看，Agent 不是“更会聊天的模型”，而是“用模型驱动的闭环控制系统”。它既继承了控制论中“反馈调节”的思想，也继承了人工智能中“感知-规划-行动”的传统。</p>
+<hr />
+<h2 id="agent-llm">三、Agent 的范式演进：从符号系统到 LLM<a class="headerlink" href="#agent-llm" title="Permanent link">&para;</a></h2>
+<p>Agent 并不是大模型时代才出现的概念。它在人工智能史中一直存在，只是过去长期停留在研究系统、规则系统或特定环境中。LLM 的出现，让 Agent 从“可定义”走向“可泛化使用”。</p>
+<h3 id="31">3.1 符号主义时代：智能是规则推理<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
+<p>早期人工智能深受数理逻辑、形式语言和计算机科学影响。研究者相信，只要能把世界知识写成符号规则，再配合推理机，就能得到智能行为。</p>
+<p>这一阶段的典型思想是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>智能 = 符号表示 + 逻辑推理 + 搜索规划
+</code></pre></div>
+<p>代表形态包括：</p>
+<ul>
+<li>通用问题求解器，把问题看作状态空间搜索。</li>
+<li>专家系统，把领域知识写成产生式规则。</li>
+<li>早期机器人系统，把感知、规划和动作串成流水线。</li>
+<li>棋类程序，把规则、评估函数和搜索结合起来。</li>
+</ul>
+<p>这一阶段的贡献很大：它确立了“Agent 可以被形式化”的基本框架，即一个系统可以拥有状态、目标、规则和动作，并通过推理选择行为。</p>
+<p>但它的根本限制也很明显：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">限制</th>
+<th style="text-align: left;">表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">知识获取瓶颈</td>
+<td style="text-align: left;">大量知识需要专家手工编码</td>
+</tr>
+<tr>
+<td style="text-align: left;">环境脆弱</td>
+<td style="text-align: left;">规则外的情况很难处理</td>
+</tr>
+<tr>
+<td style="text-align: left;">语义贫乏</td>
+<td style="text-align: left;">符号能推理，但不自然理解语言和常识</td>
+</tr>
+<tr>
+<td style="text-align: left;">泛化不足</td>
+<td style="text-align: left;">换一个任务或领域就要重新建模</td>
+</tr>
+</tbody>
+</table>
+<p>符号系统的 Agent 很像一个严谨但僵硬的官僚系统：在规则覆盖范围内表现稳定，一旦遇到开放世界问题，就会暴露“不会理解，只会匹配”的缺陷。</p>
+<h3 id="32">3.2 反应式与行为主义：智能来自环境耦合<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
+<p>符号主义的问题促使研究者转向另一种路线：智能不一定来自复杂的内在推理，也可以来自系统与环境的实时耦合。</p>
+<p>反应式 Agent 更强调：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>感知到刺激 -&gt; 触发行为 -&gt; 环境变化 -&gt; 继续反应
+</code></pre></div>
+<p>这种范式减少了对完整世界模型的依赖，更适合机器人、控制系统和实时场景。它的优势是快速、鲁棒、工程上可落地；缺点是缺少长期目标、抽象规划和复杂推理能力。</p>
+<p>这条路线提醒我们：Agent 不是只有“大脑”，还必须有感知、行动和反馈。没有与环境互动的能力，再强的推理也只是离线计算。</p>
+<h3 id="33">3.3 强化学习时代：智能来自试错和奖励<a class="headerlink" href="#33" title="Permanent link">&para;</a></h3>
+<p>强化学习把 Agent 建模为一个在环境中行动并最大化累计奖励的系统：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>状态 -&gt; 动作 -&gt; 奖励 -&gt; 新状态 -&gt; 策略更新
+</code></pre></div>
+<p>它给 Agent 带来了一个非常清晰的数学框架：MDP、策略、价值函数、探索与利用。游戏、机器人控制、推荐系统、资源调度等场景都可以在这个框架下表达。</p>
+<p>强化学习的贡献在于，它让 Agent 不再完全依赖人类写规则，而是可以从交互经验中学习策略。</p>
+<p>但强化学习也有自己的瓶颈：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">问题</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">奖励设计困难</td>
+<td style="text-align: left;">很多真实任务难以定义明确奖励</td>
+</tr>
+<tr>
+<td style="text-align: left;">样本效率低</td>
+<td style="text-align: left;">需要大量交互和试错</td>
+</tr>
+<tr>
+<td style="text-align: left;">泛化有限</td>
+<td style="text-align: left;">在特定环境中学到的策略很难迁移</td>
+</tr>
+<tr>
+<td style="text-align: left;">语言能力弱</td>
+<td style="text-align: left;">难以处理开放自然语言目标</td>
+</tr>
+</tbody>
+</table>
+<p>强化学习解释了“如何通过反馈学习行动”，但没有解决“如何理解开放任务、常识和人类意图”。</p>
+<h3 id="34">3.4 传统自动化与工作流时代：智能被压缩进流程<a class="headerlink" href="#34" title="Permanent link">&para;</a></h3>
+<p>在企业软件和业务系统中，Agent 的许多需求长期由脚本、工作流引擎、RPA、低代码平台承担。</p>
+<p>它们的共同特点是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>把任务路径提前确定下来，再由机器稳定执行
+</code></pre></div>
+<p>这类系统非常有价值。定时任务、ETL、审批流、报表生成、表单录入，都不需要 Agent。一个稳定脚本往往比一个“聪明”的 Agent 更便宜、更可靠、更容易审计。</p>
+<p>但自动化系统也有边界：</p>
+<ul>
+<li>输入必须高度结构化。</li>
+<li>路径必须提前设计好。</li>
+<li>异常通常需要人工处理。</li>
+<li>UI 或接口变化会导致失败。</li>
+<li>不擅长理解模糊自然语言目标。</li>
+<li>不擅长跨源整合信息并形成判断。</li>
+</ul>
+<p>所以传统自动化解决的是“已知流程的执行问题”，而 Agent 要解决的是“开放目标下的决策执行问题”。</p>
+<h3 id="35-llm">3.5 LLM 时代：语言模型成为通用认知引擎<a class="headerlink" href="#35-llm" title="Permanent link">&para;</a></h3>
+<p>大语言模型改变了 Agent 的关键前提。</p>
+<p>在 LLM 之前，Agent 最大的问题是认知层不够通用：符号系统需要手工规则，强化学习需要环境和奖励，工作流需要提前编排。它们都很难直接理解一句自然语言目标：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>帮我分析这个产品最近用户流失的原因，并给出三个优先级最高的改进建议。
+</code></pre></div>
+<p>LLM 的出现提供了一个新的认知引擎。它具备几类以前分散在不同系统里的能力：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">能力</th>
+<th style="text-align: left;">对 Agent 的意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">自然语言理解</td>
+<td style="text-align: left;">可以接收模糊目标，而不只接收结构化指令</td>
+</tr>
+<tr>
+<td style="text-align: left;">常识与领域知识</td>
+<td style="text-align: left;">可以在缺少显式规则时做初步判断</td>
+</tr>
+<tr>
+<td style="text-align: left;">任务分解</td>
+<td style="text-align: left;">可以把复杂目标拆成子任务</td>
+</tr>
+<tr>
+<td style="text-align: left;">代码与工具理解</td>
+<td style="text-align: left;">可以生成参数、解释错误、选择工具</td>
+</tr>
+<tr>
+<td style="text-align: left;">多轮上下文推理</td>
+<td style="text-align: left;">可以维护任务过程中的局部状态</td>
+</tr>
+<tr>
+<td style="text-align: left;">反思与改写</td>
+<td style="text-align: left;">可以基于反馈修正计划和输出</td>
+</tr>
+</tbody>
+</table>
+<p>因此，大模型让 Agent 从“专用系统”转向“通用任务接口”。这就是 LLM Agent 成立的核心历史原因。</p>
+<hr />
+<h2 id="llm-agent">四、LLM Agent 为什么成立<a class="headerlink" href="#llm-agent" title="Permanent link">&para;</a></h2>
+<p>LLM Agent 不是因为大模型“像人”，而是因为它补上了 Agent 闭环中长期缺失的通用认知层。</p>
+<h3 id="41-llm-agent">4.1 LLM 是认知引擎，不是完整 Agent<a class="headerlink" href="#41-llm-agent" title="Permanent link">&para;</a></h3>
+<p>LLM 本身更接近一个函数：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>f(上下文) -&gt; 下一个文本片段或动作意图
+</code></pre></div>
+<p>它可以理解、推理、生成计划、构造工具参数，但它自己并不会真正行动，也不会天然拥有长期状态、权限边界、成本预算、验证机制。</p>
+<p>所以更准确的关系是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>LLM 提供认知能力
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>Agent 系统提供目标闭环
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>工具提供外部行动能力
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>记忆提供状态延续能力
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>权限和验证提供可靠边界
+</code></pre></div>
+<p>如果只有 LLM，没有工具，它是聊天模型。</p>
+<p>如果只有 LLM 和工具，没有目标、状态、验证、权限，它只是工具增强助手。</p>
+<p>如果一个系统能围绕目标自主推进任务、调用工具、根据反馈修正，并在风险边界内停下或请求确认，它才更接近 Agent。</p>
+<h3 id="42-tool-calling">4.2 Tool Calling 把语言意图转成外部动作<a class="headerlink" href="#42-tool-calling" title="Permanent link">&para;</a></h3>
+<p>LLM 的输出默认是文本。工具调用把文本意图转换成结构化动作：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">{</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">"tool"</span><span class="p">:</span><span class="w"> </span><span class="s2">"search_public_web"</span><span class="p">,</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nt">"arguments"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="nt">"query"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LLM Agent planning memory tool use survey"</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="p">}</span>
+</code></pre></div>
+<p>这一步非常关键。它让模型不再只是“说”，而是可以“查、算、写、读、跑、改、发起请求”。工具是 Agent 的手和眼睛。</p>
+<p>但工具越强，风险越高。因此工具系统必须有：</p>
+<ul>
+<li>schema，限制参数结构。</li>
+<li>权限，限制能做什么。</li>
+<li>超时和重试，限制成本。</li>
+<li>副作用标记，区分只读、写入、删除、外发。</li>
+<li>执行日志，支持追踪和复盘。</li>
+</ul>
+<p>没有这些工程边界，Agent 会从“能行动”变成“不可控地行动”。</p>
+<h3 id="43">4.3 上下文与记忆让任务可以连续推进<a class="headerlink" href="#43" title="Permanent link">&para;</a></h3>
+<p>Agent 必须知道自己现在在哪里：</p>
+<ul>
+<li>用户目标是什么。</li>
+<li>已经做过哪些步骤。</li>
+<li>工具返回了什么。</li>
+<li>哪些假设被验证或推翻。</li>
+<li>还有哪些待办事项。</li>
+<li>当前预算和风险状态如何。</li>
+</ul>
+<p>这就是状态管理。</p>
+<p>如果说工具让 Agent 能影响外部世界，那么记忆让 Agent 能把多轮行动组织成连续任务。它解决的不是“模型能不能记住聊天记录”，而是三个更工程化的问题：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>当前正在做什么？
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>过去有哪些信息对现在仍然有用？
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>哪些新信息值得沉淀给未来使用？
+</code></pre></div>
+<p>因此，Agent 记忆不是单纯的“把聊天记录存起来”，而是一套围绕任务连续性、个性化和可靠性设计的工程系统。</p>
+<p>最基础的分层是：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">记忆类型</th>
+<th style="text-align: left;">负责什么</th>
+<th style="text-align: left;">典型内容</th>
+<th style="text-align: left;">生命周期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">短期记忆</td>
+<td style="text-align: left;">当前正在做什么</td>
+<td style="text-align: left;">当前目标、对话上下文、工具结果、计划、待办</td>
+<td style="text-align: left;">当前任务或会话</td>
+</tr>
+<tr>
+<td style="text-align: left;">长期记忆</td>
+<td style="text-align: left;">过去哪些信息可复用</td>
+<td style="text-align: left;">用户偏好、项目事实、历史决策、经验教训</td>
+<td style="text-align: left;">跨会话保存</td>
+</tr>
+<tr>
+<td style="text-align: left;">记忆调度器</td>
+<td style="text-align: left;">什么时候查、什么时候写、怎么注入</td>
+<td style="text-align: left;">检索触发、排序、压缩、冲突处理</td>
+<td style="text-align: left;">贯穿任务执行</td>
+</tr>
+</tbody>
+</table>
+<p>短期状态支撑当前任务，长期记忆支撑跨任务复用。一个没有状态的系统只能响应单轮输入；一个有状态的系统才能持续推进目标。</p>
+<p>但记忆不是越多越好。值得进入长期记忆的信息通常要满足三个条件：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>稳定、明确、未来会复用
+</code></pre></div>
+<p>真正可用的记忆系统，不是“记得越多越好”，而是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>该记的记，该忘的忘，该查的时候查，查到后谨慎使用。
+</code></pre></div>
+<p>这要求记忆系统同时设计读路径和写路径：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>用户输入
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>  -&gt; 更新短期记忆
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>  -&gt; 判断是否检索长期记忆
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>  -&gt; 召回、排序、过滤相关记忆
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>  -&gt; 注入当前上下文
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>  -&gt; 生成回答或执行动作
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>  -&gt; 提取值得保存的信息
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>  -&gt; 去重、冲突检查、写入长期记忆
+</code></pre></div>
+<p>错误记忆会污染后续行为，敏感记忆会带来隐私和安全风险。因此记忆系统需要来源、时间、置信度、作用域、过期机制和用户可治理能力。</p>
+<p>记忆还有一个关键优先级原则：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>当前用户明确指令
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>  &gt; 当前任务约束
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>  &gt; 项目级规则
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>  &gt; 用户长期偏好
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>  &gt; 历史建议或低置信记忆
+</code></pre></div>
+<p>也就是说，长期记忆只能辅助当前任务，不能覆盖用户此刻的明确要求。</p>
+<h3 id="44-agent">4.4 验证机制让 Agent 从“像完成”变成“真的完成”<a class="headerlink" href="#44-agent" title="Permanent link">&para;</a></h3>
+<p>Agent 最大的工程陷阱是：输出看起来很完整，但没有证据表明它真的完成了任务。</p>
+<p>可靠 Agent 至少要有三层验证：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">层级</th>
+<th style="text-align: left;">方法</th>
+<th style="text-align: left;">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">轻量自检</td>
+<td style="text-align: left;">检查格式、遗漏和约束</td>
+<td style="text-align: left;">是否包含结论、依据、风险</td>
+</tr>
+<tr>
+<td style="text-align: left;">工具校验</td>
+<td style="text-align: left;">用程序或数据源验证</td>
+<td style="text-align: left;">复算数字、运行测试、检查文件</td>
+</tr>
+<tr>
+<td style="text-align: left;">人工复核</td>
+<td style="text-align: left;">高风险或低置信度时确认</td>
+<td style="text-align: left;">发邮件前预览、改生产库前审批</td>
+</tr>
+</tbody>
+</table>
+<p>验证机制是 LLM Agent 与“会编理由的自动补全文本”之间的重要分界线。</p>
+<h3 id="45">4.5 权限边界让自主性可用<a class="headerlink" href="#45" title="Permanent link">&para;</a></h3>
+<p>Agent 的价值来自自主性，但风险也来自自主性。</p>
+<p>一个成熟 Agent 不是“能自动做一切”，而是知道哪些动作可以自动执行，哪些动作需要确认，哪些动作默认禁止。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">动作类型</th>
+<th style="text-align: left;">示例</th>
+<th style="text-align: left;">策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">低风险只读</td>
+<td style="text-align: left;">搜索、读取公开文档、计算</td>
+<td style="text-align: left;">可自动执行</td>
+</tr>
+<tr>
+<td style="text-align: left;">中风险写入</td>
+<td style="text-align: left;">生成文件、更新草稿、修改副本</td>
+<td style="text-align: left;">可执行但保留版本</td>
+</tr>
+<tr>
+<td style="text-align: left;">高风险外发</td>
+<td style="text-align: left;">发邮件、提交表单、通知客户</td>
+<td style="text-align: left;">必须确认</td>
+</tr>
+<tr>
+<td style="text-align: left;">高风险破坏性动作</td>
+<td style="text-align: left;">删除数据、付款、改生产系统</td>
+<td style="text-align: left;">默认禁止或审批</td>
+</tr>
+</tbody>
+</table>
+<p>这也是为什么 Agent 工程不能只讨论 Prompt。Prompt 决定行为倾向，系统边界决定实际风险。</p>
+<hr />
+<h2 id="llm-agent_1">五、LLM Agent 与传统自动化脚本的本质区别<a class="headerlink" href="#llm-agent_1" title="Permanent link">&para;</a></h2>
+<p>最容易混淆的问题是：既然 Agent 也会调用工具、执行步骤，那它和自动化脚本有什么不同？</p>
+<p>一句话回答：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>脚本执行预先写好的路径，Agent 在目标约束下生成和调整路径。
+</code></pre></div>
+<h3 id="51-vs">5.1 驱动方式不同：规则驱动 vs 目标驱动<a class="headerlink" href="#51-vs" title="Permanent link">&para;</a></h3>
+<p>传统脚本的核心是规则：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>如果 A 发生，就执行 B；如果 B 失败，就报错退出。
+</code></pre></div>
+<p>Agent 的核心是目标：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>用户给出目标，Agent 理解约束，拆解步骤，选择工具，检查结果，必要时重规划。
+</code></pre></div>
+<p>脚本的智能主要来自开发者事先写好的流程；Agent 的智能主要来自模型在运行时对目标、上下文和反馈的判断。</p>
+<h3 id="52-vs">5.2 任务形态不同：确定流程 vs 开放问题<a class="headerlink" href="#52-vs" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">任务</th>
+<th style="text-align: left;">更适合脚本</th>
+<th style="text-align: left;">更适合 Agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">每天 9 点导出固定报表</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">否</td>
+</tr>
+<tr>
+<td style="text-align: left;">把固定格式 CSV 入库</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">否</td>
+</tr>
+<tr>
+<td style="text-align: left;">分析本月销售下降原因</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">是</td>
+</tr>
+<tr>
+<td style="text-align: left;">根据多个文档生成调研报告</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">是</td>
+</tr>
+<tr>
+<td style="text-align: left;">固定网页表单批量录入</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">视情况</td>
+</tr>
+<tr>
+<td style="text-align: left;">页面变化后继续完成操作</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">是</td>
+</tr>
+</tbody>
+</table>
+<p>脚本适合路径已知、输入稳定、结果可确定的任务。Agent 适合路径不完全确定、需要判断、需要整合信息、需要处理异常的任务。</p>
+<h3 id="53-vs">5.3 错误处理不同：报错退出 vs 反馈重规划<a class="headerlink" href="#53-vs" title="Permanent link">&para;</a></h3>
+<p>脚本遇到异常，通常只能：</p>
+<ul>
+<li>重试。</li>
+<li>走预设分支。</li>
+<li>报错退出。</li>
+<li>等人修脚本。</li>
+</ul>
+<p>Agent 遇到异常，可以根据反馈判断下一步：</p>
+<ul>
+<li>换搜索关键词。</li>
+<li>更换工具。</li>
+<li>请求用户补充信息。</li>
+<li>降级输出部分结果。</li>
+<li>标注不确定性。</li>
+<li>在风险点停下等待确认。</li>
+</ul>
+<p>这不是说 Agent 永远更好，而是说 Agent 的错误处理空间更大。</p>
+<h3 id="54-vs">5.4 抽象层级不同：动作自动化 vs 决策自动化<a class="headerlink" href="#54-vs" title="Permanent link">&para;</a></h3>
+<p>传统自动化解决“怎么执行动作”：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>点击这个按钮，读取这个表，调用这个接口。
+</code></pre></div>
+<p>Agent 解决“为了目标接下来该做什么”：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>当前信息够不够？该查什么？该用哪个工具？结果可信吗？是否该继续？
+</code></pre></div>
+<p>因此，二者的本质区别可以概括为：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>脚本自动化动作，Agent 自动化一部分决策。
+</code></pre></div>
+<h3 id="55">5.5 它们不是替代关系，而是能级关系<a class="headerlink" href="#55" title="Permanent link">&para;</a></h3>
+<p>不要把 Agent 理解成脚本的替代品。更合理的关系是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>脚本：稳定执行确定动作
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>RPA：在图形界面中模拟固定操作
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>Workflow：编排已知流程
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>LLM Agent：在不确定路径中围绕目标决策和执行
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>Multi-Agent：把复杂目标拆给多个角色协作
+</code></pre></div>
+<p>好的 Agent 系统经常会调用脚本、RPA、API 和工作流。脚本是 Agent 的可靠工具，Agent 是脚本之上的目标决策层。</p>
+<hr />
+<h2 id="agentchatgptrpaworkflow">六、Agent、ChatGPT、RPA、Workflow 的位置关系<a class="headerlink" href="#agentchatgptrpaworkflow" title="Permanent link">&para;</a></h2>
+<p>为了避免概念混乱，可以把几类系统放在同一张表里：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">系统类型</th>
+<th style="text-align: left;">输入</th>
+<th style="text-align: left;">核心能力</th>
+<th style="text-align: left;">是否能行动</th>
+<th style="text-align: left;">是否能自我调整</th>
+<th style="text-align: left;">适合场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">普通 ChatGPT</td>
+<td style="text-align: left;">问题或指令</td>
+<td style="text-align: left;">回答、总结、生成文本</td>
+<td style="text-align: left;">通常不能</td>
+<td style="text-align: left;">弱</td>
+<td style="text-align: left;">问答、写作、解释</td>
+</tr>
+<tr>
+<td style="text-align: left;">自动化脚本</td>
+<td style="text-align: left;">固定参数</td>
+<td style="text-align: left;">按规则执行</td>
+<td style="text-align: left;">能</td>
+<td style="text-align: left;">很弱</td>
+<td style="text-align: left;">定时任务、批处理</td>
+</tr>
+<tr>
+<td style="text-align: left;">RPA</td>
+<td style="text-align: left;">UI 流程</td>
+<td style="text-align: left;">模拟点击和录入</td>
+<td style="text-align: left;">能</td>
+<td style="text-align: left;">弱</td>
+<td style="text-align: left;">固定界面操作</td>
+</tr>
+<tr>
+<td style="text-align: left;">Workflow</td>
+<td style="text-align: left;">流程定义</td>
+<td style="text-align: left;">编排多步骤业务流程</td>
+<td style="text-align: left;">能</td>
+<td style="text-align: left;">中等</td>
+<td style="text-align: left;">审批、工单、ETL</td>
+</tr>
+<tr>
+<td style="text-align: left;">LLM Agent</td>
+<td style="text-align: left;">自然语言目标</td>
+<td style="text-align: left;">理解、规划、工具调用、验证</td>
+<td style="text-align: left;">能</td>
+<td style="text-align: left;">强</td>
+<td style="text-align: left;">调研、分析、编码、复杂办公</td>
+</tr>
+<tr>
+<td style="text-align: left;">Multi-Agent</td>
+<td style="text-align: left;">复杂目标</td>
+<td style="text-align: left;">多角色分工与协作</td>
+<td style="text-align: left;">能</td>
+<td style="text-align: left;">强但成本高</td>
+<td style="text-align: left;">软件工程、投研、复杂决策辅助</td>
+</tr>
+</tbody>
+</table>
+<p>这张表的关键不是给概念贴标签，而是帮助判断“什么时候该用 Agent”。</p>
+<p>如果任务高度确定，脚本和工作流更好。</p>
+<p>如果任务需要理解自然语言、动态规划、跨源整合、异常处理、可验证输出，Agent 才有明显价值。</p>
+<hr />
+<h2 id="agent-l0-l4">七、Agent 的能力等级：从 L0 到 L4<a class="headerlink" href="#agent-l0-l4" title="Permanent link">&para;</a></h2>
+<p>Agent 不是非黑即白，而是一条能力等级线。</p>
+<h3 id="l0-llm">L0：普通 LLM<a class="headerlink" href="#l0-llm" title="Permanent link">&para;</a></h3>
+<p>只根据输入生成回答，不调用外部工具，不产生真实外部动作。</p>
+<p>适合问答、总结、改写、翻译、头脑风暴。</p>
+<h3 id="l1">L1：工具增强助手<a class="headerlink" href="#l1" title="Permanent link">&para;</a></h3>
+<p>可以调用工具，但通常由用户明确要求，流程较简单，状态管理较弱。</p>
+<p>例子：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>帮我搜索这家公司的官网，并总结它的产品。
+</code></pre></div>
+<h3 id="l2-agent">L2：工作流 Agent<a class="headerlink" href="#l2-agent" title="Permanent link">&para;</a></h3>
+<p>按照相对固定的多步骤流程完成任务，可以自动调用多个工具。</p>
+<p>例子：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>读取本周销售数据，生成周报，并输出异常地区。
+</code></pre></div>
+<p>L2 的重点不是完全自主，而是把一个稳定业务流程做成“模型参与的自动化”。</p>
+<h3 id="l3-agent">L3：目标型 Agent<a class="headerlink" href="#l3-agent" title="Permanent link">&para;</a></h3>
+<p>用户只给目标，Agent 自己拆解路径，遇到失败可以重规划，需要更强的状态、验证和权限控制。</p>
+<p>例子：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>帮我分析这个产品最近用户流失的主要原因，并给出优先级最高的三个改进建议。
+</code></pre></div>
+<p>L3 是多数人讨论的“真正 Agent”的核心层级。</p>
+<h3 id="l4-agent">L4：多 Agent 系统<a class="headerlink" href="#l4-agent" title="Permanent link">&para;</a></h3>
+<p>多个 Agent 分角色协作，例如规划者、执行者、研究员、评审者、审计者。</p>
+<p>多 Agent 的价值在于分工、并行、互评和专业化；代价是通信成本、协调复杂度、冲突解决难度都会上升。</p>
+<p>新人或新项目不应默认从 L4 开始。单 Agent 的工具调用、状态管理、验证机制没有做好，多 Agent 只会把问题放大。</p>
+<hr />
+<h2 id="llm-agent_2">八、LLM Agent 的典型架构<a class="headerlink" href="#llm-agent_2" title="Permanent link">&para;</a></h2>
+<p>一个实用 Agent 系统通常可以拆成以下组件：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>用户目标
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>  -&gt; 任务解释器
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>  -&gt; 上下文构建器
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>  -&gt; 模型
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>  -&gt; 规划器
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a>  -&gt; 工具注册表
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a>  -&gt; 执行器
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a>  -&gt; 验证器
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a>  -&gt; 记忆系统
+<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a>  -&gt; 权限与安全策略
+<a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a>  -&gt; 日志与监控
+</code></pre></div>
+<h3 id="81">8.1 任务解释器<a class="headerlink" href="#81" title="Permanent link">&para;</a></h3>
+<p>负责把用户的自然语言目标转成任务规格，包括：</p>
+<ul>
+<li>服务对象。</li>
+<li>输入和输出。</li>
+<li>成功标准。</li>
+<li>约束条件。</li>
+<li>风险等级。</li>
+<li>缺失信息。</li>
+</ul>
+<p>很多 Agent 失败不是因为模型不会推理，而是任务一开始就没有定义清楚。</p>
+<h3 id="82">8.2 上下文构建器<a class="headerlink" href="#82" title="Permanent link">&para;</a></h3>
+<p>负责决定哪些信息进入模型上下文：</p>
+<ul>
+<li>用户目标。</li>
+<li>当前计划。</li>
+<li>已完成步骤。</li>
+<li>工具返回摘要。</li>
+<li>关键约束。</li>
+<li>相关记忆。</li>
+<li>错误和待解决问题。</li>
+</ul>
+<p>上下文太少，模型缺信息；上下文太多，模型被噪声干扰，成本也会上升。</p>
+<h3 id="83">8.3 规划器<a class="headerlink" href="#83" title="Permanent link">&para;</a></h3>
+<p>负责决定步骤顺序。常见模式包括：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">模式</th>
+<th style="text-align: left;">特点</th>
+<th style="text-align: left;">适合场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Reactive</td>
+<td style="text-align: left;">每一步根据当前情况行动</td>
+<td style="text-align: left;">简单工具调用</td>
+</tr>
+<tr>
+<td style="text-align: left;">Plan-and-Execute</td>
+<td style="text-align: left;">先制定计划，再逐步执行</td>
+<td style="text-align: left;">报告、调研、分析</td>
+</tr>
+<tr>
+<td style="text-align: left;">分层规划</td>
+<td style="text-align: left;">大任务拆成多层子任务</td>
+<td style="text-align: left;">软件开发、复杂项目</td>
+</tr>
+<tr>
+<td style="text-align: left;">Planner + Critic</td>
+<td style="text-align: left;">一个执行，一个检查</td>
+<td style="text-align: left;">高准确性任务</td>
+</tr>
+<tr>
+<td style="text-align: left;">Human-in-the-Loop</td>
+<td style="text-align: left;">关键节点人工确认</td>
+<td style="text-align: left;">高风险业务流程</td>
+</tr>
+</tbody>
+</table>
+<p>多数项目应从 Plan-and-Execute 开始，因为它直观、可控、容易调试。</p>
+<h3 id="84">8.4 工具注册表与执行器<a class="headerlink" href="#84" title="Permanent link">&para;</a></h3>
+<p>工具注册表回答“有哪些工具可以用”，执行器回答“如何安全地用”。</p>
+<p>一个工具至少应该描述：</p>
+<ul>
+<li>名称。</li>
+<li>用途。</li>
+<li>输入 schema。</li>
+<li>返回格式。</li>
+<li>是否有副作用。</li>
+<li>是否需要确认。</li>
+<li>超时和重试策略。</li>
+<li>失败时如何返回错误。</li>
+</ul>
+<p>没有工具 schema，模型很容易传错参数；没有执行器边界，模型的错误决策会直接变成外部错误动作。</p>
+<h3 id="85">8.5 验证器<a class="headerlink" href="#85" title="Permanent link">&para;</a></h3>
+<p>验证器负责判断结果是否满足目标。验证方式可以包括：</p>
+<ul>
+<li>格式检查。</li>
+<li>数据复算。</li>
+<li>代码测试。</li>
+<li>多来源交叉验证。</li>
+<li>事实引用检查。</li>
+<li>人工复核。</li>
+</ul>
+<p>一个没有验证器的 Agent，往往只能“看起来完成了任务”，但无法证明自己真的完成了任务。</p>
+<h3 id="86">8.6 记忆系统<a class="headerlink" href="#86" title="Permanent link">&para;</a></h3>
+<p>记忆系统保存可复用信息，包括用户偏好、历史任务结果、团队术语、常用模板、已验证流程。但它的核心价值不是“存储”，而是“调度”：判断什么时候记、记什么、什么时候查、查出来怎么用。</p>
+<p>一个可落地的 Agent 记忆系统可以拆成七个模块：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>输入流
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>  -&gt; Memory Collector      收集对话、工具结果、任务状态
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>  -&gt; Memory Extractor      提取候选记忆
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>  -&gt; Memory Validator      去重、过滤、权限和敏感性检查
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>  -&gt; Memory Store          持久化存储
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>  -&gt; Memory Retriever      按需检索
+<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a>  -&gt; Memory Ranker         相关性、时效性、置信度排序
+<a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a>  -&gt; Memory Injector       把记忆压缩成可用上下文
+<a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a>  -&gt; Agent Response/Action  生成回答或执行动作
+</code></pre></div>
+<p>这套结构把记忆系统拆成两条路径：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">路径</th>
+<th style="text-align: left;">目标</th>
+<th style="text-align: left;">关键问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">写路径</td>
+<td style="text-align: left;">从当前交互中沉淀未来可复用信息</td>
+<td style="text-align: left;">是否稳定、是否有价值、是否敏感、是否冲突</td>
+</tr>
+<tr>
+<td style="text-align: left;">读路径</td>
+<td style="text-align: left;">从历史记忆中召回当前任务需要的信息</td>
+<td style="text-align: left;">是否需要查、查多少、怎么排序、如何压缩注入</td>
+</tr>
+</tbody>
+</table>
+<p>写入长期记忆前，可以问五个问题：</p>
+<ol>
+<li>未来是否会复用？</li>
+<li>是否足够稳定？</li>
+<li>是否与用户、项目、任务或领域有关？</li>
+<li>是否已经存在同类记忆？</li>
+<li>是否涉及隐私、敏感信息或用户不希望保存的内容？</li>
+</ol>
+<p>读取长期记忆时，不应每轮全量检索，也不应把 Top-K 原文直接塞进上下文。更稳妥的方式是先用低成本信号触发检索，再把结果整理成短小、可审计的记忆卡片：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>相关记忆：
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>1. [用户偏好][高置信] 用户希望技术文档多用实例，不要只讲概念。
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>2. [项目事实][中置信] 当前项目文档多采用“章节标题 + 表格 + 示例”的中文教程风格。
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>3. [历史决策][高置信] 本次任务目标是把 Agent 资料整理成完整知识体系。
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a>
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a>使用要求：
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a>- 只使用与当前任务直接相关的记忆。
+<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a>- 如果记忆与用户当前明确要求冲突，以当前要求为准。
+</code></pre></div>
+<p>这样做的本质是把长期历史压缩成当前任务可用的约束，而不是让模型在大量原始聊天记录里自行打捞重点。</p>
+<p>记忆要可治理：</p>
+<ul>
+<li>有来源。</li>
+<li>有时间。</li>
+<li>有置信度。</li>
+<li>有作用域。</li>
+<li>可查看。</li>
+<li>可修改。</li>
+<li>可删除。</li>
+<li>可过期。</li>
+<li>避免保存敏感信息。</li>
+</ul>
+<p>一个稳妥的第一版不必一开始上复杂知识图谱，可以从最小闭环开始：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>会话摘要 + 用户偏好 JSON + 项目记忆 Markdown + 向量摘要检索 + 记忆卡片注入
+</code></pre></div>
+<p>等读写策略、评估指标和冲突治理跑稳后，再扩展到主动预取、多级缓存、知识图谱和元记忆体系。</p>
+<h3 id="87">8.7 权限、安全与观测<a class="headerlink" href="#87" title="Permanent link">&para;</a></h3>
+<p>越能行动的 Agent，越需要刹车。</p>
+<p>安全系统要处理：</p>
+<ul>
+<li>工具权限。</li>
+<li>敏感数据。</li>
+<li>提示注入。</li>
+<li>高风险动作确认。</li>
+<li>成本预算。</li>
+<li>步数限制。</li>
+<li>异常告警。</li>
+<li>审计日志。</li>
+</ul>
+<p>观测系统要回答：</p>
+<ul>
+<li>Agent 为什么这么做？</li>
+<li>调用了哪些工具？</li>
+<li>哪一步失败？</li>
+<li>成本是多少？</li>
+<li>延迟是多少？</li>
+<li>输出有没有通过验证？</li>
+</ul>
+<p>没有观测，就没有可调试性；没有权限，就没有生产可用性。</p>
+<hr />
+<h2 id="prompt-agent">九、从 Prompt 到 Agent：范式层级的变化<a class="headerlink" href="#prompt-agent" title="Permanent link">&para;</a></h2>
+<p>LLM 应用的发展路径大致可以看成：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>Prompt -&gt; Prompt Chain -&gt; Workflow -&gt; Agent -&gt; Multi-Agent
+</code></pre></div>
+<h3 id="91-prompt">9.1 Prompt：一次性生成<a class="headerlink" href="#91-prompt" title="Permanent link">&para;</a></h3>
+<p>Prompt 是最小交互单元。用户给指令，模型给回答。它适合单步任务，但不适合长任务推进。</p>
+<h3 id="92-prompt-chain">9.2 Prompt Chain：把复杂任务拆成固定链路<a class="headerlink" href="#92-prompt-chain" title="Permanent link">&para;</a></h3>
+<p>Prompt Chain 把任务拆成多个模型调用：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>提取信息 -&gt; 总结 -&gt; 分类 -&gt; 生成报告
+</code></pre></div>
+<p>它比单 Prompt 更稳定，但路径仍然是预设的。</p>
+<h3 id="93-workflow">9.3 Workflow：把模型放进业务流程<a class="headerlink" href="#93-workflow" title="Permanent link">&para;</a></h3>
+<p>Workflow 进一步加入工具、条件分支、人工节点和业务系统。它适合企业流程，但自主性仍然有限。</p>
+<h3 id="94-agent">9.4 Agent：运行时决策<a class="headerlink" href="#94-agent" title="Permanent link">&para;</a></h3>
+<p>Agent 的关键变化是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>下一步不是完全由开发者提前写死，而是由系统基于目标、上下文和反馈动态决定。
+</code></pre></div>
+<p>这并不意味着完全放手。高质量 Agent 是“有限自主”，不是“无限自主”。</p>
+<h3 id="95-multi-agent">9.5 Multi-Agent：复杂任务的组织形态<a class="headerlink" href="#95-multi-agent" title="Permanent link">&para;</a></h3>
+<p>Multi-Agent 不是为了显得高级，而是为了解决单个 Agent 难以同时承担的角色冲突：</p>
+<ul>
+<li>研究者负责收集资料。</li>
+<li>分析者负责建模和推理。</li>
+<li>执行者负责调用工具。</li>
+<li>评审者负责验证和挑错。</li>
+<li>协调者负责分配任务和合并结果。</li>
+</ul>
+<p>当任务确实需要角色分工、并行处理或交叉验证时，多 Agent 才有价值。</p>
+<hr />
+<h2 id="agent-agent">十、Agent 的边界：什么场景不该用 Agent<a class="headerlink" href="#agent-agent" title="Permanent link">&para;</a></h2>
+<p>理解 Agent 的价值，也要理解它的边界。</p>
+<p>以下场景不适合优先使用 Agent：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">场景</th>
+<th style="text-align: left;">原因</th>
+<th style="text-align: left;">更合适方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">输入输出完全确定</td>
+<td style="text-align: left;">Agent 成本高且不稳定</td>
+<td style="text-align: left;">脚本、函数、SQL</td>
+</tr>
+<tr>
+<td style="text-align: left;">流程长期稳定</td>
+<td style="text-align: left;">不需要运行时决策</td>
+<td style="text-align: left;">Workflow、RPA</td>
+</tr>
+<tr>
+<td style="text-align: left;">高并发低延迟</td>
+<td style="text-align: left;">LLM 成本和延迟较高</td>
+<td style="text-align: left;">规则系统、缓存、模型蒸馏</td>
+</tr>
+<tr>
+<td style="text-align: left;">强一致性事务</td>
+<td style="text-align: left;">Agent 决策不适合作为最终执行者</td>
+<td style="text-align: left;">业务规则引擎</td>
+</tr>
+<tr>
+<td style="text-align: left;">不可逆高风险动作</td>
+<td style="text-align: left;">错误代价太高</td>
+<td style="text-align: left;">人工审批、权限系统</td>
+</tr>
+<tr>
+<td style="text-align: left;">缺少验证标准</td>
+<td style="text-align: left;">无法判断是否完成</td>
+<td style="text-align: left;">先定义验收标准</td>
+</tr>
+</tbody>
+</table>
+<p>Agent 的正确位置不是替代所有自动化，而是补上“开放目标、动态路径、复杂判断”这一层。</p>
+<hr />
+<h2 id="agent_3">十一、Agent 的核心矛盾：自主性与可控性<a class="headerlink" href="#agent_3" title="Permanent link">&para;</a></h2>
+<p>Agent 技术的主线可以概括为一个矛盾：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>越自主，越有价值；越自主，越需要可控。
+</code></pre></div>
+<p>自主性带来效率：</p>
+<ul>
+<li>可以少问用户。</li>
+<li>可以连续推进任务。</li>
+<li>可以处理异常。</li>
+<li>可以跨工具整合结果。</li>
+</ul>
+<p>可控性保证可靠：</p>
+<ul>
+<li>明确目标。</li>
+<li>明确权限。</li>
+<li>明确预算。</li>
+<li>明确停止条件。</li>
+<li>明确验证方式。</li>
+<li>明确人工确认点。</li>
+</ul>
+<p>真正成熟的 Agent 不是“完全自主”，而是在边界内自主，在高风险处停下，在不确定时求证。</p>
+<p>这也是 Agent 工程的核心判断：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>把确定的部分交给规则，把开放的部分交给模型，把高风险的部分交给人类确认。
+</code></pre></div>
+<hr />
+<h2 id="agent_4">十二、未来趋势：Agent 会走向哪里<a class="headerlink" href="#agent_4" title="Permanent link">&para;</a></h2>
+<p>LLM Agent 仍处在早期阶段，但方向已经比较清晰。</p>
+<h3 id="121">12.1 从聊天入口走向任务入口<a class="headerlink" href="#121" title="Permanent link">&para;</a></h3>
+<p>未来的 Agent 不只是聊天窗口，而会成为任务入口。用户不再逐步操作软件，而是描述目标，由 Agent 调动软件、文件、知识库和业务系统完成任务。</p>
+<h3 id="122">12.2 从工具调用走向环境操作<a class="headerlink" href="#122" title="Permanent link">&para;</a></h3>
+<p>工具调用会继续扩展：</p>
+<ul>
+<li>Web Agent 操作网页。</li>
+<li>GUI Agent 操作桌面和手机。</li>
+<li>Coding Agent 操作代码库和终端。</li>
+<li>Data Agent 操作数据库和表格。</li>
+<li>Enterprise Agent 操作内部系统。</li>
+</ul>
+<p>工具越接近真实环境，权限、审计、验证就越重要。</p>
+<h3 id="123">12.3 从单次任务走向长期记忆<a class="headerlink" href="#123" title="Permanent link">&para;</a></h3>
+<p>短期 Agent 完成一次任务，长期 Agent 理解用户、组织和项目的历史。长期记忆会让 Agent 更有用，也会让治理问题更重要。</p>
+<p>未来可用的记忆系统不只是“保存更多内容”，而是要能判断什么值得记、什么时候过期、如何纠错、如何让用户控制。</p>
+<p>这会推动 Agent 从“会话内智能”走向“关系型智能”：它不只是理解当前输入，还能理解用户长期偏好、项目演进历史、组织知识和已验证经验。但这类能力必须建立在治理之上，否则长期记忆会快速变成错误长期保存系统。</p>
+<p>因此，记忆系统会成为 Agent 平台的重要基础设施。它至少需要同时优化五个指标：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;">核心问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">召回率</td>
+<td style="text-align: left;">该查的有没有查到</td>
+</tr>
+<tr>
+<td style="text-align: left;">精确率</td>
+<td style="text-align: left;">查到的是不是相关</td>
+</tr>
+<tr>
+<td style="text-align: left;">新鲜度</td>
+<td style="text-align: left;">是否用了过时信息</td>
+</tr>
+<tr>
+<td style="text-align: left;">隐私合规</td>
+<td style="text-align: left;">是否保存或注入了不该保存的信息</td>
+</tr>
+<tr>
+<td style="text-align: left;">成本与延迟</td>
+<td style="text-align: left;">检索和注入是否过重</td>
+</tr>
+</tbody>
+</table>
+<p>长期来看，优秀 Agent 的记忆能力不会表现为“什么都知道”，而会表现为“知道哪些历史信息应该影响当前决策，哪些不应该”。</p>
+<h3 id="124-agent">12.4 从单 Agent 走向组织化协作<a class="headerlink" href="#124-agent" title="Permanent link">&para;</a></h3>
+<p>多 Agent 系统会从演示走向更实际的协作模式。它不是简单地让多个模型聊天，而是围绕明确角色、协议、交付物和评审机制组织任务。</p>
+<h3 id="125">12.5 从演示效果走向可评估工程<a class="headerlink" href="#125" title="Permanent link">&para;</a></h3>
+<p>Agent 走向生产，核心指标会从“看起来聪明”转向：</p>
+<ul>
+<li>任务完成率。</li>
+<li>事实准确率。</li>
+<li>工具调用成功率。</li>
+<li>参数正确率。</li>
+<li>验证通过率。</li>
+<li>单任务成本。</li>
+<li>延迟。</li>
+<li>权限违规率。</li>
+<li>用户满意度。</li>
+</ul>
+<p>没有评估体系，Agent 很难从 Demo 变成产品。</p>
+<hr />
+<h2 id="_1">十三、一个统一的理解框架<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>现在可以把全文收束成一个完整框架。</p>
+<p>从第一性原理看：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>Agent = 在环境中围绕目标形成行动闭环的系统
+</code></pre></div>
+<p>从工程实现看：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>Agent = 目标 + 状态 + 计划 + 工具 + 执行 + 验证 + 权限 + 记忆 + 观测
+</code></pre></div>
+<p>从历史演进看：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>符号系统解决规则推理
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a>反应式系统解决环境耦合
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a>强化学习解决反馈学习
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a>自动化脚本解决确定流程执行
+<a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a>LLM 解决开放语言目标下的通用认知
+<a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a>记忆系统解决跨会话状态延续与经验复用
+<a id="__codelineno-39-7" name="__codelineno-39-7" href="#__codelineno-39-7"></a>Agent 把这些能力重新组合成目标闭环
+</code></pre></div>
+<p>从与传统自动化的差异看：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>脚本执行预设路径
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a>Workflow 编排已知流程
+<a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a>RPA 模拟界面操作
+<a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a>LLM Agent 在目标约束下动态决策和执行
+</code></pre></div>
+<p>从产品落地看：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>能自动做事不是终点
+<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a>能在边界内稳定完成任务才是终点
+</code></pre></div>
+<hr />
+<h2 id="_2">结语<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>Agent 的历史不是一个新名词突然出现的历史，而是一条人工智能主线的重新汇合：符号主义给了它规则和规划，控制论给了它反馈闭环，强化学习给了它环境交互，自动化工程给了它执行基础，LLM 给了它通用语言认知。</p>
+<p>LLM Agent 之所以成立，是因为大模型第一次让“自然语言目标 -&gt; 任务分解 -&gt; 工具调用 -&gt; 反馈修正”这条链路具备了足够通用的认知能力。</p>
+<p>但 Agent 的价值不在于表现得无所不能，而在于在清晰边界内可靠地推进任务。一个真正可用的 Agent，必须同时拥有目标感、行动力、验证能力和自我约束能力。</p>
+<p>如果用一句话总结：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>Agent 不是会调用工具的模型，而是以目标为中心、以反馈为驱动、以工具为手段、以边界为前提的智能执行系统。
+</code></pre></div>
+<hr />
+<h2 id="_3">参考与延伸<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<ul>
+<li>《Agent 开发总结》：https://blog.csdn.net/sinat_28228747/article/details/164014253</li>
+<li>《Agent 记忆设计》：https://blog.csdn.net/sinat_28228747/article/details/164092820</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.indexes", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

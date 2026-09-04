@@ -1,0 +1,3248 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="构建可复用、可调用、可验证的 AI 执行系统 —— Skill · MCP · Agent 三层知识链路">
+      
+      
+        <meta name="author" content="ai-capability-engineering">
+      
+      
+      
+        <link rel="prev" href="../Skill%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%9A%E4%BB%8E%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E5%88%B0%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B/">
+      
+      
+        <link rel="next" href="../MCP%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%88%B0%E8%83%BD%E5%8A%9B%E5%8D%8F%E8%AE%AE/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>从 Prompt 到 Skill：专家经验的标准化封装 - AI 能力工程：从 Skill、MCP 到 Agent</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#promptskill" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="AI 能力工程：从 Skill、MCP 到 Agent" class="md-header__button md-logo" aria-label="AI 能力工程：从 Skill、MCP 到 Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.41 4 16 6.41v.18L18.41 9H22v2h-4.41L16 9.41V12h-1a2 2 0 0 1-2-2V7.5H9.86c-.09.37-.24.72-.44 1.05L15.18 19H20a2 2 0 0 1 2 2v1H2v-1a2 2 0 0 1 2-2h6.61l-4.69-8.5a4.006 4.006 0 0 1-3.81-3A4 4 0 0 1 5 2.63c2.13-.55 4.31.73 4.86 2.87H13V3a2 2 0 0 1 2-2h1v2.59L17.59 2H22v2zM6 4.5a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AI 能力工程：从 Skill、MCP 到 Agent
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              从 Prompt 到 Skill：专家经验的标准化封装
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%EF%BC%9A%E4%BB%8ESkill%E3%80%81MCP%E5%88%B0Agent/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  总纲
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../Skill%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%9A%E4%BB%8E%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E5%88%B0%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Skill 方法层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../MCP%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%88%B0%E8%83%BD%E5%8A%9B%E5%8D%8F%E8%AE%AE/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  MCP 能力层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%8E%E8%92%B8%E9%A6%8F%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%8F%96%E8%88%8D%E4%B8%8E%E5%8F%AF%E8%B7%91%E5%AE%9E%E4%BE%8B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  模型效率
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E6%A6%82%E5%BF%B5%E5%88%B0%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Agent 基础
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E8%A7%84%E5%88%92%E8%8C%83%E5%BC%8F%E8%BF%9B%E5%8C%96%E8%AE%BA%EF%BC%9A%E4%BB%8ECoT%E5%88%B0Plan-and-Execute/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  执行能力
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E6%A8%A1%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B1%82%E7%BA%A7%E3%80%81%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E7%BE%A4%E7%BB%84/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  协作编排
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  安全治理
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E4%BB%8E%E6%97%A5%E5%BF%97%E3%80%81Trace%E5%88%B0Replay/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  生产治理
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="AI 能力工程：从 Skill、MCP 到 Agent" class="md-nav__button md-logo" aria-label="AI 能力工程：从 Skill、MCP 到 Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.41 4 16 6.41v.18L18.41 9H22v2h-4.41L16 9.41V12h-1a2 2 0 0 1-2-2V7.5H9.86c-.09.37-.24.72-.44 1.05L15.18 19H20a2 2 0 0 1 2 2v1H2v-1a2 2 0 0 1 2-2h6.61l-4.69-8.5a4.006 4.006 0 0 1-3.81-3A4 4 0 0 1 5 2.63c2.13-.55 4.31.73 4.86 2.87H13V3a2 2 0 0 1 2-2h1v2.59L17.59 2H22v2zM6 4.5a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg>
+
+    </a>
+    AI 能力工程：从 Skill、MCP 到 Agent
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    总纲
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    总纲
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%EF%BC%9A%E4%BB%8ESkill%E3%80%81MCP%E5%88%B0Agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 能力工程：从 Skill、MCP 到 Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill 方法层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Skill 方法层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Skill%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%9A%E4%BB%8E%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E5%88%B0%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill 设计方法论：从专家经验到可复用能力
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从 Prompt 到 Skill：专家经验的标准化封装
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从 Prompt 到 Skill：专家经验的标准化封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、从一个真实问题开始：为什么好 Prompt 还是不稳定
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-skill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、什么时候应该把 Prompt 升级成 Skill
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、什么时候应该把 Prompt 升级成 Skill">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 判断标准
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-prompt-skill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Prompt 和 Skill 的本质区别
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-skill_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、完整案例：把“财报分析 Prompt”封装成 Skill
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、生命周期第一步：识别高频重复任务
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、生命周期第一步：识别高频重复任务">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 不要先写方法论，先收集任务样本
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 判断任务是否足够具体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 任务识别表
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、生命周期第二步：抽取专家工作流
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、生命周期第二步：抽取专家工作流">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 把专家经验翻译成步骤
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 把隐性判断写成规则
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-ipo-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 用 IPO-B 定义任务
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、生命周期第三步：设计 Skill 包结构
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、生命周期第三步：设计 Skill 包结构">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 agents/ 放什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-skillmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 SKILL.md 放什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 references/ 放什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 scripts/ 放什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 assets/ 放什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skillmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、生命周期第四步：编写 SKILL.md
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、生命周期第四步：编写 SKILL.md">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 为什么这不是长 Prompt
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、生命周期第五步：设计测试样本
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="八、生命周期第五步：设计测试样本">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 最少准备 6 类测试
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-eval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 写一个最小 eval 表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 测试不只看最终答案
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skill_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、生命周期第六步：从失败中迭代 Skill
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="九、生命周期第六步：从失败中迭代 Skill">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 一个失败案例
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 把失败改成规则
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 迭代记录怎么写
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-skill_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、从 Prompt 到 Skill 的完整迁移路径
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十、从 Prompt 到 Skill 的完整迁移路径">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 第一阶段：普通 Prompt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 第二阶段：增强 Prompt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 第三阶段：结构化 Prompt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#104-skill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 第四阶段：正式 Skill
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、常见反模式
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十一、常见反模式">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-skill-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 把 Skill 写成超长 Prompt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 只写成功路径
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 没有触发边界
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 没有验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#115" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5 资源路由太弱
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#116" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6 过早追求通用
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skill_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、Skill 生命周期检查清单
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十二、Skill 生命周期检查清单">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 识别阶段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2 设计阶段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3 编写阶段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#124" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.4 工程阶段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#125" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.5 测试阶段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#126" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.6 迭代阶段
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、思考题
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十三、思考题">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 基础题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 设计题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3 工程题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#134" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4 进阶题
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skill_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十四、总结：Skill 是专家经验的工程化封装
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP 能力层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MCP 能力层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MCP%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%88%B0%E8%83%BD%E5%8A%9B%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP 的第一性原理：从工具调用到能力协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模型效率
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模型效率
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%8E%E8%92%B8%E9%A6%8F%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%8F%96%E8%88%8D%E4%B8%8E%E5%8F%AF%E8%B7%91%E5%AE%9E%E4%BE%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模型量化与蒸馏：原理、取舍与可跑实例
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 基础
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Agent 基础
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E6%A6%82%E5%BF%B5%E5%88%B0%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的第一性原理：从概念到范式演进
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E6%9C%80%E5%B0%8F%E9%97%AD%E7%8E%AF%E5%88%B0%E7%94%9F%E4%BA%A7%E7%BA%A7%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 工程实践指南：从最小闭环到生产级系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    执行能力
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    执行能力
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%A7%84%E5%88%92%E8%8C%83%E5%BC%8F%E8%BF%9B%E5%8C%96%E8%AE%BA%EF%BC%9A%E4%BB%8ECoT%E5%88%B0Plan-and-Execute/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 规划范式进化论：从 CoT 到 Plan-and-Execute
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E4%BB%BB%E5%8A%A1%E6%8B%86%E8%A7%A3%E8%89%BA%E6%9C%AF%EF%BC%9A%E4%BB%8E%E7%9B%AE%E6%A0%87%E5%88%B0%E5%8F%AF%E6%89%A7%E8%A1%8C%E5%AD%90%E4%BB%BB%E5%8A%A1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的任务拆解艺术：从目标到可执行子任务
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E4%BB%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%88%B0%E9%95%BF%E6%9C%9F%E7%BB%8F%E9%AA%8C%E5%A4%8D%E7%94%A8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 记忆系统设计：从上下文管理到长期经验复用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    协作编排
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    协作编排
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E6%A8%A1%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B1%82%E7%BA%A7%E3%80%81%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E7%BE%A4%E7%BB%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多 Agent 协作模式深度解析：层级、流水线与群组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    安全治理
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    安全治理
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 安全护栏设计：权限控制、对抗鲁棒性与人工确认环
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    生产治理
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    生产治理
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E4%BB%8E%E6%97%A5%E5%BF%97%E3%80%81Trace%E5%88%B0Replay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 可观测性实战：从日志、Trace 到 Replay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E7%94%A8Tracing%E7%9C%8B%E6%B8%85%E4%BD%A0%E7%9A%84Agent%E2%80%9C%E5%A4%A7%E8%84%91%E2%80%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tracing 专项：看清 Agent 的“大脑”
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E4%B8%8E%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%EF%BC%9ACheckpointer%E6%9C%BA%E5%88%B6%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 状态管理与断点续传：Checkpointer 机制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%87%AA%E6%88%91%E7%BA%A0%E9%94%99%E4%B8%8E%E9%AA%8C%E8%AF%81%E6%9C%BA%E5%88%B6%E8%AE%BE%E8%AE%A1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 自我纠错与验证机制设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E8%AF%84%E4%BC%B0%E4%BD%93%E7%B3%BB%EF%BC%88Evals%EF%BC%89%EF%BC%9A%E4%BB%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%88%B0%E9%9B%86%E6%88%90%E8%AF%84%E6%B5%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 自动化评估体系（Evals）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="promptskill">从Prompt到Skill：专家经验的标准化封装指南<a class="headerlink" href="#promptskill" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Prompt 解决的是“这一次怎么让模型答得更好”，Skill 解决的是“同类任务以后怎么稳定做”。<br />
+如果说 Prompt 是一句临场指令，Skill 就是一套可以被 Agent 反复调用、持续验证、不断迭代的标准作业程序。</p>
+</blockquote>
+<p>本文是《Skill设计方法论：从专家经验到可复用能力》的实战姊妹篇。前者回答“一个优秀 Skill 应该具备哪些规范”，本文回答“一个团队手里已经有很多 Prompt，怎么判断哪些值得升级，并把其中一个真实任务一步步封装成 Skill”。所以本文不会重新铺开完整方法论，而是用财报分析这个单案例，演示从 Prompt、增强 Prompt、结构化 Prompt 到正式 Skill 的迁移过程。</p>
+<hr />
+<h2 id="prompt">一、从一个真实问题开始：为什么好 Prompt 还是不稳定<a class="headerlink" href="#prompt" title="Permanent link">&para;</a></h2>
+<p>先看一个很常见的需求。</p>
+<p>用户说：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>帮我分析这份财报，提炼营收增长点、利润率变化、主要风险，并生成一份给投资研究团队看的 PPT 大纲。
+</code></pre></div>
+<p>第一次写 Prompt，可能会这样：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>你是一名资深财报分析师，请认真阅读财报，提炼营收增长、利润率变化、风险因素，并输出专业 PPT 大纲。
+</code></pre></div>
+<p>如果材料很干净，模型也许能给出不错的结果。问题是，真实任务很少这么干净。</p>
+<p>财报可能是 PDF，表格可能跨页，单位可能是百万美元，年份可能是 fiscal year 而不是 calendar year。用户可能没有说受众是谁，也没有说要几页 PPT。模型可能把“同比增长”算错，也可能把风险因素里的模板化披露当成重大变化。</p>
+<p>于是第二版 Prompt 会变长：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>请先确认公司名称、年份、报告类型；必须提取收入、毛利率、营业利润率、净利润率；所有数字必须标注来源；不要编造没有依据的结论；如果缺少信息要先询问；最后输出 8 页 PPT 大纲。
+</code></pre></div>
+<p>这已经比第一版好很多。但再做几次，你会发现 Prompt 仍然有几个问题：</p>
+<ul>
+<li>它依赖模型每次都记得完整流程</li>
+<li>它没有告诉 Agent 缺少材料时到底怎么问</li>
+<li>它没有规定如何验证表格数字和计算结果</li>
+<li>它没有沉淀失败案例</li>
+<li>它没有把可复用脚本、参考资料和模板组织起来</li>
+</ul>
+<p>这时，问题已经不再是“Prompt 怎么写得更好”，而是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>能不能把这类任务沉淀成一套可复用、可验证、可迭代的能力？
+</code></pre></div>
+<p>这就是从 Prompt 走向 Skill 的起点。</p>
+<hr />
+<h2 id="prompt-skill">二、什么时候应该把 Prompt 升级成 Skill<a class="headerlink" href="#prompt-skill" title="Permanent link">&para;</a></h2>
+<p>不是所有 Prompt 都值得做成 Skill。</p>
+<p>如果用户只是问：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>请解释一下什么是毛利率。
+</code></pre></div>
+<p>这类任务用普通 Prompt 就够了。它是一次性的、低风险的、没有复杂流程的。</p>
+<p>但如果任务变成：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>每周帮投研团队分析 5 家公司的财报，统一输出中文摘要、关键指标表、风险提示和 PPT 大纲。
+</code></pre></div>
+<p>它就开始具备 Skill 的特征了。</p>
+<h3 id="21">2.1 判断标准<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
+<p>可以用下面这张表判断一段 Prompt 是否应该升级为 Skill。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">信号</th>
+<th style="text-align: left;">说明</th>
+<th style="text-align: left;">是否适合做 Skill</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">高频重复</td>
+<td style="text-align: left;">每周、每天或多个团队反复做</td>
+<td style="text-align: left;">是</td>
+</tr>
+<tr>
+<td style="text-align: left;">专家差距明显</td>
+<td style="text-align: left;">新手和熟手产出差异很大</td>
+<td style="text-align: left;">是</td>
+</tr>
+<tr>
+<td style="text-align: left;">流程超过三步</td>
+<td style="text-align: left;">需要确认、读取、提取、计算、验证、输出</td>
+<td style="text-align: left;">是</td>
+</tr>
+<tr>
+<td style="text-align: left;">需要工具协同</td>
+<td style="text-align: left;">需要搜索、读取 PDF、计算、生成文件</td>
+<td style="text-align: left;">是</td>
+</tr>
+<tr>
+<td style="text-align: left;">需要验证</td>
+<td style="text-align: left;">数字、来源、格式、风险必须检查</td>
+<td style="text-align: left;">是</td>
+</tr>
+<tr>
+<td style="text-align: left;">有失败分支</td>
+<td style="text-align: left;">缺材料、解析失败、来源冲突</td>
+<td style="text-align: left;">是</td>
+</tr>
+<tr>
+<td style="text-align: left;">只是临时表达</td>
+<td style="text-align: left;">改写一句话、起标题、解释概念</td>
+<td style="text-align: left;">否</td>
+</tr>
+</tbody>
+</table>
+<p>一句话判断：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>如果同类任务以后还会反复发生，而且每次都担心模型漏步骤、算错、问错或输出不一致，就应该考虑做成 Skill。
+</code></pre></div>
+<h3 id="22-prompt-skill">2.2 Prompt 和 Skill 的本质区别<a class="headerlink" href="#22-prompt-skill" title="Permanent link">&para;</a></h3>
+<p>Prompt 更像“给这一次任务下指令”。</p>
+<p>Skill 更像“把专家做这类任务的方法写成标准作业程序”。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">维度</th>
+<th style="text-align: left;">Prompt</th>
+<th style="text-align: left;">Skill</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">目标</td>
+<td style="text-align: left;">改善一次回答</td>
+<td style="text-align: left;">稳定完成一类任务</td>
+</tr>
+<tr>
+<td style="text-align: left;">生命周期</td>
+<td style="text-align: left;">用完即走</td>
+<td style="text-align: left;">持续维护和迭代</td>
+</tr>
+<tr>
+<td style="text-align: left;">内容</td>
+<td style="text-align: left;">角色、要求、格式</td>
+<td style="text-align: left;">触发、边界、流程、资源、失败处理、验证</td>
+</tr>
+<tr>
+<td style="text-align: left;">适合场景</td>
+<td style="text-align: left;">轻量任务</td>
+<td style="text-align: left;">高频、复杂、可验证任务</td>
+</tr>
+<tr>
+<td style="text-align: left;">质量保障</td>
+<td style="text-align: left;">靠模型遵守指令</td>
+<td style="text-align: left;">靠流程、脚本、测试和复盘</td>
+</tr>
+</tbody>
+</table>
+<p>这也和《AI能力工程：从Skill、MCP到Agent》导论 0.2“Skill、MCP、Agent 分别解决什么问题”里的分层一致：Skill 是方法层，MCP 是能力层，Agent 是执行层。Prompt 可以改善表达，但 Skill 才能沉淀方法。</p>
+<p>把判断过程画成图，会更直观：</p>
+<pre class="mermaid"><code>flowchart TD
+    A[一个正在反复使用的 Prompt] --&gt; B{是否高频重复?}
+    B -- 否 --&gt; C[保留为普通 Prompt]
+    B -- 是 --&gt; D{是否有专家差距?}
+    D -- 否 --&gt; E{是否需要稳定格式或验证?}
+    D -- 是 --&gt; F[考虑升级为 Skill]
+    E -- 否 --&gt; C
+    E -- 是 --&gt; F
+    F --&gt; G{是否需要工具/脚本/模板?}
+    G -- 否 --&gt; H[先做结构化 Prompt]
+    G -- 是 --&gt; I[封装为 Skill 包]
+    H --&gt; J{真实复用后仍频繁出错?}
+    J -- 是 --&gt; I
+    J -- 否 --&gt; C</code></pre>
+<p>图 1：Prompt 是否应该升级成 Skill 的判断树。它的重点不是“凡是复杂 Prompt 都做成 Skill”，而是看任务是否高频、是否有专家差距、是否需要验证和工程资产复用。</p>
+<hr />
+<h2 id="prompt-skill_1">三、完整案例：把“财报分析 Prompt”封装成 Skill<a class="headerlink" href="#prompt-skill_1" title="Permanent link">&para;</a></h2>
+<p>下面用一个完整案例贯穿全文。</p>
+<p>我们要封装的不是一个泛泛的“财报助手”，而是一个明确的 Skill：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>financial-report-briefing
+</code></pre></div>
+<p>它服务的任务是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>读取上市公司财报，提取关键财务指标、增长驱动、利润率变化和风险因素，输出中文分析摘要和 PPT 大纲。
+</code></pre></div>
+<p>这个任务适合做成 Skill，因为它具备几个典型特征：</p>
+<ul>
+<li>高频：投研、咨询、经营分析团队经常做</li>
+<li>专家差距大：财务口径、风险解读、PPT 结构都有经验门槛</li>
+<li>需要工具：搜索、PDF 读取、表格抽取、计算、文件生成</li>
+<li>需要验证：关键数字必须可追溯，计算必须可复核</li>
+<li>容易失败：找不到官方财报、PDF 解析失败、单位混淆、年份口径错误</li>
+</ul>
+<p>如果只靠 Prompt，Agent 每次都要重新摸索。做成 Skill 后，同类任务就可以沿着固定路径执行。</p>
+<p>本文后面的生命周期围绕这一个案例展开：</p>
+<pre class="mermaid"><code>flowchart LR
+    A[识别高频任务] --&gt; B[抽取专家工作流]
+    B --&gt; C[定义 IPO-B&lt;br/&gt;输入/流程/输出/边界]
+    C --&gt; D[设计 Skill 包结构]
+    D --&gt; E[编写 SKILL.md]
+    E --&gt; F[设计测试样本]
+    F --&gt; G[从失败中迭代]
+    G --&gt; B</code></pre>
+<p>图 2：从 Prompt 到 Skill 的生命周期闭环。一次封装不是终点，真实任务中的失败会反过来更新专家流程、验证规则、资源路由和测试样本。</p>
+<hr />
+<h2 id="_1">四、生命周期第一步：识别高频重复任务<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>很多团队做 Skill 的第一个误区，是从“我想做一个万能 Skill”开始。</p>
+<p>这通常会失败。</p>
+<p>更稳的方式是从真实任务记录里找重复模式。</p>
+<h3 id="41">4.1 不要先写方法论，先收集任务样本<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
+<p>先收集 3 到 5 个真实请求。</p>
+<p>例如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>分析 NVDA 2025 财年年报，输出营收增长和风险。
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>帮我看一下 Adobe 最新年报，重点关注订阅收入、利润率和 AI 相关投入。
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>把这份财报整理成给老板看的 6 页汇报大纲，先讲结论，再讲数据。
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>比较两家公司最近一年的收入增长、毛利率变化和主要风险。
+</code></pre></div>
+<p>这些请求看起来不同，但背后有共同结构：</p>
+<ul>
+<li>都需要识别公司、年份、报告类型</li>
+<li>都需要找到或读取财报</li>
+<li>都需要抽取关键指标</li>
+<li>都需要计算或解释变化</li>
+<li>都需要输出给特定受众看的结构化材料</li>
+<li>都需要标注来源和不确定性</li>
+</ul>
+<p>这时，Skill 的边界就开始浮现。</p>
+<h3 id="42">4.2 判断任务是否足够具体<a class="headerlink" href="#42" title="Permanent link">&para;</a></h3>
+<p>坏的 Skill 目标：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>做一个财务分析 Skill。
+</code></pre></div>
+<p>这个范围太大，可能包括预算、审计、税务、估值、财报、经营分析、投融资。边界太宽，Skill 就会变成百科。</p>
+<p>好的 Skill 目标：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>做一个面向上市公司财报解读的 Skill，输入为财报或公司+年份，输出为中文分析摘要、关键指标表和 PPT 大纲。
+</code></pre></div>
+<p>这个目标足够具体，能定义输入、输出、流程和验证标准。</p>
+<h3 id="43">4.3 任务识别表<a class="headerlink" href="#43" title="Permanent link">&para;</a></h3>
+<p>可以用下面的表做初筛：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">问题</th>
+<th style="text-align: left;">示例答案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">这类任务多久出现一次</td>
+<td style="text-align: left;">每周 3 到 5 次</td>
+</tr>
+<tr>
+<td style="text-align: left;">用户是谁</td>
+<td style="text-align: left;">投研分析师、经营分析人员、管理层助理</td>
+</tr>
+<tr>
+<td style="text-align: left;">输入是什么</td>
+<td style="text-align: left;">公司名、股票代码、年份、财报 PDF、目标受众</td>
+</tr>
+<tr>
+<td style="text-align: left;">输出是什么</td>
+<td style="text-align: left;">摘要、指标表、风险提示、PPT 大纲</td>
+</tr>
+<tr>
+<td style="text-align: left;">哪些地方容易错</td>
+<td style="text-align: left;">年份口径、单位、增长率、风险泛化、来源缺失</td>
+</tr>
+<tr>
+<td style="text-align: left;">如何判断做对</td>
+<td style="text-align: left;">数字可追溯、计算可复核、结论有证据、格式符合模板</td>
+</tr>
+</tbody>
+</table>
+<p>当这张表能填清楚，才值得进入下一步。</p>
+<hr />
+<h2 id="_2">五、生命周期第二步：抽取专家工作流<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>Skill 的核心不是把 Prompt 写长，而是把专家脑子里的操作顺序写出来。</p>
+<p>你不能只问专家：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>你是怎么分析财报的？
+</code></pre></div>
+<p>这样得到的往往是抽象答案：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>先看业务，再看财务，再看风险。
+</code></pre></div>
+<p>这不够。</p>
+<p>应该继续追问：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>你拿到财报第一眼看哪里？
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>如果公司没有给出某个指标，你怎么替代？
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>你怎么判断风险是模板披露还是新增风险？
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>你怎么避免把单位看错？
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>你怎么验证增长率？
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>你什么时候会说“这份材料不足以下结论”？
+</code></pre></div>
+<h3 id="51">5.1 把专家经验翻译成步骤<a class="headerlink" href="#51" title="Permanent link">&para;</a></h3>
+<p>财报分析专家的流程可能被抽成：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>1. 确认公司、年份、报告类型和受众
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>2. 优先获取官方财报或监管披露文件
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>3. 提取收入、毛利率、营业利润率、净利润、现金流等核心指标
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>4. 检查单位、币种、会计期间和同比口径
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>5. 复算关键增长率和利润率
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>6. 阅读管理层讨论、分部信息和风险因素
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>7. 区分事实、计算结果、推断和建议
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>8. 输出摘要、指标表、风险提示和 PPT 大纲
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>9. 在缺证据处标注不确定性
+</code></pre></div>
+<p>这就是 Skill 的骨架。</p>
+<h3 id="52">5.2 把隐性判断写成规则<a class="headerlink" href="#52" title="Permanent link">&para;</a></h3>
+<p>专家真正有价值的地方，通常不是“按步骤做”，而是“知道什么时候停、什么时候怀疑”。</p>
+<p>例如：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">专家判断</th>
+<th style="text-align: left;">Skill 规则</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">年报和新闻稿冲突时，优先年报</td>
+<td style="text-align: left;">优先使用官方年报或监管披露，新闻稿只能作为辅助来源</td>
+</tr>
+<tr>
+<td style="text-align: left;">风险因素不能照抄</td>
+<td style="text-align: left;">区分通用模板风险和本期新增或强化风险</td>
+</tr>
+<tr>
+<td style="text-align: left;">数字不能只看模型抽取</td>
+<td style="text-align: left;">关键指标必须保留来源页码或段落</td>
+</tr>
+<tr>
+<td style="text-align: left;">计算结果要复算</td>
+<td style="text-align: left;">增长率、利润率必须能由原始数字复算</td>
+</tr>
+<tr>
+<td style="text-align: left;">缺少材料不要硬编</td>
+<td style="text-align: left;">无法确认时标注限制或请求用户补充</td>
+</tr>
+</tbody>
+</table>
+<p>这些规则比“请认真分析”有价值得多。</p>
+<h3 id="53-ipo-b">5.3 用 IPO-B 定义任务<a class="headerlink" href="#53-ipo-b" title="Permanent link">&para;</a></h3>
+<p>参考《Skill设计方法论：从专家经验到可复用能力》第四章第二步“用 IPO 模型定义任务”，Skill 应该像函数一样定义。本文把它写成 IPO-B，是为了显式提醒：除了 Input、Process、Output，还必须定义 Boundary。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">层面</th>
+<th style="text-align: left;">财报分析 Skill 的定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Input</td>
+<td style="text-align: left;">公司名或股票代码、年份、报告类型、PDF 文件、受众、输出语言</td>
+</tr>
+<tr>
+<td style="text-align: left;">Process</td>
+<td style="text-align: left;">搜索/读取财报、抽取指标、复算、归纳增长驱动、整理风险、生成大纲</td>
+</tr>
+<tr>
+<td style="text-align: left;">Output</td>
+<td style="text-align: left;">中文摘要、关键指标表、证据说明、PPT 大纲、限制条件</td>
+</tr>
+<tr>
+<td style="text-align: left;">Boundary</td>
+<td style="text-align: left;">不做投资建议，不预测股价，不替代审计，不输出无来源数字</td>
+</tr>
+</tbody>
+</table>
+<p>这一步非常关键。没有 IPO-B，Skill 很容易变成一段长 Prompt；有了 IPO-B，后面才能写清触发、资源、失败处理和验证。</p>
+<hr />
+<h2 id="skill">六、生命周期第三步：设计 Skill 包结构<a class="headerlink" href="#skill" title="Permanent link">&para;</a></h2>
+<p>一个实战 Skill 不应该只有 <code>SKILL.md</code>。</p>
+<p>如果所有内容都塞进一个文件，Agent 每次加载都会读到一大堆不一定需要的信息，上下文会被浪费，维护也会变难。</p>
+<p>更好的结构是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>financial-report-briefing/
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>├── SKILL.md
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>├── agents/
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>│   └── openai.yaml
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>├── references/
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>│   ├── financial-metrics.md
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>│   ├── report-sections.md
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>│   └── risk-language.md
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>├── scripts/
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>│   └── validate_metrics.py
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>└── assets/
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>    └── briefing-outline-template.md
+</code></pre></div>
+<h3 id="61-agents">6.1 <code>agents/</code> 放什么<a class="headerlink" href="#61-agents" title="Permanent link">&para;</a></h3>
+<p><code>agents/</code> 通常放平台展示元数据，例如 <code>agents/openai.yaml</code>。它不是 Skill 的核心执行逻辑，但能帮助界面展示名称、简介和默认请求。</p>
+<p>例如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nt">display_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Financial Report Briefing</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="nt">short_description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Analyze public financial reports and generate verified Chinese briefings.</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="nt">default_prompt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Analyze this annual report and produce a Chinese executive summary, metric table, risk notes, and PPT outline.</span>
+</code></pre></div>
+<p>如果只是写一个最小 Skill，<code>agents/</code> 可以暂时不建；如果 Skill 要进入可复用目录或团队共享，就建议补上这层展示元数据。</p>
+<h3 id="62-skillmd">6.2 <code>SKILL.md</code> 放什么<a class="headerlink" href="#62-skillmd" title="Permanent link">&para;</a></h3>
+<p><code>SKILL.md</code> 是入口，应该放最关键的内容：</p>
+<ul>
+<li>什么时候触发</li>
+<li>做什么、不做什么</li>
+<li>标准工作流</li>
+<li>缺信息时怎么问</li>
+<li>什么时候读取哪些 reference</li>
+<li>什么时候运行哪些脚本</li>
+<li>失败和验证规则</li>
+</ul>
+<h3 id="63-references">6.3 <code>references/</code> 放什么<a class="headerlink" href="#63-references" title="Permanent link">&para;</a></h3>
+<p><code>references/</code> 放详细知识。</p>
+<p>例如：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">文件</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>financial-metrics.md</code></td>
+<td style="text-align: left;">常见指标定义、公式、单位注意事项</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>report-sections.md</code></td>
+<td style="text-align: left;">年报常见章节，哪些章节适合找哪些信息</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>risk-language.md</code></td>
+<td style="text-align: left;">如何区分模板风险、强化风险和新增风险</td>
+</tr>
+</tbody>
+</table>
+<p>这些内容不需要每次都完整塞进 <code>SKILL.md</code>。只有当任务需要时，Agent 再按路由读取。</p>
+<h3 id="64-scripts">6.4 <code>scripts/</code> 放什么<a class="headerlink" href="#64-scripts" title="Permanent link">&para;</a></h3>
+<p>能确定性完成的事情，优先脚本化。</p>
+<p>例如关键指标复算就很适合放进脚本：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">growth_rate</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">previous</span><span class="p">):</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>    <span class="k">if</span> <span class="n">previous</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"previous value cannot be zero"</span><span class="p">)</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>    <span class="k">return</span> <span class="p">(</span><span class="n">current</span> <span class="o">-</span> <span class="n">previous</span><span class="p">)</span> <span class="o">/</span> <span class="n">previous</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">gross_margin</span><span class="p">(</span><span class="n">gross_profit</span><span class="p">,</span> <span class="n">revenue</span><span class="p">):</span>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>    <span class="k">if</span> <span class="n">revenue</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"revenue cannot be zero"</span><span class="p">)</span>
+<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a>    <span class="k">return</span> <span class="n">gross_profit</span> <span class="o">/</span> <span class="n">revenue</span>
+<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>
+<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a>
+<a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="k">def</span><span class="w"> </span><span class="nf">validate_metric</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.001</span><span class="p">):</span>
+<a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a>    <span class="n">delta</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">expected</span> <span class="o">-</span> <span class="n">actual</span><span class="p">)</span>
+<a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a>    <span class="k">return</span> <span class="p">{</span>
+<a id="__codelineno-21-16" name="__codelineno-21-16" href="#__codelineno-21-16"></a>        <span class="s2">"metric"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+<a id="__codelineno-21-17" name="__codelineno-21-17" href="#__codelineno-21-17"></a>        <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"pass"</span> <span class="k">if</span> <span class="n">delta</span> <span class="o">&lt;=</span> <span class="n">tolerance</span> <span class="k">else</span> <span class="s2">"fail"</span><span class="p">,</span>
+<a id="__codelineno-21-18" name="__codelineno-21-18" href="#__codelineno-21-18"></a>        <span class="s2">"expected"</span><span class="p">:</span> <span class="n">expected</span><span class="p">,</span>
+<a id="__codelineno-21-19" name="__codelineno-21-19" href="#__codelineno-21-19"></a>        <span class="s2">"actual"</span><span class="p">:</span> <span class="n">actual</span><span class="p">,</span>
+<a id="__codelineno-21-20" name="__codelineno-21-20" href="#__codelineno-21-20"></a>        <span class="s2">"delta"</span><span class="p">:</span> <span class="n">delta</span><span class="p">,</span>
+<a id="__codelineno-21-21" name="__codelineno-21-21" href="#__codelineno-21-21"></a>    <span class="p">}</span>
+<a id="__codelineno-21-22" name="__codelineno-21-22" href="#__codelineno-21-22"></a>
+<a id="__codelineno-21-23" name="__codelineno-21-23" href="#__codelineno-21-23"></a>
+<a id="__codelineno-21-24" name="__codelineno-21-24" href="#__codelineno-21-24"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+<a id="__codelineno-21-25" name="__codelineno-21-25" href="#__codelineno-21-25"></a>    <span class="n">expected_growth</span> <span class="o">=</span> <span class="n">growth_rate</span><span class="p">(</span><span class="mi">1300</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<a id="__codelineno-21-26" name="__codelineno-21-26" href="#__codelineno-21-26"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">validate_metric</span><span class="p">(</span><span class="s2">"revenue_growth"</span><span class="p">,</span> <span class="n">expected_growth</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">))</span>
+</code></pre></div>
+<p>这段代码很简单，但它表达了一个重要原则：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>能算的不要让模型猜，能验证的不要靠模型自信。
+</code></pre></div>
+<h3 id="65-assets">6.5 <code>assets/</code> 放什么<a class="headerlink" href="#65-assets" title="Permanent link">&para;</a></h3>
+<p><code>assets/</code> 放输出模板或素材。</p>
+<p>例如 <code>briefing-outline-template.md</code> 可以规定 PPT 大纲结构：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="gh"># 财报分析汇报大纲</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="gu">## 1. 一页结论</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="gu">## 2. 核心财务指标</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="gu">## 3. 营收增长驱动</span>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="gu">## 4. 利润率变化</span>
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a><span class="gu">## 5. 分部业务表现</span>
+<a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a>
+<a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a><span class="gu">## 6. 主要风险</span>
+<a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a>
+<a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a><span class="gu">## 7. 不确定性与待补充资料</span>
+<a id="__codelineno-23-16" name="__codelineno-23-16" href="#__codelineno-23-16"></a>
+<a id="__codelineno-23-17" name="__codelineno-23-17" href="#__codelineno-23-17"></a><span class="gu">## 8. 下一步分析建议</span>
+</code></pre></div>
+<p>模板不是为了限制表达，而是为了让同类交付物稳定。</p>
+<hr />
+<h2 id="skillmd">七、生命周期第四步：编写 <code>SKILL.md</code><a class="headerlink" href="#skillmd" title="Permanent link">&para;</a></h2>
+<p>下面给出一个可直接参考的 <code>SKILL.md</code> 草案。</p>
+<p>它不是最终完美版，但已经具备一个可用 Skill 的关键要素：触发、边界、工作流、资源路由、失败处理和验证。</p>
+<p>下面的草案保留英文，是因为很多 Agent / Skill 运行环境会直接读取 <code>description</code> 做触发判断，英文技术词和文件名更稳定。中文团队内部使用时，也可以把正文说明改成中文，但 <code>name</code>、目录名、脚本名和关键触发词建议保持简短、稳定、可机器匹配。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>---
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>name: financial-report-briefing
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="gu">description: Analyze public company financial reports and produce Chinese executive summaries, key metric tables, risk notes, and PPT outlines. Use when the user asks to analyze annual reports, 10-K/10-Q filings, earnings reports, or financial report PDFs. Do not use for stock price prediction, personalized investment advice, tax filing, or audit opinions.</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="gu">---</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="gh"># Financial Report Briefing</span>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="gu">## Purpose</span>
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a>Turn a public company financial report into a verified Chinese briefing with:
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="k">-</span><span class="w"> </span>executive summary
+<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a><span class="k">-</span><span class="w"> </span>key financial metrics
+<a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a><span class="k">-</span><span class="w"> </span>growth drivers
+<a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a><span class="k">-</span><span class="w"> </span>margin changes
+<a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a><span class="k">-</span><span class="w"> </span>risk notes
+<a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a><span class="k">-</span><span class="w"> </span>PPT outline
+<a id="__codelineno-24-18" name="__codelineno-24-18" href="#__codelineno-24-18"></a><span class="k">-</span><span class="w"> </span>evidence and limitations
+<a id="__codelineno-24-19" name="__codelineno-24-19" href="#__codelineno-24-19"></a>
+<a id="__codelineno-24-20" name="__codelineno-24-20" href="#__codelineno-24-20"></a><span class="gu">## Boundaries</span>
+<a id="__codelineno-24-21" name="__codelineno-24-21" href="#__codelineno-24-21"></a>
+<a id="__codelineno-24-22" name="__codelineno-24-22" href="#__codelineno-24-22"></a><span class="k">-</span><span class="w"> </span>Do not provide personalized investment advice.
+<a id="__codelineno-24-23" name="__codelineno-24-23" href="#__codelineno-24-23"></a><span class="k">-</span><span class="w"> </span>Do not predict stock prices.
+<a id="__codelineno-24-24" name="__codelineno-24-24" href="#__codelineno-24-24"></a><span class="k">-</span><span class="w"> </span>Do not invent missing financial numbers.
+<a id="__codelineno-24-25" name="__codelineno-24-25" href="#__codelineno-24-25"></a><span class="k">-</span><span class="w"> </span>Do not treat press releases as more authoritative than official filings.
+<a id="__codelineno-24-26" name="__codelineno-24-26" href="#__codelineno-24-26"></a><span class="k">-</span><span class="w"> </span>Mark unsupported conclusions as assumptions or limitations.
+<a id="__codelineno-24-27" name="__codelineno-24-27" href="#__codelineno-24-27"></a>
+<a id="__codelineno-24-28" name="__codelineno-24-28" href="#__codelineno-24-28"></a><span class="gu">## Required Inputs</span>
+<a id="__codelineno-24-29" name="__codelineno-24-29" href="#__codelineno-24-29"></a>
+<a id="__codelineno-24-30" name="__codelineno-24-30" href="#__codelineno-24-30"></a>Before starting, identify:
+<a id="__codelineno-24-31" name="__codelineno-24-31" href="#__codelineno-24-31"></a>
+<a id="__codelineno-24-32" name="__codelineno-24-32" href="#__codelineno-24-32"></a><span class="k">-</span><span class="w"> </span>company name or ticker
+<a id="__codelineno-24-33" name="__codelineno-24-33" href="#__codelineno-24-33"></a><span class="k">-</span><span class="w"> </span>fiscal year or reporting period
+<a id="__codelineno-24-34" name="__codelineno-24-34" href="#__codelineno-24-34"></a><span class="k">-</span><span class="w"> </span>report type
+<a id="__codelineno-24-35" name="__codelineno-24-35" href="#__codelineno-24-35"></a><span class="k">-</span><span class="w"> </span>source PDF or permission to search for the official filing
+<a id="__codelineno-24-36" name="__codelineno-24-36" href="#__codelineno-24-36"></a><span class="k">-</span><span class="w"> </span>target audience
+<a id="__codelineno-24-37" name="__codelineno-24-37" href="#__codelineno-24-37"></a><span class="k">-</span><span class="w"> </span>output format
+<a id="__codelineno-24-38" name="__codelineno-24-38" href="#__codelineno-24-38"></a>
+<a id="__codelineno-24-39" name="__codelineno-24-39" href="#__codelineno-24-39"></a>If company, year, or report source is missing, ask the user before analysis unless the user explicitly allows searching.
+<a id="__codelineno-24-40" name="__codelineno-24-40" href="#__codelineno-24-40"></a>
+<a id="__codelineno-24-41" name="__codelineno-24-41" href="#__codelineno-24-41"></a><span class="gu">## Workflow</span>
+<a id="__codelineno-24-42" name="__codelineno-24-42" href="#__codelineno-24-42"></a>
+<a id="__codelineno-24-43" name="__codelineno-24-43" href="#__codelineno-24-43"></a><span class="k">1.</span> Confirm the company, period, report type, audience, and expected output.
+<a id="__codelineno-24-44" name="__codelineno-24-44" href="#__codelineno-24-44"></a><span class="k">2.</span> Prefer official filings or investor relations pages as sources.
+<a id="__codelineno-24-45" name="__codelineno-24-45" href="#__codelineno-24-45"></a><span class="k">3.</span> Extract revenue, gross margin, operating margin, net income, cash flow, and segment data when available.
+<a id="__codelineno-24-46" name="__codelineno-24-46" href="#__codelineno-24-46"></a><span class="k">4.</span> Check unit, currency, fiscal period, and comparison basis.
+<a id="__codelineno-24-47" name="__codelineno-24-47" href="#__codelineno-24-47"></a><span class="k">5.</span> Recalculate key growth rates and margins.
+<a id="__codelineno-24-48" name="__codelineno-24-48" href="#__codelineno-24-48"></a><span class="k">6.</span> Read management discussion, segment notes, and risk factors.
+<a id="__codelineno-24-49" name="__codelineno-24-49" href="#__codelineno-24-49"></a><span class="k">7.</span> Separate facts, calculations, interpretations, and recommendations.
+<a id="__codelineno-24-50" name="__codelineno-24-50" href="#__codelineno-24-50"></a><span class="k">8.</span> Generate the briefing and PPT outline.
+<a id="__codelineno-24-51" name="__codelineno-24-51" href="#__codelineno-24-51"></a><span class="k">9.</span> Report evidence, assumptions, limitations, and verification results.
+<a id="__codelineno-24-52" name="__codelineno-24-52" href="#__codelineno-24-52"></a>
+<a id="__codelineno-24-53" name="__codelineno-24-53" href="#__codelineno-24-53"></a><span class="gu">## Resource Routing</span>
+<a id="__codelineno-24-54" name="__codelineno-24-54" href="#__codelineno-24-54"></a>
+<a id="__codelineno-24-55" name="__codelineno-24-55" href="#__codelineno-24-55"></a><span class="k">-</span><span class="w"> </span>If metric definitions or formulas are needed, read <span class="sb">`references/financial-metrics.md`</span>.
+<a id="__codelineno-24-56" name="__codelineno-24-56" href="#__codelineno-24-56"></a><span class="k">-</span><span class="w"> </span>If the report section is unfamiliar, read <span class="sb">`references/report-sections.md`</span>.
+<a id="__codelineno-24-57" name="__codelineno-24-57" href="#__codelineno-24-57"></a><span class="k">-</span><span class="w"> </span>If risk factor language needs interpretation, read <span class="sb">`references/risk-language.md`</span>.
+<a id="__codelineno-24-58" name="__codelineno-24-58" href="#__codelineno-24-58"></a><span class="k">-</span><span class="w"> </span>If extracted metrics include growth rates or margins, run <span class="sb">`scripts/validate_metrics.py`</span> or manually recalculate using the same formulas.
+<a id="__codelineno-24-59" name="__codelineno-24-59" href="#__codelineno-24-59"></a><span class="k">-</span><span class="w"> </span>If a PPT outline is requested, use <span class="sb">`assets/briefing-outline-template.md`</span>.
+<a id="__codelineno-24-60" name="__codelineno-24-60" href="#__codelineno-24-60"></a>
+<a id="__codelineno-24-61" name="__codelineno-24-61" href="#__codelineno-24-61"></a><span class="gu">## Failure Handling</span>
+<a id="__codelineno-24-62" name="__codelineno-24-62" href="#__codelineno-24-62"></a>
+<a id="__codelineno-24-63" name="__codelineno-24-63" href="#__codelineno-24-63"></a><span class="k">-</span><span class="w"> </span>If the official report cannot be found, ask the user for a source or clearly mark the source limitation.
+<a id="__codelineno-24-64" name="__codelineno-24-64" href="#__codelineno-24-64"></a><span class="k">-</span><span class="w"> </span>If PDF extraction fails, try another extraction path and report what could not be read.
+<a id="__codelineno-24-65" name="__codelineno-24-65" href="#__codelineno-24-65"></a><span class="k">-</span><span class="w"> </span>If numeric values conflict, keep both values, identify the source, and do not merge them silently.
+<a id="__codelineno-24-66" name="__codelineno-24-66" href="#__codelineno-24-66"></a><span class="k">-</span><span class="w"> </span>If a calculation fails validation, correct it before final output.
+<a id="__codelineno-24-67" name="__codelineno-24-67" href="#__codelineno-24-67"></a><span class="k">-</span><span class="w"> </span>If evidence is insufficient for a strong conclusion, downgrade the conclusion or ask for more data.
+<a id="__codelineno-24-68" name="__codelineno-24-68" href="#__codelineno-24-68"></a>
+<a id="__codelineno-24-69" name="__codelineno-24-69" href="#__codelineno-24-69"></a><span class="gu">## Validation</span>
+<a id="__codelineno-24-70" name="__codelineno-24-70" href="#__codelineno-24-70"></a>
+<a id="__codelineno-24-71" name="__codelineno-24-71" href="#__codelineno-24-71"></a>Before final output, verify:
+<a id="__codelineno-24-72" name="__codelineno-24-72" href="#__codelineno-24-72"></a>
+<a id="__codelineno-24-73" name="__codelineno-24-73" href="#__codelineno-24-73"></a><span class="k">-</span><span class="w"> </span>all key numbers have source references
+<a id="__codelineno-24-74" name="__codelineno-24-74" href="#__codelineno-24-74"></a><span class="k">-</span><span class="w"> </span>growth rates and margins are recalculated
+<a id="__codelineno-24-75" name="__codelineno-24-75" href="#__codelineno-24-75"></a><span class="k">-</span><span class="w"> </span>facts, calculations, interpretations, and recommendations are separated
+<a id="__codelineno-24-76" name="__codelineno-24-76" href="#__codelineno-24-76"></a><span class="k">-</span><span class="w"> </span>risk factors are not copied blindly without interpretation
+<a id="__codelineno-24-77" name="__codelineno-24-77" href="#__codelineno-24-77"></a><span class="k">-</span><span class="w"> </span>output follows the requested audience and format
+<a id="__codelineno-24-78" name="__codelineno-24-78" href="#__codelineno-24-78"></a><span class="k">-</span><span class="w"> </span>limitations are explicitly stated
+</code></pre></div>
+<h3 id="71-prompt">7.1 为什么这不是长 Prompt<a class="headerlink" href="#71-prompt" title="Permanent link">&para;</a></h3>
+<p>这份 <code>SKILL.md</code> 看起来也像文本，但它和普通 Prompt 的差别很大。</p>
+<p>普通 Prompt 通常只告诉模型：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>请你扮演财报分析师，输出专业结果。
+</code></pre></div>
+<p>而 Skill 会进一步规定：</p>
+<ul>
+<li>缺哪些信息必须问</li>
+<li>哪些来源优先</li>
+<li>哪些事情不能做</li>
+<li>哪些资料按需加载</li>
+<li>哪些计算必须验证</li>
+<li>哪些失败不能掩盖</li>
+<li>最终完成前检查什么</li>
+</ul>
+<p>也就是说，Skill 不是让模型“表现得像专家”，而是让 Agent “按专家流程行动”。</p>
+<hr />
+<h2 id="_3">八、生命周期第五步：设计测试样本<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>Skill 写完不能直接算完成。</p>
+<p>一个没有测试样本的 Skill，很容易只在作者脑子里的理想场景成立。</p>
+<h3 id="81-6">8.1 最少准备 6 类测试<a class="headerlink" href="#81-6" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">测试类型</th>
+<th style="text-align: left;">示例请求</th>
+<th style="text-align: left;">验证重点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">正常任务</td>
+<td style="text-align: left;">分析 NVDA 2025 年报并输出 PPT 大纲</td>
+<td style="text-align: left;">标准流程是否完整</td>
+</tr>
+<tr>
+<td style="text-align: left;">缺参任务</td>
+<td style="text-align: left;">帮我分析这家公司财报</td>
+<td style="text-align: left;">是否追问公司、年份或来源</td>
+</tr>
+<tr>
+<td style="text-align: left;">来源任务</td>
+<td style="text-align: left;">用户只给公司名不给 PDF</td>
+<td style="text-align: left;">是否优先找官方来源</td>
+</tr>
+<tr>
+<td style="text-align: left;">数字任务</td>
+<td style="text-align: left;">给出收入和利润率变化</td>
+<td style="text-align: left;">是否复算增长率和利润率</td>
+</tr>
+<tr>
+<td style="text-align: left;">失败任务</td>
+<td style="text-align: left;">PDF 无法解析</td>
+<td style="text-align: left;">是否降级处理并报告限制</td>
+</tr>
+<tr>
+<td style="text-align: left;">边界任务</td>
+<td style="text-align: left;">预测明年股价</td>
+<td style="text-align: left;">是否拒绝或转为非投资建议分析</td>
+</tr>
+</tbody>
+</table>
+<h3 id="82-eval">8.2 写一个最小 eval 表<a class="headerlink" href="#82-eval" title="Permanent link">&para;</a></h3>
+<p>可以先用一个简单的 Markdown 表管理测试集：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">case_id</th>
+<th style="text-align: left;">用户请求</th>
+<th style="text-align: left;">预期行为</th>
+<th style="text-align: left;">必须通过</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">FR-001</td>
+<td style="text-align: left;">分析指定 PDF</td>
+<td style="text-align: left;">读取 PDF、抽指标、输出摘要和大纲</td>
+<td style="text-align: left;">有来源、有复算</td>
+</tr>
+<tr>
+<td style="text-align: left;">FR-002</td>
+<td style="text-align: left;">只说“分析这家公司”</td>
+<td style="text-align: left;">追问公司、年份、报告来源</td>
+<td style="text-align: left;">不直接编造</td>
+</tr>
+<tr>
+<td style="text-align: left;">FR-003</td>
+<td style="text-align: left;">要求预测股价</td>
+<td style="text-align: left;">拒绝个性化投资建议，改为基本面分析</td>
+<td style="text-align: left;">边界清楚</td>
+</tr>
+<tr>
+<td style="text-align: left;">FR-004</td>
+<td style="text-align: left;">PDF 解析失败</td>
+<td style="text-align: left;">尝试替代方式，报告失败部分</td>
+<td style="text-align: left;">不假装完成</td>
+</tr>
+<tr>
+<td style="text-align: left;">FR-005</td>
+<td style="text-align: left;">数字前后矛盾</td>
+<td style="text-align: left;">标注冲突来源，请求确认或保留差异</td>
+<td style="text-align: left;">不静默合并</td>
+</tr>
+</tbody>
+</table>
+<p>如果团队已经能拿到 Agent 的结构化执行记录，还可以用一个很小的脚本跑冒烟测试：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="n">EVAL_CASES</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>    <span class="p">{</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>        <span class="s2">"case_id"</span><span class="p">:</span> <span class="s2">"FR-001"</span><span class="p">,</span>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>        <span class="s2">"required_events"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"source_checked"</span><span class="p">,</span> <span class="s2">"metrics_extracted"</span><span class="p">,</span> <span class="s2">"metrics_validated"</span><span class="p">},</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>        <span class="s2">"forbidden_events"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"invented_number"</span><span class="p">},</span>
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>    <span class="p">},</span>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a>    <span class="p">{</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a>        <span class="s2">"case_id"</span><span class="p">:</span> <span class="s2">"FR-003"</span><span class="p">,</span>
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a>        <span class="s2">"required_events"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"boundary_refused"</span><span class="p">,</span> <span class="s2">"alternative_offered"</span><span class="p">},</span>
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>        <span class="s2">"forbidden_events"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"stock_price_prediction"</span><span class="p">},</span>
+<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>    <span class="p">},</span>
+<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a><span class="p">]</span>
+<a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a>
+<a id="__codelineno-26-14" name="__codelineno-26-14" href="#__codelineno-26-14"></a>
+<a id="__codelineno-26-15" name="__codelineno-26-15" href="#__codelineno-26-15"></a><span class="k">def</span><span class="w"> </span><span class="nf">evaluate_case</span><span class="p">(</span><span class="n">case</span><span class="p">,</span> <span class="n">trace_events</span><span class="p">):</span>
+<a id="__codelineno-26-16" name="__codelineno-26-16" href="#__codelineno-26-16"></a>    <span class="n">events</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">trace_events</span><span class="p">)</span>
+<a id="__codelineno-26-17" name="__codelineno-26-17" href="#__codelineno-26-17"></a>    <span class="n">missing</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">case</span><span class="p">[</span><span class="s2">"required_events"</span><span class="p">]</span> <span class="o">-</span> <span class="n">events</span><span class="p">)</span>
+<a id="__codelineno-26-18" name="__codelineno-26-18" href="#__codelineno-26-18"></a>    <span class="n">forbidden</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">case</span><span class="p">[</span><span class="s2">"forbidden_events"</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">events</span><span class="p">)</span>
+<a id="__codelineno-26-19" name="__codelineno-26-19" href="#__codelineno-26-19"></a>    <span class="n">passed</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">missing</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">forbidden</span>
+<a id="__codelineno-26-20" name="__codelineno-26-20" href="#__codelineno-26-20"></a>    <span class="k">return</span> <span class="p">{</span>
+<a id="__codelineno-26-21" name="__codelineno-26-21" href="#__codelineno-26-21"></a>        <span class="s2">"case_id"</span><span class="p">:</span> <span class="n">case</span><span class="p">[</span><span class="s2">"case_id"</span><span class="p">],</span>
+<a id="__codelineno-26-22" name="__codelineno-26-22" href="#__codelineno-26-22"></a>        <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"pass"</span> <span class="k">if</span> <span class="n">passed</span> <span class="k">else</span> <span class="s2">"fail"</span><span class="p">,</span>
+<a id="__codelineno-26-23" name="__codelineno-26-23" href="#__codelineno-26-23"></a>        <span class="s2">"missing"</span><span class="p">:</span> <span class="n">missing</span><span class="p">,</span>
+<a id="__codelineno-26-24" name="__codelineno-26-24" href="#__codelineno-26-24"></a>        <span class="s2">"forbidden"</span><span class="p">:</span> <span class="n">forbidden</span><span class="p">,</span>
+<a id="__codelineno-26-25" name="__codelineno-26-25" href="#__codelineno-26-25"></a>    <span class="p">}</span>
+<a id="__codelineno-26-26" name="__codelineno-26-26" href="#__codelineno-26-26"></a>
+<a id="__codelineno-26-27" name="__codelineno-26-27" href="#__codelineno-26-27"></a>
+<a id="__codelineno-26-28" name="__codelineno-26-28" href="#__codelineno-26-28"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+<a id="__codelineno-26-29" name="__codelineno-26-29" href="#__codelineno-26-29"></a>    <span class="n">trace</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-26-30" name="__codelineno-26-30" href="#__codelineno-26-30"></a>        <span class="s2">"source_checked"</span><span class="p">,</span>
+<a id="__codelineno-26-31" name="__codelineno-26-31" href="#__codelineno-26-31"></a>        <span class="s2">"metrics_extracted"</span><span class="p">,</span>
+<a id="__codelineno-26-32" name="__codelineno-26-32" href="#__codelineno-26-32"></a>        <span class="s2">"metrics_validated"</span><span class="p">,</span>
+<a id="__codelineno-26-33" name="__codelineno-26-33" href="#__codelineno-26-33"></a>    <span class="p">]</span>
+<a id="__codelineno-26-34" name="__codelineno-26-34" href="#__codelineno-26-34"></a>
+<a id="__codelineno-26-35" name="__codelineno-26-35" href="#__codelineno-26-35"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">evaluate_case</span><span class="p">(</span><span class="n">EVAL_CASES</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">trace</span><span class="p">))</span>
+</code></pre></div>
+<p>真实系统里的 eval 会更复杂，但最小逻辑仍然是这三个问题：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>应该发生的步骤是否发生了？
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>不该发生的行为是否被拦住了？
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>失败时有没有留下可解释的原因？
+</code></pre></div>
+<h3 id="83">8.3 测试不只看最终答案<a class="headerlink" href="#83" title="Permanent link">&para;</a></h3>
+<p>评估 Skill 时，不要只看最终文本是否漂亮。</p>
+<p>还要看 Agent 有没有按 Skill 行动：</p>
+<ul>
+<li>是否正确触发 Skill</li>
+<li>是否问了必要问题</li>
+<li>是否读取了该读的 reference</li>
+<li>是否运行或执行了验证步骤</li>
+<li>是否在失败时暂停或降级</li>
+<li>是否报告了验证结果和限制条件</li>
+</ul>
+<p>这和《Agent自我纠错与验证机制设计：从自信回答到可验证执行》第八章“把自我纠错和可观测性连起来”的思想一致：可信系统不是只看最终答案，而是要看过程和证据。</p>
+<hr />
+<h2 id="skill_1">九、生命周期第六步：从失败中迭代 Skill<a class="headerlink" href="#skill_1" title="Permanent link">&para;</a></h2>
+<p>Skill 第一次写出来，一定不完美。</p>
+<p>真正让 Skill 变好的，不是作者一次性写得很完整，而是持续吸收真实失败。</p>
+<h3 id="91">9.1 一个失败案例<a class="headerlink" href="#91" title="Permanent link">&para;</a></h3>
+<p>某次 Agent 输出：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>公司收入同比增长 32%，主要来自云业务增长。
+</code></pre></div>
+<p>用户指出：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>你把单位看错了。表格里是百万美元，不是亿美元。另外“云业务增长”只出现在新闻稿里，年报里没有这样归因。
+</code></pre></div>
+<p>这不是简单的“模型粗心”，而是 Skill 缺了两个规则：</p>
+<ul>
+<li>提取数字时必须记录单位和币种</li>
+<li>归因必须优先来自年报或管理层讨论，新闻稿只能作为辅助来源</li>
+</ul>
+<h3 id="92">9.2 把失败改成规则<a class="headerlink" href="#92" title="Permanent link">&para;</a></h3>
+<p>不要只在复盘里写：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>下次要注意单位。
+</code></pre></div>
+<p>应该改成 Skill 可执行规则：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>When extracting financial metrics, always record:
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="k">-</span><span class="w"> </span>value
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="k">-</span><span class="w"> </span>unit
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="k">-</span><span class="w"> </span>currency
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="k">-</span><span class="w"> </span>fiscal period
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="k">-</span><span class="w"> </span>source section or page
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a>
+<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a>Do not compare metrics unless unit, currency, and fiscal period are aligned.
+</code></pre></div>
+<p>再补一条验证规则：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>Before reporting a growth driver, identify whether the evidence comes from:
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="k">-</span><span class="w"> </span>official filing
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="k">-</span><span class="w"> </span>management discussion
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="k">-</span><span class="w"> </span>segment data
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="k">-</span><span class="w"> </span>earnings call
+<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="k">-</span><span class="w"> </span>press release
+<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a>
+<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a>If the evidence only comes from press releases, mark the driver as weaker evidence.
+</code></pre></div>
+<p>这样一次失败就变成了下一次任务的防线。</p>
+<h3 id="93">9.3 迭代记录怎么写<a class="headerlink" href="#93" title="Permanent link">&para;</a></h3>
+<p>建议为 Skill 维护一个轻量变更记录，不一定放在正式 Skill 包里，但开发期要有。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">日期</th>
+<th style="text-align: left;">失败模式</th>
+<th style="text-align: left;">修改内容</th>
+<th style="text-align: left;">新增测试</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">2026-08-31</td>
+<td style="text-align: left;">单位混淆</td>
+<td style="text-align: left;">指标抽取必须记录 unit/currency/period</td>
+<td style="text-align: left;">FR-006</td>
+</tr>
+<tr>
+<td style="text-align: left;">2026-08-31</td>
+<td style="text-align: left;">证据等级不清</td>
+<td style="text-align: left;">增加来源优先级和弱证据标注</td>
+<td style="text-align: left;">FR-007</td>
+</tr>
+</tbody>
+</table>
+<p>迭代的目标不是把 Skill 写长，而是让它在关键错误上更难犯错。</p>
+<hr />
+<h2 id="prompt-skill_2">十、从 Prompt 到 Skill 的完整迁移路径<a class="headerlink" href="#prompt-skill_2" title="Permanent link">&para;</a></h2>
+<p>现在回头看，财报分析任务从 Prompt 到 Skill，大致经历了四步。</p>
+<h3 id="101-prompt">10.1 第一阶段：普通 Prompt<a class="headerlink" href="#101-prompt" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>你是财报分析师，请分析这份财报并输出 PPT 大纲。
+</code></pre></div>
+<p>优点是快。</p>
+<p>缺点是流程不稳定，验证不足，边界不清。</p>
+<h3 id="102-prompt">10.2 第二阶段：增强 Prompt<a class="headerlink" href="#102-prompt" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>请确认公司、年份和报告类型；提取关键指标；复算增长率；标注来源；输出 8 页 PPT 大纲。
+</code></pre></div>
+<p>这已经开始有流程，但仍然是一次性指令。</p>
+<h3 id="103-prompt">10.3 第三阶段：结构化 Prompt<a class="headerlink" href="#103-prompt" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>输入：
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>- 公司、年份、报告类型、PDF
+<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a>
+<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a>步骤：
+<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a>1. 确认材料
+<a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a>2. 抽取指标
+<a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a>3. 复算数字
+<a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a>4. 总结风险
+<a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a>5. 输出大纲
+<a id="__codelineno-35-10" name="__codelineno-35-10" href="#__codelineno-35-10"></a>
+<a id="__codelineno-35-11" name="__codelineno-35-11" href="#__codelineno-35-11"></a>验收：
+<a id="__codelineno-35-12" name="__codelineno-35-12" href="#__codelineno-35-12"></a>- 数字有来源
+<a id="__codelineno-35-13" name="__codelineno-35-13" href="#__codelineno-35-13"></a>- 计算可复核
+<a id="__codelineno-35-14" name="__codelineno-35-14" href="#__codelineno-35-14"></a>- 不确定性明确标注
+</code></pre></div>
+<p>这一步已经接近 Skill，但还缺资源组织、失败处理和测试集。</p>
+<h3 id="104-skill">10.4 第四阶段：正式 Skill<a class="headerlink" href="#104-skill" title="Permanent link">&para;</a></h3>
+<p>正式 Skill 会把这些内容拆成：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>SKILL.md：触发、边界、流程、资源路由、失败处理、验证
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a>references/：指标定义、报告章节、风险语言
+<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a>scripts/：确定性计算和校验
+<a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a>assets/：输出模板
+<a id="__codelineno-36-5" name="__codelineno-36-5" href="#__codelineno-36-5"></a>evals：真实任务测试集
+</code></pre></div>
+<p>这时，能力才真正从“会写提示词”变成“可复用工程资产”。</p>
+<hr />
+<h2 id="_4">十一、常见反模式<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h3 id="111-skill-prompt">11.1 把 Skill 写成超长 Prompt<a class="headerlink" href="#111-skill-prompt" title="Permanent link">&para;</a></h3>
+<p>问题：正文塞满背景知识、例子和解释，Agent 每次都要读一大堆无关内容。</p>
+<p>建议：<code>SKILL.md</code> 放流程和路由，细节放 <code>references/</code>。</p>
+<h3 id="112">11.2 只写成功路径<a class="headerlink" href="#112" title="Permanent link">&para;</a></h3>
+<p>问题：真实任务一旦缺参、工具失败、来源冲突，Agent 就开始临场发挥。</p>
+<p>建议：写清失败状态、降级方案和人工确认条件。</p>
+<h3 id="113">11.3 没有触发边界<a class="headerlink" href="#113" title="Permanent link">&para;</a></h3>
+<p>问题：只要用户提到“财报”，Agent 就加载 Skill，甚至用户只是问一个概念也加载。</p>
+<p>建议：<code>description</code> 同时写清使用场景和排除场景。</p>
+<h3 id="114">11.4 没有验证<a class="headerlink" href="#114" title="Permanent link">&para;</a></h3>
+<p>问题：Skill 只规定“输出什么”，没有规定“如何证明输出可靠”。</p>
+<p>建议：把验证写成完成条件。没有验证，就不能宣称完成。</p>
+<h3 id="115">11.5 资源路由太弱<a class="headerlink" href="#115" title="Permanent link">&para;</a></h3>
+<p>问题：写成“可参考某文件”，Agent 可能不会读。</p>
+<p>建议：写成明确条件：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>如果任务涉及增长率或利润率，必须读取指标定义或运行计算脚本。
+</code></pre></div>
+<h3 id="116">11.6 过早追求通用<a class="headerlink" href="#116" title="Permanent link">&para;</a></h3>
+<p>问题：试图写一个覆盖所有财务分析任务的 Skill，最后变成又长又泛的说明书。</p>
+<p>建议：先做好一个窄场景，再从真实复用中扩展。</p>
+<hr />
+<h2 id="skill_2">十二、Skill 生命周期检查清单<a class="headerlink" href="#skill_2" title="Permanent link">&para;</a></h2>
+<h3 id="121">12.1 识别阶段<a class="headerlink" href="#121" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务是否高频重复？</li>
+<li>是否有专家差距？</li>
+<li>输入和输出是否能定义清楚？</li>
+<li>是否有明确失败场景？</li>
+<li>是否需要验证？</li>
+</ul>
+<h3 id="122">12.2 设计阶段<a class="headerlink" href="#122" title="Permanent link">&para;</a></h3>
+<ul>
+<li>是否收集了真实案例？</li>
+<li>是否抽取了专家流程？</li>
+<li>是否定义了 IPO-B？</li>
+<li>是否写清职责边界？</li>
+<li>是否确定了触发条件和排除场景？</li>
+</ul>
+<h3 id="123">12.3 编写阶段<a class="headerlink" href="#123" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>SKILL.md</code> 是否包含 frontmatter？</li>
+<li><code>description</code> 是否足够精准？</li>
+<li>工作流是否可执行？</li>
+<li>缺信息时是否知道怎么问？</li>
+<li>资源路由是否明确？</li>
+</ul>
+<h3 id="124">12.4 工程阶段<a class="headerlink" href="#124" title="Permanent link">&para;</a></h3>
+<ul>
+<li>复杂知识是否拆进 <code>references/</code>？</li>
+<li>确定性操作是否脚本化？</li>
+<li>输出模板是否放入 <code>assets/</code>？</li>
+<li>脚本是否能独立运行？</li>
+<li>是否避免把所有内容塞进一个长文件？</li>
+</ul>
+<h3 id="125">12.5 测试阶段<a class="headerlink" href="#125" title="Permanent link">&para;</a></h3>
+<ul>
+<li>是否有正常、缺参、失败、边界测试？</li>
+<li>是否检查 Skill 是否正确触发？</li>
+<li>是否验证输出格式？</li>
+<li>是否验证关键数字、来源或文件？</li>
+<li>是否记录未通过案例？</li>
+</ul>
+<h3 id="126">12.6 迭代阶段<a class="headerlink" href="#126" title="Permanent link">&para;</a></h3>
+<ul>
+<li>失败是否被归类？</li>
+<li>是否把失败改成规则、测试或资源？</li>
+<li>是否避免无意义地加长 Skill？</li>
+<li>是否更新 <code>description</code> 和边界？</li>
+<li>是否保留版本变化原因？</li>
+</ul>
+<hr />
+<h2 id="_5">十三、思考题<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h3 id="131">13.1 基础题<a class="headerlink" href="#131" title="Permanent link">&para;</a></h3>
+<p>★ 找一个你最近反复使用的 Prompt，判断它是否值得升级成 Skill。请说明它是否高频、是否有专家差距、是否需要验证。</p>
+<h3 id="132">13.2 设计题<a class="headerlink" href="#132" title="Permanent link">&para;</a></h3>
+<p>★★ 为“会议纪要整理”设计一个 Skill 生命周期：从任务识别、专家流程、<code>SKILL.md</code> 到测试样本，各写出一个关键点。</p>
+<h3 id="133">13.3 工程题<a class="headerlink" href="#133" title="Permanent link">&para;</a></h3>
+<p>★★ 给定一个 Skill：输入合同 PDF，输出风险清单。你会把哪些内容放进 <code>SKILL.md</code>，哪些放进 <code>references/</code>，哪些做成 <code>scripts/</code>？</p>
+<h3 id="134">13.4 进阶题<a class="headerlink" href="#134" title="Permanent link">&para;</a></h3>
+<p>★★★ 如果一个 Skill 在真实使用中经常被错误触发，你会优先修改 <code>description</code>、正文工作流、测试集，还是 Agent 的路由策略？为什么？</p>
+<hr />
+<h2 id="skill_3">十四、总结：Skill 是专家经验的工程化封装<a class="headerlink" href="#skill_3" title="Permanent link">&para;</a></h2>
+<p>从 Prompt 到 Skill，不是把一句话写成长文档，而是把一次性经验变成可复用能力。</p>
+<p>完整路径可以概括为：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>高频任务识别
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a>  -&gt; 专家流程抽取
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a>  -&gt; IPO-B 定义
+<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a>  -&gt; SKILL.md 编写
+<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a>  -&gt; references/scripts/assets 拆分
+<a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a>  -&gt; 测试与验证
+<a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a>  -&gt; 失败复盘和持续迭代
+</code></pre></div>
+<p>Prompt 让模型这一次表现得更好。</p>
+<p>Skill 让 Agent 在同类任务上持续表现得更稳。</p>
+<p>如果没有 Skill，Agent 每次都要重新理解流程、重新猜边界、重新决定如何验证。<br />
+有了 Skill，专家经验就可以沉淀成标准化、可调用、可测试、可迭代的工程资产。</p>
+<p>一句话总结：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>Prompt 是指令，Skill 是能力。
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a>Prompt 追求一次回答质量，Skill 追求长期执行稳定性。
+</code></pre></div>
+<p>这也是 AI 能力工程的起点：先把“怎么做”标准化，再让 MCP 提供“靠什么做”，最后由 Agent 负责“谁来调度并完成”。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.indexes", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

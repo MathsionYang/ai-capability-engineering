@@ -1,0 +1,4070 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="构建可复用、可调用、可验证的 AI 执行系统 —— Skill · MCP · Agent 三层知识链路">
+      
+      
+        <meta name="author" content="ai-capability-engineering">
+      
+      
+      
+        <link rel="prev" href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/">
+      
+      
+        <link rel="next" href="../Agent%E7%9A%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E7%94%A8Tracing%E7%9C%8B%E6%B8%85%E4%BD%A0%E7%9A%84Agent%E2%80%9C%E5%A4%A7%E8%84%91%E2%80%9D/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Agent 可观测性实战：从日志、Trace 到 Replay - AI 能力工程：从 Skill、MCP 到 Agent</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agent-trace-replay" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="AI 能力工程：从 Skill、MCP 到 Agent" class="md-header__button md-logo" aria-label="AI 能力工程：从 Skill、MCP 到 Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.41 4 16 6.41v.18L18.41 9H22v2h-4.41L16 9.41V12h-1a2 2 0 0 1-2-2V7.5H9.86c-.09.37-.24.72-.44 1.05L15.18 19H20a2 2 0 0 1 2 2v1H2v-1a2 2 0 0 1 2-2h6.61l-4.69-8.5a4.006 4.006 0 0 1-3.81-3A4 4 0 0 1 5 2.63c2.13-.55 4.31.73 4.86 2.87H13V3a2 2 0 0 1 2-2h1v2.59L17.59 2H22v2zM6 4.5a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AI 能力工程：从 Skill、MCP 到 Agent
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Agent 可观测性实战：从日志、Trace 到 Replay
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%EF%BC%9A%E4%BB%8ESkill%E3%80%81MCP%E5%88%B0Agent/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  总纲
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Skill%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%9A%E4%BB%8E%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E5%88%B0%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Skill 方法层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../MCP%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%88%B0%E8%83%BD%E5%8A%9B%E5%8D%8F%E8%AE%AE/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  MCP 能力层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%8E%E8%92%B8%E9%A6%8F%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%8F%96%E8%88%8D%E4%B8%8E%E5%8F%AF%E8%B7%91%E5%AE%9E%E4%BE%8B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  模型效率
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E6%A6%82%E5%BF%B5%E5%88%B0%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Agent 基础
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E8%A7%84%E5%88%92%E8%8C%83%E5%BC%8F%E8%BF%9B%E5%8C%96%E8%AE%BA%EF%BC%9A%E4%BB%8ECoT%E5%88%B0Plan-and-Execute/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  执行能力
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E6%A8%A1%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B1%82%E7%BA%A7%E3%80%81%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E7%BE%A4%E7%BB%84/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  协作编排
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  安全治理
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+    
+  
+  生产治理
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="AI 能力工程：从 Skill、MCP 到 Agent" class="md-nav__button md-logo" aria-label="AI 能力工程：从 Skill、MCP 到 Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.41 4 16 6.41v.18L18.41 9H22v2h-4.41L16 9.41V12h-1a2 2 0 0 1-2-2V7.5H9.86c-.09.37-.24.72-.44 1.05L15.18 19H20a2 2 0 0 1 2 2v1H2v-1a2 2 0 0 1 2-2h6.61l-4.69-8.5a4.006 4.006 0 0 1-3.81-3A4 4 0 0 1 5 2.63c2.13-.55 4.31.73 4.86 2.87H13V3a2 2 0 0 1 2-2h1v2.59L17.59 2H22v2zM6 4.5a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg>
+
+    </a>
+    AI 能力工程：从 Skill、MCP 到 Agent
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    总纲
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    总纲
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%EF%BC%9A%E4%BB%8ESkill%E3%80%81MCP%E5%88%B0Agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 能力工程：从 Skill、MCP 到 Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill 方法层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Skill 方法层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Skill%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%9A%E4%BB%8E%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E5%88%B0%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill 设计方法论：从专家经验到可复用能力
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E4%BB%8EPrompt%E5%88%B0Skill%EF%BC%9A%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96%E5%B0%81%E8%A3%85%E6%8C%87%E5%8D%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从 Prompt 到 Skill：专家经验的标准化封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP 能力层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MCP 能力层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MCP%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%88%B0%E8%83%BD%E5%8A%9B%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP 的第一性原理：从工具调用到能力协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模型效率
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模型效率
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%8E%E8%92%B8%E9%A6%8F%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%8F%96%E8%88%8D%E4%B8%8E%E5%8F%AF%E8%B7%91%E5%AE%9E%E4%BE%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模型量化与蒸馏：原理、取舍与可跑实例
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 基础
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Agent 基础
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E6%A6%82%E5%BF%B5%E5%88%B0%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的第一性原理：从概念到范式演进
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E6%9C%80%E5%B0%8F%E9%97%AD%E7%8E%AF%E5%88%B0%E7%94%9F%E4%BA%A7%E7%BA%A7%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 工程实践指南：从最小闭环到生产级系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    执行能力
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    执行能力
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%A7%84%E5%88%92%E8%8C%83%E5%BC%8F%E8%BF%9B%E5%8C%96%E8%AE%BA%EF%BC%9A%E4%BB%8ECoT%E5%88%B0Plan-and-Execute/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 规划范式进化论：从 CoT 到 Plan-and-Execute
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E4%BB%BB%E5%8A%A1%E6%8B%86%E8%A7%A3%E8%89%BA%E6%9C%AF%EF%BC%9A%E4%BB%8E%E7%9B%AE%E6%A0%87%E5%88%B0%E5%8F%AF%E6%89%A7%E8%A1%8C%E5%AD%90%E4%BB%BB%E5%8A%A1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的任务拆解艺术：从目标到可执行子任务
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E4%BB%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%88%B0%E9%95%BF%E6%9C%9F%E7%BB%8F%E9%AA%8C%E5%A4%8D%E7%94%A8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 记忆系统设计：从上下文管理到长期经验复用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    协作编排
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    协作编排
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E6%A8%A1%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B1%82%E7%BA%A7%E3%80%81%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E7%BE%A4%E7%BB%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多 Agent 协作模式深度解析：层级、流水线与群组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    安全治理
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    安全治理
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 安全护栏设计：权限控制、对抗鲁棒性与人工确认环
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    生产治理
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    生产治理
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 可观测性实战：从日志、Trace 到 Replay
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 可观测性实战：从日志、Trace 到 Replay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、从一个真实问题开始：为什么 Agent 出错后很难定位
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、Agent 可观测性的第一性原理：把执行过程变成证据链
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、一次 Agent 任务到底应该记录什么
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、一次 Agent 任务到底应该记录什么">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Goal：用户真正要完成什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-planagent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Plan：Agent 准备怎样完成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-tool-call" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Tool Call：调用了什么工具、传了什么参数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-observation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Observation：工具返回了什么结果
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Validation：如何判断结果是否达标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-cost-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 Cost：消耗了多少 Token、时间和工具预算
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、从普通日志到结构化事件
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、Trace：把分散事件串成一条执行链
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#replay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、Replay：让一次失败可以被重放
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trace_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、如何用 Trace 定位典型问题
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、如何用 Trace 定位典型问题">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 目标理解错误
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 计划拆解错误
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 工具选择错误
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 工具参数错误
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-observation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Observation 误读
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6 Validation 缺失或过弱
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#77" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.7 成本和循环失控
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、最小可用可观测方案：先从一张任务轨迹表开始
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="八、最小可用可观测方案：先从一张任务轨迹表开始">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-opentelemetry-cognitive-span" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 OpenTelemetry：给认知步骤加 Cognitive Span
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-langfuse-tracespangeneration-score" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Langfuse 风格：记录 Trace、Span、Generation 和 Score
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-replay-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Replay Service 最小伪代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 埋点成本和存储开销估算
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricstracereplay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、生产级方案：日志、Metrics、Trace、Replay 的分层架构
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skillmcpmemoryevals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、和 Skill、MCP、Memory、Evals 的关系
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十、和 Skill、MCP、Memory、Evals 的关系">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-skill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 和 Skill 的关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-mcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 和 MCP 的关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 和 Memory 的关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#104-evals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 和 Evals 的关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、常见误区
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十一、常见误区">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 有日志就等于可观测
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 只记录最终答案
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-trace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 Trace 只看耗时，不看决策
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114-replay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 Replay 只是重新跑一遍
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#115-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5 成本只看 Token，不看无效步骤
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#116" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6 把所有原始内容都写进日志
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、设计检查清单
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十二、设计检查清单">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 任务链路检查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2 工具调用检查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123-observation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3 Observation 检查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#124-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.4 Validation 检查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#125-cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.5 Cost 检查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#126-replay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.6 Replay 检查
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、总结：可观测性是 Agent 走向生产的飞行记录仪（黑匣子）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        附录：术语对照表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        参考与延伸
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E7%94%A8Tracing%E7%9C%8B%E6%B8%85%E4%BD%A0%E7%9A%84Agent%E2%80%9C%E5%A4%A7%E8%84%91%E2%80%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tracing 专项：看清 Agent 的“大脑”
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E4%B8%8E%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%EF%BC%9ACheckpointer%E6%9C%BA%E5%88%B6%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 状态管理与断点续传：Checkpointer 机制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%87%AA%E6%88%91%E7%BA%A0%E9%94%99%E4%B8%8E%E9%AA%8C%E8%AF%81%E6%9C%BA%E5%88%B6%E8%AE%BE%E8%AE%A1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 自我纠错与验证机制设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E8%AF%84%E4%BC%B0%E4%BD%93%E7%B3%BB%EF%BC%88Evals%EF%BC%89%EF%BC%9A%E4%BB%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%88%B0%E9%9B%86%E6%88%90%E8%AF%84%E6%B5%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 自动化评估体系（Evals）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="agent-trace-replay">Agent 可观测性实战：从日志、Trace 到 Replay<a class="headerlink" href="#agent-trace-replay" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Agent 可观测性不是“多打几行日志”，而是让一次任务从目标、计划、工具调用、观察结果、验证过程到成本消耗都可以被记录、重放、解释和排障。<br />
+对生产级 Agent 来说，看得见执行过程，才谈得上稳定、治理和持续优化。</p>
+</blockquote>
+<hr />
+<h2 id="agent">一、从一个真实问题开始：为什么 Agent 出错后很难定位<a class="headerlink" href="#agent" title="Permanent link">&para;</a></h2>
+<p>先看一个很常见的场景。</p>
+<p>用户说：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>帮我分析这个 SaaS 产品最近用户流失的主要原因，并给出三个改进建议。
+</code></pre></div>
+<p>Agent 看起来很努力。它查了留存数据、读取了用户反馈、调用了工单系统，还生成了一份结构化报告。最终结论是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>用户流失主要来自新手引导复杂、价格感知偏高和客服响应慢。
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>建议优化 Onboarding、调整定价展示，并增加客服自动分流。
+</code></pre></div>
+<p>这份报告看起来很完整。问题是，业务负责人追问了几个问题：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>为什么认为新手引导是第一原因？
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>这个结论来自数据、反馈，还是模型推断？
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>有没有看过最近版本发布记录？
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>工具调用失败过吗？失败后怎么处理的？
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>这次任务花了多少钱？为什么跑了这么久？
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>如果我认为结论不对，能不能回放整个过程？
+</code></pre></div>
+<p>很多 Agent 系统到这里就卡住了。</p>
+<p>因为它只保存了最终答案，没有保存完整执行过程。开发者可能只能看到几段零散日志：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>start task
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>call retention api success
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>call feedback api success
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>generate report success
+</code></pre></div>
+<p>这些日志说明“发生过一些事”，但不能回答真正的排障问题。</p>
+<p>它没有记录：</p>
+<ul>
+<li>用户目标是如何被理解的。</li>
+<li>Agent 制定了什么计划。</li>
+<li>每一步为什么选择这个工具。</li>
+<li>工具参数是什么。</li>
+<li>工具返回的原始观察是什么。</li>
+<li>Agent 如何把观察转成结论。</li>
+<li>哪些结论经过验证，哪些只是推断。</li>
+<li>失败、重试、跳过和降级发生在哪里。</li>
+<li>Token、模型、工具、时间和缓存分别消耗了多少。</li>
+</ul>
+<p>这就是 Agent 可观测性的核心问题：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>当 Agent 做错、做慢、做贵或做不完时，系统能不能解释它到底经历了什么。
+</code></pre></div>
+<p>没有可观测性，Agent 就像一个黑箱。它成功时让人惊喜，失败时让人无从下手。</p>
+<hr />
+<h2 id="agent_1">二、Agent 可观测性的第一性原理：把执行过程变成证据链<a class="headerlink" href="#agent_1" title="Permanent link">&para;</a></h2>
+<p>传统软件系统的可观测性，通常围绕三类信号展开：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Logs：发生了什么事件。
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Metrics：整体表现如何变化。
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>Traces：一次请求经过了哪些链路。
+</code></pre></div>
+<p>这些能力对 Agent 仍然重要，但还不够。</p>
+<p>因为 Agent 不只是调用服务。它会理解目标、制定计划、选择工具、解释观察、验证结果、必要时重规划。也就是说，Agent 的失败不只可能发生在技术链路上，还可能发生在认知链路上。</p>
+<p>传统服务出错，常见问题是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>哪个接口慢了？
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>哪个数据库报错了？
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>哪个服务返回 500？
+</code></pre></div>
+<p>Agent 出错，常见问题会变成：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>它是不是理解错目标了？
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>它是不是计划漏了一步？
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>它是不是调用了不合适的工具？
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>它是不是把工具结果读错了？
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>它是不是没有验证就输出了结论？
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>它是不是为了补证据不断循环，导致成本失控？
+</code></pre></div>
+<p>所以，Agent 可观测性要观察的不只是系统调用，还包括任务推理结构。</p>
+<p>可以把它理解成一条证据链：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Goal -&gt; Plan -&gt; Step -&gt; Tool Call -&gt; Observation -&gt; Interpretation -&gt; Validation -&gt; Output -&gt; Cost
+</code></pre></div>
+<p>这条链路可以画成一张全景图：</p>
+<pre class="mermaid"><code>flowchart LR
+    A[Goal&lt;br/&gt;目标解释] --&gt; B[Plan&lt;br/&gt;计划生成]
+    B --&gt; C[Step&lt;br/&gt;步骤推进]
+    C --&gt; D[Tool Call&lt;br/&gt;工具调用]
+    D --&gt; E[Observation&lt;br/&gt;外部观察]
+    E --&gt; F[Interpretation&lt;br/&gt;模型解释]
+    F --&gt; G[Validation&lt;br/&gt;验证判断]
+    G --&gt; H[Output&lt;br/&gt;最终交付]
+    H --&gt; I[Cost&lt;br/&gt;成本汇总]
+
+    G -- 不通过 --&gt; B
+    E -- 工具失败 --&gt; B</code></pre>
+<p>注意，这 9 个环节并不意味着一定要设计 9 张表或 9 类顶层对象。工程上可以把它们归并成更少的核心对象，只要字段和事件类型能把链路表达清楚即可。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">证据链环节</th>
+<th style="text-align: left;">归属对象</th>
+<th style="text-align: left;">对应字段或事件类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Goal</td>
+<td style="text-align: left;">Goal</td>
+<td style="text-align: left;"><code>goal_created</code>、<code>goal_interpreted</code>、<code>user_request</code>、<code>interpreted_goal</code>、<code>success_criteria</code>、<code>constraints</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Plan</td>
+<td style="text-align: left;">Plan</td>
+<td style="text-align: left;"><code>plan_created</code>、<code>plan_revised</code>、<code>plan_id</code>、<code>revision</code>、<code>steps</code>、<code>dependencies</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Step</td>
+<td style="text-align: left;">Plan</td>
+<td style="text-align: left;"><code>step_started</code>、<code>step_completed</code>、<code>step_id</code>、<code>purpose</code>、<code>expected_output</code>、<code>done_when</code>、<code>status</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Tool Call</td>
+<td style="text-align: left;">Tool Call</td>
+<td style="text-align: left;"><code>tool_call_started</code>、<code>tool_call_finished</code>、<code>tool_name</code>、<code>tool_version</code>、<code>arguments</code>、<code>status</code>、<code>duration_ms</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Observation</td>
+<td style="text-align: left;">Observation</td>
+<td style="text-align: left;"><code>observation_recorded</code>、<code>observation_id</code>、<code>raw_result_ref</code>、<code>summary</code>、<code>evidence</code>、<code>error</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Interpretation</td>
+<td style="text-align: left;">Observation / Validation</td>
+<td style="text-align: left;"><code>interpretation_created</code>、<code>observation_id</code>、<code>claim</code>、<code>reasoning_summary</code>、<code>confidence</code>、<code>evidence_ids</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Validation</td>
+<td style="text-align: left;">Validation</td>
+<td style="text-align: left;"><code>validation_started</code>、<code>validation_finished</code>、<code>validation_rule</code>、<code>verdict</code>、<code>reason</code>、<code>recommended_action</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Output</td>
+<td style="text-align: left;">Validation / Goal</td>
+<td style="text-align: left;"><code>final_output_created</code>、<code>final_output_ref</code>、<code>output_summary</code>、<code>success_criteria_match</code>、<code>limitations</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Cost</td>
+<td style="text-align: left;">Cost</td>
+<td style="text-align: left;"><code>cost_recorded</code>、<code>cost_summary</code>、<code>tokens</code>、<code>tool_calls</code>、<code>retry_count</code>、<code>duration_ms</code>、<code>estimated_cost</code></td>
+</tr>
+</tbody>
+</table>
+<p>这条链路要回答三个问题。</p>
+<p>第一个问题：发生了什么？</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Agent 执行了哪些步骤，调用了哪些工具，产生了哪些中间结果。
+</code></pre></div>
+<p>第二个问题：为什么这样做？</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>每一步服务于哪个目标，依赖哪些上下文，依据什么判断继续或停止。
+</code></pre></div>
+<p>第三个问题：结果是否可信？</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>最终结论有没有证据，验证是否通过，不确定性和限制在哪里。
+</code></pre></div>
+<p>这四类能力对应不同层次：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Logs：回答发生了什么。
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>Trace：回答执行路径是什么。
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>Validation：回答结果是否可信。
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>Replay：回答当时过程能否复现和对比。
+</code></pre></div>
+<p>如果只能回答“发生了什么”，那只是日志。</p>
+<p>如果能把事件串成路径，才接近 Trace。</p>
+<p>如果能证明结果是否满足目标，就进入 Validation。</p>
+<p>如果还能复现当时的上下文、工具结果、版本和决策链路，才具备 Replay 能力。</p>
+<p>一句话总结：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Agent 可观测性的本质，是把一次不确定的智能执行过程，转化为可审计、可解释、可复盘的证据链。
+</code></pre></div>
+<hr />
+<h2 id="agent_2">三、一次 Agent 任务到底应该记录什么<a class="headerlink" href="#agent_2" title="Permanent link">&para;</a></h2>
+<p>很多团队第一次给 Agent 加日志时，会从工具调用开始：记录工具名、参数、返回值和耗时。这个方向没错，但不完整。</p>
+<p>Agent 的完整任务轨迹，至少应该覆盖六类对象：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">对象</th>
+<th style="text-align: left;">核心问题</th>
+<th style="text-align: left;">典型字段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Goal</td>
+<td style="text-align: left;">用户真正要完成什么</td>
+<td style="text-align: left;">goal_id、user_request、success_criteria、constraints</td>
+</tr>
+<tr>
+<td style="text-align: left;">Plan</td>
+<td style="text-align: left;">准备怎样完成</td>
+<td style="text-align: left;">plan_id、steps、dependencies、status、revision</td>
+</tr>
+<tr>
+<td style="text-align: left;">Tool Call</td>
+<td style="text-align: left;">实际调用了什么</td>
+<td style="text-align: left;">tool_name、arguments、start_time、end_time、status</td>
+</tr>
+<tr>
+<td style="text-align: left;">Observation</td>
+<td style="text-align: left;">工具返回了什么</td>
+<td style="text-align: left;">raw_result_ref、summary、evidence、error</td>
+</tr>
+<tr>
+<td style="text-align: left;">Validation</td>
+<td style="text-align: left;">如何判断达标</td>
+<td style="text-align: left;">validation_rule、verdict、reason、confidence</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cost</td>
+<td style="text-align: left;">消耗多少资源</td>
+<td style="text-align: left;">tokens、duration_ms、tool_count、retry_count、money</td>
+</tr>
+</tbody>
+</table>
+<p>其中 Step、Interpretation 和 Output 没有单独列为顶层对象，是因为它们通常更适合作为事件或字段挂在六类核心对象下面：</p>
+<ul>
+<li>Step 属于 Plan 的执行单元，通过 <code>step_id</code> 关联后续工具、观察和验证。</li>
+<li>Interpretation 属于 Observation 的解释层，同时要接受 Validation 检查。</li>
+<li>Output 属于最终交付事件，并且要和 Goal 的成功标准做对齐验证。</li>
+</ul>
+<p>这六类对象不一定都要存完整原文，但必须能关联起来。否则，排障时就会出现断点。</p>
+<p>例如你知道某个工具调用失败了，但不知道它属于哪个计划步骤。或者你知道最终结论引用了“用户反馈”，但不知道这条反馈来自哪个工具结果。</p>
+<p>下面逐个展开。</p>
+<h3 id="31-goal">3.1 Goal：用户真正要完成什么<a class="headerlink" href="#31-goal" title="Permanent link">&para;</a></h3>
+<p>Goal 不是简单保存用户原话。</p>
+<p>用户原话经常是模糊的，例如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>帮我看看最近用户为什么不续费。
+</code></pre></div>
+<p>Agent 需要把它转成可执行目标：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">{</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="nt">"goal_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"goal_20260828_001"</span><span class="p">,</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span><span class="nt">"user_request"</span><span class="p">:</span><span class="w"> </span><span class="s2">"帮我看看最近用户为什么不续费。"</span><span class="p">,</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span><span class="nt">"interpreted_goal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"分析过去 30 天付费用户续费率下降的主要原因，并输出证据、结论和改进建议。"</span><span class="p">,</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">  </span><span class="nt">"success_criteria"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="s2">"识别 2 到 4 个主要原因"</span><span class="p">,</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">    </span><span class="s2">"每个原因至少绑定一类证据"</span><span class="p">,</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">    </span><span class="s2">"区分事实、推断和建议"</span><span class="p">,</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">    </span><span class="s2">"输出三个优先级最高的改进动作"</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">  </span><span class="nt">"constraints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="w">    </span><span class="nt">"time_window"</span><span class="p">:</span><span class="w"> </span><span class="s2">"last_30_days"</span><span class="p">,</span>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="w">    </span><span class="nt">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zh-CN"</span><span class="p">,</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="w">    </span><span class="nt">"risk_level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"analysis_only"</span>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="p">}</span>
+</code></pre></div>
+<p>这样记录的价值是：当最终结果被质疑时，可以回到最初的目标解释，看 Agent 是否一开始就跑偏了。</p>
+<p>很多失败不是发生在工具调用，而是发生在 Goal 解释阶段。</p>
+<p>例如用户说“最近”，Agent 默认理解成 7 天，但业务实际希望看 90 天。后面所有数据查询都可能很精确，但整体方向已经错了。</p>
+<p>所以，Goal 记录至少要包含：</p>
+<ul>
+<li>用户原始请求。</li>
+<li>Agent 解释后的目标。</li>
+<li>任务边界和约束。</li>
+<li>成功标准。</li>
+<li>缺失信息和默认假设。</li>
+<li>是否经过用户确认。</li>
+</ul>
+<h3 id="32-planagent">3.2 Plan：Agent 准备怎样完成<a class="headerlink" href="#32-planagent" title="Permanent link">&para;</a></h3>
+<p>Plan 记录的是 Agent 的执行意图。</p>
+<p>对于复杂任务，只记录最终结果是不够的。你需要知道 Agent 当时计划怎么做，以及它有没有按计划推进。</p>
+<p>一个计划事件可以这样记录：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p">{</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">"plan_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"plan_001"</span><span class="p">,</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="nt">"goal_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"goal_20260828_001"</span><span class="p">,</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span><span class="nt">"revision"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">  </span><span class="nt">"steps"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">      </span><span class="nt">"step_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s1"</span><span class="p">,</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"读取续费指标"</span><span class="p">,</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="w">      </span><span class="nt">"purpose"</span><span class="p">:</span><span class="w"> </span><span class="s2">"确认续费率下降是否真实存在，以及影响范围"</span><span class="p">,</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="w">      </span><span class="nt">"expected_output"</span><span class="p">:</span><span class="w"> </span><span class="s2">"按周续费率、影响用户数、同比或环比变化"</span><span class="p">,</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="w">      </span><span class="nt">"done_when"</span><span class="p">:</span><span class="w"> </span><span class="s2">"得到可计算的续费率趋势，或明确数据不可用"</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="w">      </span><span class="nt">"step_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s2"</span><span class="p">,</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"分析流失用户分群"</span><span class="p">,</span>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="w">      </span><span class="nt">"purpose"</span><span class="p">:</span><span class="w"> </span><span class="s2">"判断下降主要发生在哪类用户"</span><span class="p">,</span>
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a><span class="w">      </span><span class="nt">"expected_output"</span><span class="p">:</span><span class="w"> </span><span class="s2">"按套餐、行业、渠道、使用频率分组的流失分布"</span><span class="p">,</span>
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="w">      </span><span class="nt">"done_when"</span><span class="p">:</span><span class="w"> </span><span class="s2">"至少得到两个维度的分群结果"</span>
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a><span class="w">      </span><span class="nt">"step_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3"</span><span class="p">,</span>
+<a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"读取用户反馈和工单"</span><span class="p">,</span>
+<a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a><span class="w">      </span><span class="nt">"purpose"</span><span class="p">:</span><span class="w"> </span><span class="s2">"寻找流失原因的文本证据"</span><span class="p">,</span>
+<a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a><span class="w">      </span><span class="nt">"expected_output"</span><span class="p">:</span><span class="w"> </span><span class="s2">"高频主题、样本反馈、主题占比"</span><span class="p">,</span>
+<a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a><span class="w">      </span><span class="nt">"done_when"</span><span class="p">:</span><span class="w"> </span><span class="s2">"得到可引用的反馈聚类结果"</span>
+<a id="__codelineno-16-26" name="__codelineno-16-26" href="#__codelineno-16-26"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-16-27" name="__codelineno-16-27" href="#__codelineno-16-27"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-16-28" name="__codelineno-16-28" href="#__codelineno-16-28"></a><span class="p">}</span>
+</code></pre></div>
+<p>Plan 的核心价值不是“看起来有条理”，而是让后续事件有归属。</p>
+<p>一次工具调用应该能追溯到某个计划步骤。一次验证失败也应该能说明是哪个步骤没有达标。</p>
+<p>如果中途发生重规划，还应该记录新的 revision：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">{</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="nt">"event_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"plan_revised"</span><span class="p">,</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span><span class="nt">"plan_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"plan_001"</span><span class="p">,</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">  </span><span class="nt">"from_revision"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">  </span><span class="nt">"to_revision"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">  </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"用户反馈系统无权限，改用客服工单和取消原因字段作为替代证据"</span><span class="p">,</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">  </span><span class="nt">"changed_steps"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"s3"</span><span class="p">]</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="p">}</span>
+</code></pre></div>
+<p>这样一来，重规划就不是模糊的“Agent 自己改了主意”，而是一次可解释的计划变更。</p>
+<h3 id="33-tool-call">3.3 Tool Call：调用了什么工具、传了什么参数<a class="headerlink" href="#33-tool-call" title="Permanent link">&para;</a></h3>
+<p>Tool Call 是最容易被记录、也最容易被低估的一层。</p>
+<p>很多系统只记录工具名和成功失败：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>query_retention_metrics success
+</code></pre></div>
+<p>这不够。</p>
+<p>至少应该记录：</p>
+<ul>
+<li>关联的 goal_id、plan_id、step_id。</li>
+<li>tool_name 和 tool_version。</li>
+<li>输入参数，敏感字段脱敏。</li>
+<li>调用开始时间和结束时间。</li>
+<li>状态：success、partial_success、error、timeout、cancelled。</li>
+<li>错误码和是否可重试。</li>
+<li>是否产生副作用。</li>
+<li>调用者身份和权限上下文。</li>
+</ul>
+<p>示例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="p">{</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span><span class="nt">"event_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tool_call"</span><span class="p">,</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="nt">"trace_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trace_abc"</span><span class="p">,</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">  </span><span class="nt">"span_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"span_003"</span><span class="p">,</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">  </span><span class="nt">"goal_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"goal_20260828_001"</span><span class="p">,</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">  </span><span class="nt">"plan_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"plan_001"</span><span class="p">,</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">  </span><span class="nt">"step_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s1"</span><span class="p">,</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="w">  </span><span class="nt">"tool_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"query_retention_metrics"</span><span class="p">,</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="w">  </span><span class="nt">"tool_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.4.2"</span><span class="p">,</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">  </span><span class="nt">"arguments"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="w">    </span><span class="nt">"product_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"prod_17"</span><span class="p">,</span>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="w">    </span><span class="nt">"time_window"</span><span class="p">:</span><span class="w"> </span><span class="s2">"last_30_days"</span><span class="p">,</span>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="w">    </span><span class="nt">"segment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid_users"</span>
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="w">  </span><span class="nt">"side_effect"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a><span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span>
+<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="w">  </span><span class="nt">"duration_ms"</span><span class="p">:</span><span class="w"> </span><span class="mi">842</span><span class="p">,</span>
+<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a><span class="w">  </span><span class="nt">"started_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-08-28T10:13:12+08:00"</span><span class="p">,</span>
+<a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a><span class="w">  </span><span class="nt">"ended_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-08-28T10:13:13+08:00"</span>
+<a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a><span class="p">}</span>
+</code></pre></div>
+<p>工具调用记录要特别注意两件事。</p>
+<p>第一，不要把敏感信息直接打进日志。例如 Token、密码、完整用户隐私、内部 SQL、完整文件路径都应该脱敏或只保存引用。</p>
+<p>第二，要区分只读工具和有副作用工具。读取指标和发送邮件都叫 Tool Call，但风险完全不同。Replay 时也必须知道某个调用是否可以安全重放。</p>
+<h3 id="34-observation">3.4 Observation：工具返回了什么结果<a class="headerlink" href="#34-observation" title="Permanent link">&para;</a></h3>
+<p>Observation 是 Agent 看到的外部世界。</p>
+<p>它不是最终结论，也不是模型解释，而是工具返回后的可观察事实。</p>
+<p>例如工具返回：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">{</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">"renewal_rate_current"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.68</span><span class="p">,</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span><span class="nt">"renewal_rate_previous"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.77</span><span class="p">,</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">  </span><span class="nt">"affected_accounts"</span><span class="p">:</span><span class="w"> </span><span class="mi">184</span><span class="p">,</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">  </span><span class="nt">"largest_drop_segment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SMB annual plan"</span><span class="p">,</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">  </span><span class="nt">"sample_size"</span><span class="p">:</span><span class="w"> </span><span class="mi">1270</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="p">}</span>
+</code></pre></div>
+<p>Agent 后续可能解释为：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>续费率下降主要集中在 SMB 年付客户。
+</code></pre></div>
+<p>这句话已经是 Interpretation，不是原始 Observation。</p>
+<p>为什么要区分？</p>
+<p>因为 Agent 很容易误读 Observation。</p>
+<p>例如工具返回的是“SMB 年付客户下降最多”，Agent 却写成“所有年付客户下降明显”。前者是数据事实，后者是过度泛化。</p>
+<p>Observation 记录可以分两层：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">层级</th>
+<th style="text-align: left;">内容</th>
+<th style="text-align: left;">保存方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">原始结果</td>
+<td style="text-align: left;">工具完整返回、文件、表格、日志片段</td>
+<td style="text-align: left;">存对象存储或数据库，日志中只存 ref</td>
+</tr>
+<tr>
+<td style="text-align: left;">摘要结果</td>
+<td style="text-align: left;">对 Agent 有用的结构化摘要</td>
+<td style="text-align: left;">存入 trace event，便于检索和展示</td>
+</tr>
+</tbody>
+</table>
+<p>示例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="p">{</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">  </span><span class="nt">"event_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"observation"</span><span class="p">,</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">  </span><span class="nt">"trace_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trace_abc"</span><span class="p">,</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">  </span><span class="nt">"parent_span_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"span_003"</span><span class="p">,</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">  </span><span class="nt">"observation_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"obs_003"</span><span class="p">,</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">  </span><span class="nt">"raw_result_ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3://agent-traces/trace_abc/tool/query_retention_metrics.json"</span><span class="p">,</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="w">  </span><span class="nt">"summary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"过去 30 天续费率从 77% 降至 68%，下降主要集中在 SMB 年付客户，影响 184 个账号。"</span><span class="p">,</span>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="w">  </span><span class="nt">"evidence"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"metric"</span><span class="p">,</span>
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"renewal_rate_delta"</span><span class="p">,</span>
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a><span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.09</span>
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a><span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"segment"</span><span class="p">,</span>
+<a id="__codelineno-22-16" name="__codelineno-22-16" href="#__codelineno-22-16"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"largest_drop_segment"</span><span class="p">,</span>
+<a id="__codelineno-22-17" name="__codelineno-22-17" href="#__codelineno-22-17"></a><span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SMB annual plan"</span>
+<a id="__codelineno-22-18" name="__codelineno-22-18" href="#__codelineno-22-18"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-22-19" name="__codelineno-22-19" href="#__codelineno-22-19"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-22-20" name="__codelineno-22-20" href="#__codelineno-22-20"></a><span class="p">}</span>
+</code></pre></div>
+<p>好的 Observation 设计应该同时服务人和机器：人能快速看懂摘要，机器能继续基于结构化字段做验证和评估。</p>
+<h3 id="35-validation">3.5 Validation：如何判断结果是否达标<a class="headerlink" href="#35-validation" title="Permanent link">&para;</a></h3>
+<p>没有 Validation 的 Agent，可观测性只完成了一半。</p>
+<p>因为你不仅要知道 Agent 做了什么，还要知道它做得对不对。</p>
+<p>Validation 可以发生在三个层面。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">层面</th>
+<th style="text-align: left;">验证对象</th>
+<th style="text-align: left;">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">步骤级验证</td>
+<td style="text-align: left;">单个计划步骤是否完成</td>
+<td style="text-align: left;">是否拿到有效续费率数据</td>
+</tr>
+<tr>
+<td style="text-align: left;">结论级验证</td>
+<td style="text-align: left;">某个判断是否有证据支撑</td>
+<td style="text-align: left;">“价格问题”是否有反馈或数据证据</td>
+</tr>
+<tr>
+<td style="text-align: left;">交付级验证</td>
+<td style="text-align: left;">最终输出是否满足用户目标</td>
+<td style="text-align: left;">是否给出原因、证据、建议和限制说明</td>
+</tr>
+</tbody>
+</table>
+<p>示例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="p">{</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span><span class="nt">"event_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"validation"</span><span class="p">,</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">  </span><span class="nt">"trace_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trace_abc"</span><span class="p">,</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">  </span><span class="nt">"validation_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"val_007"</span><span class="p">,</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">  </span><span class="nt">"target_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"claim"</span><span class="p">,</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="w">  </span><span class="nt">"target"</span><span class="p">:</span><span class="w"> </span><span class="s2">"价格感知偏高是用户不续费的重要原因"</span><span class="p">,</span>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="w">  </span><span class="nt">"rule"</span><span class="p">:</span><span class="w"> </span><span class="s2">"每个主要原因必须至少有一类数据证据或三条以上用户反馈样本支持"</span><span class="p">,</span>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="w">  </span><span class="nt">"verdict"</span><span class="p">:</span><span class="w"> </span><span class="s2">"failed"</span><span class="p">,</span>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="w">  </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"反馈样本中仅 1 条提到价格，且没有最近价格调整记录支持。"</span><span class="p">,</span>
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a><span class="w">  </span><span class="nt">"recommended_action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"降级为次要假设，或继续检索价格相关反馈。"</span>
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a><span class="p">}</span>
+</code></pre></div>
+<p>这个记录非常关键。</p>
+<p>它让系统知道：“价格感知偏高”不是一个已经被证实的主要结论，而是一个证据不足的假设。</p>
+<p>如果没有这条 Validation，最终报告可能会把它写成确定结论，业务团队也可能据此做出错误决策。</p>
+<h3 id="36-cost-token">3.6 Cost：消耗了多少 Token、时间和工具预算<a class="headerlink" href="#36-cost-token" title="Permanent link">&para;</a></h3>
+<p>Agent 的成本不只来自模型 Token。</p>
+<p>完整成本至少包括：</p>
+<ul>
+<li>输入 Token。</li>
+<li>输出 Token。</li>
+<li>模型调用次数。</li>
+<li>工具调用次数。</li>
+<li>外部 API 费用。</li>
+<li>执行耗时。</li>
+<li>重试次数。</li>
+<li>缓存命中率。</li>
+<li>人工复核成本。</li>
+</ul>
+<p>示例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="p">{</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="nt">"event_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cost_summary"</span><span class="p">,</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">  </span><span class="nt">"trace_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trace_abc"</span><span class="p">,</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">  </span><span class="nt">"model_calls"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">  </span><span class="nt">"input_tokens"</span><span class="p">:</span><span class="w"> </span><span class="mi">18420</span><span class="p">,</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">  </span><span class="nt">"output_tokens"</span><span class="p">:</span><span class="w"> </span><span class="mi">4360</span><span class="p">,</span>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">  </span><span class="nt">"tool_calls"</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">  </span><span class="nt">"retry_count"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="w">  </span><span class="nt">"duration_ms"</span><span class="p">:</span><span class="w"> </span><span class="mi">48520</span><span class="p">,</span>
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="w">  </span><span class="nt">"estimated_usd"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.73</span><span class="p">,</span>
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="w">  </span><span class="nt">"cache_hits"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="w">  </span><span class="nt">"cache_misses"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span>
+<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a><span class="p">}</span>
+</code></pre></div>
+<p>成本记录的价值不只是财务统计，还能帮助定位执行问题。</p>
+<p>例如：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">现象</th>
+<th style="text-align: left;">可能原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Token 很高但工具很少</td>
+<td style="text-align: left;">上下文过大、摘要不充分、历史信息注入过多</td>
+</tr>
+<tr>
+<td style="text-align: left;">工具很多但结论很弱</td>
+<td style="text-align: left;">计划发散、停止条件不清、验证标准缺失</td>
+</tr>
+<tr>
+<td style="text-align: left;">重试很多</td>
+<td style="text-align: left;">工具不稳定、参数生成错误、权限配置异常</td>
+</tr>
+<tr>
+<td style="text-align: left;">时间很长但 Token 不高</td>
+<td style="text-align: left;">外部 API 慢、队列等待、文件解析耗时</td>
+</tr>
+<tr>
+<td style="text-align: left;">缓存命中率低</td>
+<td style="text-align: left;">缓存键设计不合理、数据版本未纳入 key</td>
+</tr>
+</tbody>
+</table>
+<p>对生产级 Agent 来说，成本也是一种可观测信号。一个结果正确但成本不可控的 Agent，仍然不能算稳定可用。</p>
+<hr />
+<h2 id="_1">四、从普通日志到结构化事件<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>普通日志的问题，不是它没用，而是它很难被机器理解。</p>
+<p>例如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>用户流失分析开始。
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>读取留存数据成功。
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>反馈系统调用失败，改用工单系统。
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>最终输出报告。
+</code></pre></div>
+<p>这几句话人能读懂，但系统很难聚合、筛选、统计和重放。</p>
+<p>结构化日志应该把每个事件变成可查询对象。</p>
+<p>一个最小事件结构可以这样设计：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="p">{</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">  </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-08-28T10:13:12+08:00"</span><span class="p">,</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">  </span><span class="nt">"trace_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trace_abc"</span><span class="p">,</span>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">  </span><span class="nt">"span_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"span_003"</span><span class="p">,</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="w">  </span><span class="nt">"parent_span_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"span_002"</span><span class="p">,</span>
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="w">  </span><span class="nt">"event_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tool_call"</span><span class="p">,</span>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">  </span><span class="nt">"level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"info"</span><span class="p">,</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="w">  </span><span class="nt">"agent_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"churn_analysis_agent"</span><span class="p">,</span>
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="w">  </span><span class="nt">"agent_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.9.1"</span><span class="p">,</span>
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a><span class="w">  </span><span class="nt">"goal_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"goal_20260828_001"</span><span class="p">,</span>
+<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a><span class="w">  </span><span class="nt">"plan_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"plan_001"</span><span class="p">,</span>
+<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a><span class="w">  </span><span class="nt">"step_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s1"</span><span class="p">,</span>
+<a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a><span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span>
+<a id="__codelineno-26-14" name="__codelineno-26-14" href="#__codelineno-26-14"></a><span class="w">  </span><span class="nt">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span>
+<a id="__codelineno-26-15" name="__codelineno-26-15" href="#__codelineno-26-15"></a><span class="w">  </span><span class="nt">"cost"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span>
+<a id="__codelineno-26-16" name="__codelineno-26-16" href="#__codelineno-26-16"></a><span class="w">  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<a id="__codelineno-26-17" name="__codelineno-26-17" href="#__codelineno-26-17"></a><span class="p">}</span>
+</code></pre></div>
+<p>关键字段包括：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">字段</th>
+<th style="text-align: left;">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">trace_id</td>
+<td style="text-align: left;">关联一次完整任务</td>
+</tr>
+<tr>
+<td style="text-align: left;">span_id</td>
+<td style="text-align: left;">标识某个阶段、步骤或工具调用</td>
+</tr>
+<tr>
+<td style="text-align: left;">parent_span_id</td>
+<td style="text-align: left;">表达层级关系</td>
+</tr>
+<tr>
+<td style="text-align: left;">event_type</td>
+<td style="text-align: left;">区分 goal、plan、tool_call、observation、interpretation、validation、cost</td>
+</tr>
+<tr>
+<td style="text-align: left;">agent_version</td>
+<td style="text-align: left;">定位是否是版本变更导致的问题</td>
+</tr>
+<tr>
+<td style="text-align: left;">step_id</td>
+<td style="text-align: left;">关联计划步骤</td>
+</tr>
+<tr>
+<td style="text-align: left;">status</td>
+<td style="text-align: left;">方便统计成功、失败、跳过、超时</td>
+</tr>
+<tr>
+<td style="text-align: left;">payload</td>
+<td style="text-align: left;">保存事件主体，敏感字段脱敏</td>
+</tr>
+<tr>
+<td style="text-align: left;">cost</td>
+<td style="text-align: left;">保存当前事件的局部消耗</td>
+</tr>
+<tr>
+<td style="text-align: left;">error</td>
+<td style="text-align: left;">保存结构化错误</td>
+</tr>
+</tbody>
+</table>
+<p>其中 <code>interpretation</code> 可以作为独立事件记录，也可以在存储实现里作为 <code>observation</code> 的子类型记录：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="p">{</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">  </span><span class="nt">"event_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"observation"</span><span class="p">,</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">  </span><span class="nt">"subtype"</span><span class="p">:</span><span class="w"> </span><span class="s2">"interpretation"</span><span class="p">,</span>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">  </span><span class="nt">"observation_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"obs_003"</span><span class="p">,</span>
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="w">  </span><span class="nt">"claim"</span><span class="p">:</span><span class="w"> </span><span class="s2">"续费率下降主要集中在 SMB 年付客户"</span><span class="p">,</span>
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="w">  </span><span class="nt">"evidence_ids"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"obs_003.metric.renewal_rate_delta"</span><span class="p">],</span>
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="w">  </span><span class="nt">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.82</span>
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="p">}</span>
+</code></pre></div>
+<p>无论采用哪种方式，都必须能让排障时对比 Observation 和 Interpretation。否则，工具结果正确但模型误读时，Trace 会缺少最关键的一环。</p>
+<p>结构化事件还有一个重要好处：它让排障查询变得具体。</p>
+<p>例如你可以问：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>过去 24 小时，哪个 Agent 的 validation_failed 最多？
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>哪个工具的 timeout 率最高？
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>哪些任务发生了 plan_revised？
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>哪些任务因为权限不足降级？
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>哪些任务成本超过预算但最终没有通过验证？
+</code></pre></div>
+<p>这些问题如果靠自然语言日志，很难稳定回答。靠结构化事件，就可以进入数据库、日志平台、Trace 系统或评估平台继续分析。</p>
+<p>一句话总结：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>普通日志记录故事，结构化事件记录证据。
+</code></pre></div>
+<hr />
+<h2 id="trace">五、Trace：把分散事件串成一条执行链<a class="headerlink" href="#trace" title="Permanent link">&para;</a></h2>
+<p>日志解决“发生了什么”，Trace 解决“一次任务经过了什么路径”。</p>
+<p>对普通后端服务来说，一条 Trace 可能是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>API Gateway -&gt; User Service -&gt; Order Service -&gt; Database
+</code></pre></div>
+<p>对 Agent 来说，一条 Trace 更像：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>User Goal
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>  -&gt; Goal Interpreter
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>  -&gt; Planner
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>  -&gt; Step 1: Query Metrics
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>  -&gt; Step 2: Analyze Segments
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>  -&gt; Step 3: Search Feedback
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a>  -&gt; Step 4: Validate Claims
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a>  -&gt; Final Response
+</code></pre></div>
+<p>可以用 span 表达这个层级：</p>
+<pre class="mermaid"><code>flowchart TD
+    A[Trace: 用户流失分析任务] --&gt; B[Goal 解释]
+    A --&gt; C[Plan 生成]
+    C --&gt; D[Step 1: 读取续费指标]
+    D --&gt; D1[Tool: query_retention_metrics]
+    D1 --&gt; D2[Observation: 续费率下降 9pct]
+    C --&gt; E[Step 2: 分析用户分群]
+    E --&gt; E1[Tool: query_churn_segments]
+    E1 --&gt; E2[Observation: SMB 年付下降最大]
+    C --&gt; F[Step 3: 检索反馈]
+    F --&gt; F1[Tool: search_feedback]
+    F1 --&gt; F2[Error: permission_denied]
+    F --&gt; F3[Tool: search_support_tickets]
+    F3 --&gt; F4[Observation: 导入失败主题上升]
+    A --&gt; G[Validation]
+    G --&gt; H[Final Output]</code></pre>
+<p>这里最重要的是层级关系。</p>
+<p>如果只有扁平日志，你可能知道 Agent 调用了 10 个工具，但不知道这些工具分别服务于哪个步骤。</p>
+<p>有了 Trace，你可以看出：</p>
+<ul>
+<li>哪个步骤最耗时。</li>
+<li>哪个步骤调用失败最多。</li>
+<li>哪个步骤发生了重试或降级。</li>
+<li>哪个结论依赖哪些 Observation。</li>
+<li>哪个 Validation 拦截了不可靠结论。</li>
+</ul>
+<p>Trace 还可以帮助分析“任务漂移”。</p>
+<p>例如原始目标是分析用户流失，但 Trace 显示后半段大量 span 都在生成营销文案。这说明 Agent 可能从“分析原因”漂移到了“写召回方案”，需要加强计划边界或停止条件。</p>
+<p>一个 Agent Trace 至少应该有三类 span。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Span 类型</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Cognitive Span</td>
+<td style="text-align: left;">目标解释、计划生成、结论归纳、重规划</td>
+</tr>
+<tr>
+<td style="text-align: left;">Tool Span</td>
+<td style="text-align: left;">外部工具、API、数据库、文件、浏览器调用</td>
+</tr>
+<tr>
+<td style="text-align: left;">Validation Span</td>
+<td style="text-align: left;">格式检查、证据检查、测试运行、人工确认</td>
+</tr>
+</tbody>
+</table>
+<p>传统 APM 更熟悉 Tool Span。Agent 系统真正需要补的是 Cognitive Span 和 Validation Span。</p>
+<p>否则你只能知道工具慢不慢，却不知道 Agent 为什么调用它，也不知道调用结果有没有被正确使用。</p>
+<hr />
+<h2 id="replay">六、Replay：让一次失败可以被重放<a class="headerlink" href="#replay" title="Permanent link">&para;</a></h2>
+<p>Replay 是 Agent 可观测性里最容易被误解的概念。</p>
+<p>很多人以为 Replay 就是“把同一个问题再跑一遍”。</p>
+<p>这不准确。</p>
+<p>Agent 的 Replay 至少有三种层次。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">层次</th>
+<th style="text-align: left;">含义</th>
+<th style="text-align: left;">适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Trace Replay</td>
+<td style="text-align: left;">回放当时记录，不重新调用工具</td>
+<td style="text-align: left;">排查决策过程、审计、复盘</td>
+</tr>
+<tr>
+<td style="text-align: left;">Deterministic Replay</td>
+<td style="text-align: left;">使用冻结的工具结果和上下文重新运行 Agent</td>
+<td style="text-align: left;">对比模型、Prompt、Skill 版本差异</td>
+</tr>
+<tr>
+<td style="text-align: left;">Live Replay</td>
+<td style="text-align: left;">在当前环境重新执行工具调用</td>
+<td style="text-align: left;">验证问题是否仍然存在</td>
+</tr>
+</tbody>
+</table>
+<p>最安全、最基础的是 Trace Replay。</p>
+<p>它不重新执行任何副作用动作，只是把当时的 Goal、Plan、Tool Call、Observation、Validation 和 Cost 按顺序展示出来。</p>
+<p>这能回答：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>当时 Agent 到底看到了什么？
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>它为什么形成这个结论？
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>哪个工具失败了？
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a>哪个验证规则没有执行？
+</code></pre></div>
+<p>Deterministic Replay 更进一步。它会冻结当时的上下文和工具返回，让新版本 Agent 在同样输入下重新推理。</p>
+<p>这适合做版本对比：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>旧版本把“价格问题”写成主要原因。
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>新版本在相同 Observation 下，把它降级为未验证假设。
+</code></pre></div>
+<p>Live Replay 风险最高。因为它会重新调用真实工具，可能读取到新的数据，也可能产生副作用。</p>
+<p>所以 Replay 设计必须区分工具类型：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">工具类型</th>
+<th style="text-align: left;">Replay 策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">只读查询</td>
+<td style="text-align: left;">可在授权后重新执行</td>
+</tr>
+<tr>
+<td style="text-align: left;">写入操作</td>
+<td style="text-align: left;">默认禁止自动重放</td>
+</tr>
+<tr>
+<td style="text-align: left;">外发操作</td>
+<td style="text-align: left;">必须人工确认，通常只回放记录</td>
+</tr>
+<tr>
+<td style="text-align: left;">付款、删除、生产变更</td>
+<td style="text-align: left;">禁止自动重放，只能模拟或人工审批</td>
+</tr>
+</tbody>
+</table>
+<p>一个 Replay 系统的最小输入包可以包括：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="p">{</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="w">  </span><span class="nt">"trace_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trace_abc"</span><span class="p">,</span>
+<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">  </span><span class="nt">"agent_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.9.1"</span><span class="p">,</span>
+<a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="w">  </span><span class="nt">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"model_name"</span><span class="p">,</span>
+<a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a><span class="w">  </span><span class="nt">"system_instructions_ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"prompt://agent/churn/v12"</span><span class="p">,</span>
+<a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a><span class="w">  </span><span class="nt">"skill_refs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"skill://churn-analysis/v3"</span><span class="p">],</span>
+<a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a><span class="w">  </span><span class="nt">"tool_registry_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-08-28"</span><span class="p">,</span>
+<a id="__codelineno-34-8" name="__codelineno-34-8" href="#__codelineno-34-8"></a><span class="w">  </span><span class="nt">"goal"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span>
+<a id="__codelineno-34-9" name="__codelineno-34-9" href="#__codelineno-34-9"></a><span class="w">  </span><span class="nt">"plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span>
+<a id="__codelineno-34-10" name="__codelineno-34-10" href="#__codelineno-34-10"></a><span class="w">  </span><span class="nt">"observations"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<a id="__codelineno-34-11" name="__codelineno-34-11" href="#__codelineno-34-11"></a><span class="w">  </span><span class="nt">"validation_results"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<a id="__codelineno-34-12" name="__codelineno-34-12" href="#__codelineno-34-12"></a><span class="w">  </span><span class="nt">"cost_summary"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-34-13" name="__codelineno-34-13" href="#__codelineno-34-13"></a><span class="p">}</span>
+</code></pre></div>
+<p>注意，这里不一定要把所有内容都塞进一条日志。更好的方式是用引用连接大对象：文件、表格、长文本、原始工具返回都存到对象存储或数据库，Trace 里只保存 <code>ref</code>、摘要和哈希。</p>
+<p>Replay 的关键不是“完全复刻世界”，而是保留足够信息，让你能判断当时的失败来自哪里。</p>
+<p>一句话总结：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>Replay 不是再问一次模型，而是把当时的执行环境、观察结果和决策链路重新摆到桌面上。
+</code></pre></div>
+<hr />
+<h2 id="trace_1">七、如何用 Trace 定位典型问题<a class="headerlink" href="#trace_1" title="Permanent link">&para;</a></h2>
+<p>有了 Trace，排障就可以从“猜 Agent 为什么错”变成“沿执行链找断点”。</p>
+<p>下面用几个典型问题说明。</p>
+<h3 id="71">7.1 目标理解错误<a class="headerlink" href="#71" title="Permanent link">&para;</a></h3>
+<p>现象：最终输出和用户想要的不一致。</p>
+<p>例如用户要“分析不续费原因”，Agent 输出了“召回邮件模板”。</p>
+<p>排查方法：先看 Goal 解释事件。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>user_request：帮我看看最近用户为什么不续费
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a>interpreted_goal：生成三封用户召回邮件
+</code></pre></div>
+<p>这说明错误发生在目标解释阶段，而不是工具调用阶段。</p>
+<p>修复方向包括：</p>
+<ul>
+<li>要求 Agent 显式记录 interpreted_goal。</li>
+<li>对高风险或高成本任务先请求用户确认目标。</li>
+<li>在计划生成前检查输出类型是否匹配用户请求。</li>
+</ul>
+<h3 id="72">7.2 计划拆解错误<a class="headerlink" href="#72" title="Permanent link">&para;</a></h3>
+<p>现象：工具都调用成功了，但结论缺关键维度。</p>
+<p>例如 Agent 查了用户反馈，却没有查续费指标，也没有按用户分群。</p>
+<p>排查方法：看 Plan 是否包含必要步骤。</p>
+<p>如果计划本身没有“读取续费数据”和“分群分析”，那就是计划拆解问题。</p>
+<p>修复方向包括：</p>
+<ul>
+<li>为同类任务沉淀 Skill。</li>
+<li>给 Planner 加必选步骤检查。</li>
+<li>使用验证器检查计划是否覆盖核心证据维度。</li>
+</ul>
+<h3 id="73">7.3 工具选择错误<a class="headerlink" href="#73" title="Permanent link">&para;</a></h3>
+<p>现象：Agent 调用了工具，但工具不适合当前任务。</p>
+<p>例如要分析付费用户续费，却调用了免费用户活跃数据。</p>
+<p>排查方法：检查 Tool Call 的 <code>tool_name</code>、<code>arguments</code> 和 <code>step_id</code>。</p>
+<p>常见原因包括：</p>
+<ul>
+<li>工具描述不清。</li>
+<li>工具命名相似。</li>
+<li>Agent 没有理解指标口径。</li>
+<li>Tool Registry 缺少适用场景和排除场景。</li>
+</ul>
+<p>修复方向包括：</p>
+<ul>
+<li>优化工具描述。</li>
+<li>给工具增加 schema 约束和枚举。</li>
+<li>在工具返回中写清指标口径。</li>
+<li>对关键工具选择加入验证规则。</li>
+</ul>
+<h3 id="74">7.4 工具参数错误<a class="headerlink" href="#74" title="Permanent link">&para;</a></h3>
+<p>现象：工具返回成功，但数据范围错了。</p>
+<p>例如用户要过去 30 天，Agent 查询了过去 7 天。</p>
+<p>排查方法：看 Tool Call 参数和 Goal 约束是否一致。</p>
+<p>这类问题非常常见，因为工具层只知道参数合法，不知道参数是否符合任务目标。</p>
+<p>修复方向包括：</p>
+<ul>
+<li>把 Goal 约束结构化保存。</li>
+<li>执行前做参数一致性检查。</li>
+<li>在 Validation 中检查数据时间窗、用户范围和指标口径。</li>
+</ul>
+<h3 id="75-observation">7.5 Observation 误读<a class="headerlink" href="#75-observation" title="Permanent link">&para;</a></h3>
+<p>现象：工具返回的数据正确，但 Agent 解释错了。</p>
+<p>例如 Observation 写着“下降集中在 SMB 年付客户”，最终输出写成“企业客户下降最明显”。</p>
+<p>排查方法：对比 Observation 和 Interpretation。</p>
+<p>如果原始观察没错，结论错了，说明问题发生在模型解释层。</p>
+<p>修复方向包括：</p>
+<ul>
+<li>将关键 Observation 转成结构化字段。</li>
+<li>让结论引用 observation_id。</li>
+<li>对数值和分群结论做程序化校验。</li>
+<li>要求输出区分事实、推断和建议。</li>
+</ul>
+<h3 id="76-validation">7.6 Validation 缺失或过弱<a class="headerlink" href="#76-validation" title="Permanent link">&para;</a></h3>
+<p>现象：最终报告流畅，但证据不足。</p>
+<p>例如报告列出三个主要原因，其中两个没有数据支持。</p>
+<p>排查方法：检查是否存在结论级 Validation。</p>
+<p>如果只有“格式正确”验证，没有“证据是否支撑结论”验证，说明验证器太弱。</p>
+<p>修复方向包括：</p>
+<ul>
+<li>为每类结论定义证据门槛。</li>
+<li>要求每个关键 claim 绑定 evidence_id。</li>
+<li>把不满足证据门槛的内容降级为假设。</li>
+<li>对高风险报告加入人工复核。</li>
+</ul>
+<h3 id="77">7.7 成本和循环失控<a class="headerlink" href="#77" title="Permanent link">&para;</a></h3>
+<p>现象：任务最终完成了，但耗时和费用明显过高。</p>
+<p>排查方法：看 Cost Summary 和 span 层级。</p>
+<p>常见原因包括：</p>
+<ul>
+<li>计划过细，步骤太多。</li>
+<li>工具失败后重复重试。</li>
+<li>没有停止条件。</li>
+<li>上下文注入过大。</li>
+<li>检索结果没有摘要，导致 Token 膨胀。</li>
+</ul>
+<p>修复方向包括：</p>
+<ul>
+<li>设置最大步骤数、最大工具调用数和预算上限。</li>
+<li>对重试加入指数退避和最大次数。</li>
+<li>对大结果做摘要、分页和引用存储。</li>
+<li>让 Planner 输出“证据足够时停止”的条件。</li>
+</ul>
+<hr />
+<h2 id="_2">八、最小可用可观测方案：先从一张任务轨迹表开始<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>不要一开始就追求完整平台。</p>
+<p>很多团队可以先从一张任务轨迹表开始，把 Agent 的关键事件记录下来。</p>
+<p>最小表结构可以这样设计：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">字段</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">trace_id</td>
+<td style="text-align: left;">一次任务的唯一 ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">event_index</td>
+<td style="text-align: left;">事件顺序</td>
+</tr>
+<tr>
+<td style="text-align: left;">timestamp</td>
+<td style="text-align: left;">事件时间</td>
+</tr>
+<tr>
+<td style="text-align: left;">event_type</td>
+<td style="text-align: left;">goal、plan、tool_call、observation、interpretation、validation、cost、final</td>
+</tr>
+<tr>
+<td style="text-align: left;">step_id</td>
+<td style="text-align: left;">所属计划步骤</td>
+</tr>
+<tr>
+<td style="text-align: left;">name</td>
+<td style="text-align: left;">事件名称</td>
+</tr>
+<tr>
+<td style="text-align: left;">input_summary</td>
+<td style="text-align: left;">输入摘要</td>
+</tr>
+<tr>
+<td style="text-align: left;">output_summary</td>
+<td style="text-align: left;">输出摘要</td>
+</tr>
+<tr>
+<td style="text-align: left;">status</td>
+<td style="text-align: left;">success、failed、skipped、partial</td>
+</tr>
+<tr>
+<td style="text-align: left;">duration_ms</td>
+<td style="text-align: left;">当前事件耗时</td>
+</tr>
+<tr>
+<td style="text-align: left;">cost_tokens</td>
+<td style="text-align: left;">当前事件 Token 消耗</td>
+</tr>
+<tr>
+<td style="text-align: left;">error_code</td>
+<td style="text-align: left;">错误码</td>
+</tr>
+<tr>
+<td style="text-align: left;">ref</td>
+<td style="text-align: left;">原始内容引用</td>
+</tr>
+</tbody>
+</table>
+<p>一次任务记录可能长这样：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">event_index</th>
+<th style="text-align: left;">event_type</th>
+<th style="text-align: left;">step_id</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">status</th>
+<th style="text-align: left;">output_summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">goal</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">解释用户目标</td>
+<td style="text-align: left;">success</td>
+<td style="text-align: left;">分析过去 30 天续费下降原因</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">plan</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">生成计划</td>
+<td style="text-align: left;">success</td>
+<td style="text-align: left;">指标、分群、反馈、验证、建议</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">tool_call</td>
+<td style="text-align: left;">s1</td>
+<td style="text-align: left;">查询续费指标</td>
+<td style="text-align: left;">success</td>
+<td style="text-align: left;">续费率从 77% 到 68%</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">observation</td>
+<td style="text-align: left;">s1</td>
+<td style="text-align: left;">保存指标观察</td>
+<td style="text-align: left;">success</td>
+<td style="text-align: left;">下降集中在 SMB 年付客户</td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">interpretation</td>
+<td style="text-align: left;">s1</td>
+<td style="text-align: left;">解释指标含义</td>
+<td style="text-align: left;">success</td>
+<td style="text-align: left;">续费下降候选原因需要继续分群验证</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">tool_call</td>
+<td style="text-align: left;">s3</td>
+<td style="text-align: left;">查询用户反馈</td>
+<td style="text-align: left;">failed</td>
+<td style="text-align: left;">permission_denied</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">plan_revised</td>
+<td style="text-align: left;">s3</td>
+<td style="text-align: left;">调整证据路径</td>
+<td style="text-align: left;">success</td>
+<td style="text-align: left;">改查客服工单和取消原因</td>
+</tr>
+<tr>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">validation</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">验证主要结论</td>
+<td style="text-align: left;">partial</td>
+<td style="text-align: left;">2 个结论通过，1 个证据不足</td>
+</tr>
+<tr>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">final</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">输出报告</td>
+<td style="text-align: left;">success</td>
+<td style="text-align: left;">输出原因、证据、建议和限制</td>
+</tr>
+</tbody>
+</table>
+<p>如果团队为了减少事件类型，也可以把第 5 行落成 <code>event_type=observation</code>、<code>subtype=interpretation</code>。关键不是枚举名字，而是不要把 Interpretation 淹没在普通摘要里。</p>
+<p>这个 MVP 已经能解决很多问题。</p>
+<p>当用户质疑结果时，开发者至少可以看到完整事件顺序。出现失败时，也能知道 Agent 是在哪一步失败、有没有重试、有没有降级。</p>
+<p>最小可用方案建议遵循四个原则。</p>
+<p>第一，先记录任务级 Trace，而不是只记录工具日志。</p>
+<p>第二，先记录摘要和引用，不要把所有原始内容塞进日志。</p>
+<p>第三，所有事件都带 trace_id、event_type、status 和时间戳。</p>
+<p>第四，从第一天就记录成本，否则后面很难补齐口径。</p>
+<h3 id="81-opentelemetry-cognitive-span">8.1 OpenTelemetry：给认知步骤加 Cognitive Span<a class="headerlink" href="#81-opentelemetry-cognitive-span" title="Permanent link">&para;</a></h3>
+<p>OpenTelemetry 原本常用于服务链路追踪。放到 Agent 场景里，不只要追踪 API 和数据库，也要追踪目标解释、计划生成、重规划、结论归纳这些认知步骤。</p>
+<p>下面是一段最小可运行示例。它会把 <code>agent.plan</code> 作为 Cognitive Span 输出到控制台。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>pip<span class="w"> </span>install<span class="w"> </span>opentelemetry-api<span class="w"> </span>opentelemetry-sdk
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">opentelemetry</span><span class="w"> </span><span class="kn">import</span> <span class="n">trace</span>
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">opentelemetry.sdk.trace</span><span class="w"> </span><span class="kn">import</span> <span class="n">TracerProvider</span>
+<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">opentelemetry.sdk.trace.export</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConsoleSpanExporter</span><span class="p">,</span> <span class="n">SimpleSpanProcessor</span>
+<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a>
+<a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a><span class="n">provider</span> <span class="o">=</span> <span class="n">TracerProvider</span><span class="p">()</span>
+<a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a><span class="n">provider</span><span class="o">.</span><span class="n">add_span_processor</span><span class="p">(</span><span class="n">SimpleSpanProcessor</span><span class="p">(</span><span class="n">ConsoleSpanExporter</span><span class="p">()))</span>
+<a id="__codelineno-38-8" name="__codelineno-38-8" href="#__codelineno-38-8"></a><span class="n">trace</span><span class="o">.</span><span class="n">set_tracer_provider</span><span class="p">(</span><span class="n">provider</span><span class="p">)</span>
+<a id="__codelineno-38-9" name="__codelineno-38-9" href="#__codelineno-38-9"></a>
+<a id="__codelineno-38-10" name="__codelineno-38-10" href="#__codelineno-38-10"></a><span class="n">tracer</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">get_tracer</span><span class="p">(</span><span class="s2">"agent.observability"</span><span class="p">)</span>
+<a id="__codelineno-38-11" name="__codelineno-38-11" href="#__codelineno-38-11"></a>
+<a id="__codelineno-38-12" name="__codelineno-38-12" href="#__codelineno-38-12"></a>
+<a id="__codelineno-38-13" name="__codelineno-38-13" href="#__codelineno-38-13"></a><span class="k">def</span><span class="w"> </span><span class="nf">create_plan</span><span class="p">(</span><span class="n">goal_id</span><span class="p">,</span> <span class="n">interpreted_goal</span><span class="p">,</span> <span class="n">steps</span><span class="p">):</span>
+<a id="__codelineno-38-14" name="__codelineno-38-14" href="#__codelineno-38-14"></a>    <span class="k">with</span> <span class="n">tracer</span><span class="o">.</span><span class="n">start_as_current_span</span><span class="p">(</span><span class="s2">"agent.plan"</span><span class="p">)</span> <span class="k">as</span> <span class="n">span</span><span class="p">:</span>
+<a id="__codelineno-38-15" name="__codelineno-38-15" href="#__codelineno-38-15"></a>        <span class="n">span</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s2">"agent.span_type"</span><span class="p">,</span> <span class="s2">"cognitive"</span><span class="p">)</span>
+<a id="__codelineno-38-16" name="__codelineno-38-16" href="#__codelineno-38-16"></a>        <span class="n">span</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s2">"agent.goal_id"</span><span class="p">,</span> <span class="n">goal_id</span><span class="p">)</span>
+<a id="__codelineno-38-17" name="__codelineno-38-17" href="#__codelineno-38-17"></a>        <span class="n">span</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s2">"agent.interpreted_goal"</span><span class="p">,</span> <span class="n">interpreted_goal</span><span class="p">)</span>
+<a id="__codelineno-38-18" name="__codelineno-38-18" href="#__codelineno-38-18"></a>        <span class="n">span</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s2">"agent.plan.step_count"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">steps</span><span class="p">))</span>
+<a id="__codelineno-38-19" name="__codelineno-38-19" href="#__codelineno-38-19"></a>        <span class="n">span</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s2">"gen_ai.system"</span><span class="p">,</span> <span class="s2">"agent"</span><span class="p">)</span>
+<a id="__codelineno-38-20" name="__codelineno-38-20" href="#__codelineno-38-20"></a>        <span class="n">span</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s2">"gen_ai.request.model"</span><span class="p">,</span> <span class="s2">"agent-model"</span><span class="p">)</span>
+<a id="__codelineno-38-21" name="__codelineno-38-21" href="#__codelineno-38-21"></a>        <span class="n">span</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s2">"gen_ai.usage.input_tokens"</span><span class="p">,</span> <span class="mi">420</span><span class="p">)</span>
+<a id="__codelineno-38-22" name="__codelineno-38-22" href="#__codelineno-38-22"></a>        <span class="n">span</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s2">"gen_ai.usage.output_tokens"</span><span class="p">,</span> <span class="mi">38</span><span class="p">)</span>
+<a id="__codelineno-38-23" name="__codelineno-38-23" href="#__codelineno-38-23"></a>        <span class="n">span</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span>
+<a id="__codelineno-38-24" name="__codelineno-38-24" href="#__codelineno-38-24"></a>            <span class="s2">"plan_created"</span><span class="p">,</span>
+<a id="__codelineno-38-25" name="__codelineno-38-25" href="#__codelineno-38-25"></a>            <span class="p">{</span>
+<a id="__codelineno-38-26" name="__codelineno-38-26" href="#__codelineno-38-26"></a>                <span class="s2">"steps"</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">steps</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<a id="__codelineno-38-27" name="__codelineno-38-27" href="#__codelineno-38-27"></a>                <span class="s2">"success_criteria"</span><span class="p">:</span> <span class="s2">"每个主要结论必须绑定证据"</span><span class="p">,</span>
+<a id="__codelineno-38-28" name="__codelineno-38-28" href="#__codelineno-38-28"></a>            <span class="p">},</span>
+<a id="__codelineno-38-29" name="__codelineno-38-29" href="#__codelineno-38-29"></a>        <span class="p">)</span>
+<a id="__codelineno-38-30" name="__codelineno-38-30" href="#__codelineno-38-30"></a>        <span class="k">return</span> <span class="p">{</span>
+<a id="__codelineno-38-31" name="__codelineno-38-31" href="#__codelineno-38-31"></a>            <span class="s2">"goal_id"</span><span class="p">:</span> <span class="n">goal_id</span><span class="p">,</span>
+<a id="__codelineno-38-32" name="__codelineno-38-32" href="#__codelineno-38-32"></a>            <span class="s2">"interpreted_goal"</span><span class="p">:</span> <span class="n">interpreted_goal</span><span class="p">,</span>
+<a id="__codelineno-38-33" name="__codelineno-38-33" href="#__codelineno-38-33"></a>            <span class="s2">"steps"</span><span class="p">:</span> <span class="n">steps</span><span class="p">,</span>
+<a id="__codelineno-38-34" name="__codelineno-38-34" href="#__codelineno-38-34"></a>        <span class="p">}</span>
+<a id="__codelineno-38-35" name="__codelineno-38-35" href="#__codelineno-38-35"></a>
+<a id="__codelineno-38-36" name="__codelineno-38-36" href="#__codelineno-38-36"></a>
+<a id="__codelineno-38-37" name="__codelineno-38-37" href="#__codelineno-38-37"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+<a id="__codelineno-38-38" name="__codelineno-38-38" href="#__codelineno-38-38"></a>    <span class="n">plan</span> <span class="o">=</span> <span class="n">create_plan</span><span class="p">(</span>
+<a id="__codelineno-38-39" name="__codelineno-38-39" href="#__codelineno-38-39"></a>        <span class="n">goal_id</span><span class="o">=</span><span class="s2">"goal_20260828_001"</span><span class="p">,</span>
+<a id="__codelineno-38-40" name="__codelineno-38-40" href="#__codelineno-38-40"></a>        <span class="n">interpreted_goal</span><span class="o">=</span><span class="s2">"分析过去 30 天续费下降原因"</span><span class="p">,</span>
+<a id="__codelineno-38-41" name="__codelineno-38-41" href="#__codelineno-38-41"></a>        <span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+<a id="__codelineno-38-42" name="__codelineno-38-42" href="#__codelineno-38-42"></a>            <span class="p">{</span><span class="s2">"step_id"</span><span class="p">:</span> <span class="s2">"s1"</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"读取续费指标"</span><span class="p">},</span>
+<a id="__codelineno-38-43" name="__codelineno-38-43" href="#__codelineno-38-43"></a>            <span class="p">{</span><span class="s2">"step_id"</span><span class="p">:</span> <span class="s2">"s2"</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"分析流失分群"</span><span class="p">},</span>
+<a id="__codelineno-38-44" name="__codelineno-38-44" href="#__codelineno-38-44"></a>            <span class="p">{</span><span class="s2">"step_id"</span><span class="p">:</span> <span class="s2">"s3"</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"验证主要结论"</span><span class="p">},</span>
+<a id="__codelineno-38-45" name="__codelineno-38-45" href="#__codelineno-38-45"></a>        <span class="p">],</span>
+<a id="__codelineno-38-46" name="__codelineno-38-46" href="#__codelineno-38-46"></a>    <span class="p">)</span>
+<a id="__codelineno-38-47" name="__codelineno-38-47" href="#__codelineno-38-47"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</code></pre></div>
+<p>生产环境里可以把 <code>ConsoleSpanExporter</code> 换成 OTLP Exporter，接到 Jaeger、Tempo、Honeycomb、Datadog 或自建 Trace 平台。控制台 exporter 只是演示用途，中文字段在某些输出里可能显示为 <code>\uXXXX</code> 转义，不影响真实后端展示。</p>
+<p>属性命名上，建议优先对齐 OpenTelemetry 的 GenAI 语义约定，例如 <code>gen_ai.system</code>、<code>gen_ai.request.model</code>、<code>gen_ai.usage.input_tokens</code>、<code>gen_ai.usage.output_tokens</code>。<code>agent.goal_id</code>、<code>agent.plan_id</code>、<code>agent.step_id</code> 这类字段则作为业务补充，用来表达 Agent 特有的目标、计划和步骤结构。</p>
+<h3 id="82-langfuse-tracespangeneration-score">8.2 Langfuse 风格：记录 Trace、Span、Generation 和 Score<a class="headerlink" href="#82-langfuse-tracespangeneration-score" title="Permanent link">&para;</a></h3>
+<p>Langfuse 这类 LLM Observability 工具通常会把一次任务拆成 Trace、Span、Generation、Score 等对象。下面这段代码不依赖具体 SDK，而是用同样的数据模型演示如何埋点。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a>
+<a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a>
+<a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">LangfuseStyleEmitter</span><span class="p">:</span>
+<a id="__codelineno-39-7" name="__codelineno-39-7" href="#__codelineno-39-7"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-39-8" name="__codelineno-39-8" href="#__codelineno-39-8"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-39-9" name="__codelineno-39-9" href="#__codelineno-39-9"></a>
+<a id="__codelineno-39-10" name="__codelineno-39-10" href="#__codelineno-39-10"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">trace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">input_text</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<a id="__codelineno-39-11" name="__codelineno-39-11" href="#__codelineno-39-11"></a>        <span class="n">trace_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"trace_</span><span class="si">{</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+<a id="__codelineno-39-12" name="__codelineno-39-12" href="#__codelineno-39-12"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+<a id="__codelineno-39-13" name="__codelineno-39-13" href="#__codelineno-39-13"></a>            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"trace"</span><span class="p">,</span>
+<a id="__codelineno-39-14" name="__codelineno-39-14" href="#__codelineno-39-14"></a>            <span class="s2">"id"</span><span class="p">:</span> <span class="n">trace_id</span><span class="p">,</span>
+<a id="__codelineno-39-15" name="__codelineno-39-15" href="#__codelineno-39-15"></a>            <span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+<a id="__codelineno-39-16" name="__codelineno-39-16" href="#__codelineno-39-16"></a>            <span class="s2">"user_id"</span><span class="p">:</span> <span class="n">user_id</span><span class="p">,</span>
+<a id="__codelineno-39-17" name="__codelineno-39-17" href="#__codelineno-39-17"></a>            <span class="s2">"input"</span><span class="p">:</span> <span class="n">input_text</span><span class="p">,</span>
+<a id="__codelineno-39-18" name="__codelineno-39-18" href="#__codelineno-39-18"></a>            <span class="s2">"metadata"</span><span class="p">:</span> <span class="n">metadata</span> <span class="ow">or</span> <span class="p">{},</span>
+<a id="__codelineno-39-19" name="__codelineno-39-19" href="#__codelineno-39-19"></a>            <span class="s2">"ts"</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
+<a id="__codelineno-39-20" name="__codelineno-39-20" href="#__codelineno-39-20"></a>        <span class="p">})</span>
+<a id="__codelineno-39-21" name="__codelineno-39-21" href="#__codelineno-39-21"></a>        <span class="k">return</span> <span class="n">trace_id</span>
+<a id="__codelineno-39-22" name="__codelineno-39-22" href="#__codelineno-39-22"></a>
+<a id="__codelineno-39-23" name="__codelineno-39-23" href="#__codelineno-39-23"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">span</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">output_data</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<a id="__codelineno-39-24" name="__codelineno-39-24" href="#__codelineno-39-24"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+<a id="__codelineno-39-25" name="__codelineno-39-25" href="#__codelineno-39-25"></a>            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"span"</span><span class="p">,</span>
+<a id="__codelineno-39-26" name="__codelineno-39-26" href="#__codelineno-39-26"></a>            <span class="s2">"trace_id"</span><span class="p">:</span> <span class="n">trace_id</span><span class="p">,</span>
+<a id="__codelineno-39-27" name="__codelineno-39-27" href="#__codelineno-39-27"></a>            <span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+<a id="__codelineno-39-28" name="__codelineno-39-28" href="#__codelineno-39-28"></a>            <span class="s2">"input"</span><span class="p">:</span> <span class="n">input_data</span><span class="p">,</span>
+<a id="__codelineno-39-29" name="__codelineno-39-29" href="#__codelineno-39-29"></a>            <span class="s2">"output"</span><span class="p">:</span> <span class="n">output_data</span><span class="p">,</span>
+<a id="__codelineno-39-30" name="__codelineno-39-30" href="#__codelineno-39-30"></a>            <span class="s2">"metadata"</span><span class="p">:</span> <span class="n">metadata</span> <span class="ow">or</span> <span class="p">{},</span>
+<a id="__codelineno-39-31" name="__codelineno-39-31" href="#__codelineno-39-31"></a>            <span class="s2">"ts"</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
+<a id="__codelineno-39-32" name="__codelineno-39-32" href="#__codelineno-39-32"></a>        <span class="p">})</span>
+<a id="__codelineno-39-33" name="__codelineno-39-33" href="#__codelineno-39-33"></a>
+<a id="__codelineno-39-34" name="__codelineno-39-34" href="#__codelineno-39-34"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">completion</span><span class="p">,</span> <span class="n">usage</span><span class="p">):</span>
+<a id="__codelineno-39-35" name="__codelineno-39-35" href="#__codelineno-39-35"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+<a id="__codelineno-39-36" name="__codelineno-39-36" href="#__codelineno-39-36"></a>            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"generation"</span><span class="p">,</span>
+<a id="__codelineno-39-37" name="__codelineno-39-37" href="#__codelineno-39-37"></a>            <span class="s2">"trace_id"</span><span class="p">:</span> <span class="n">trace_id</span><span class="p">,</span>
+<a id="__codelineno-39-38" name="__codelineno-39-38" href="#__codelineno-39-38"></a>            <span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+<a id="__codelineno-39-39" name="__codelineno-39-39" href="#__codelineno-39-39"></a>            <span class="s2">"model"</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+<a id="__codelineno-39-40" name="__codelineno-39-40" href="#__codelineno-39-40"></a>            <span class="s2">"prompt"</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span>
+<a id="__codelineno-39-41" name="__codelineno-39-41" href="#__codelineno-39-41"></a>            <span class="s2">"completion"</span><span class="p">:</span> <span class="n">completion</span><span class="p">,</span>
+<a id="__codelineno-39-42" name="__codelineno-39-42" href="#__codelineno-39-42"></a>            <span class="s2">"usage"</span><span class="p">:</span> <span class="n">usage</span><span class="p">,</span>
+<a id="__codelineno-39-43" name="__codelineno-39-43" href="#__codelineno-39-43"></a>            <span class="s2">"ts"</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
+<a id="__codelineno-39-44" name="__codelineno-39-44" href="#__codelineno-39-44"></a>        <span class="p">})</span>
+<a id="__codelineno-39-45" name="__codelineno-39-45" href="#__codelineno-39-45"></a>
+<a id="__codelineno-39-46" name="__codelineno-39-46" href="#__codelineno-39-46"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+<a id="__codelineno-39-47" name="__codelineno-39-47" href="#__codelineno-39-47"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+<a id="__codelineno-39-48" name="__codelineno-39-48" href="#__codelineno-39-48"></a>            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"score"</span><span class="p">,</span>
+<a id="__codelineno-39-49" name="__codelineno-39-49" href="#__codelineno-39-49"></a>            <span class="s2">"trace_id"</span><span class="p">:</span> <span class="n">trace_id</span><span class="p">,</span>
+<a id="__codelineno-39-50" name="__codelineno-39-50" href="#__codelineno-39-50"></a>            <span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+<a id="__codelineno-39-51" name="__codelineno-39-51" href="#__codelineno-39-51"></a>            <span class="s2">"value"</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span>
+<a id="__codelineno-39-52" name="__codelineno-39-52" href="#__codelineno-39-52"></a>            <span class="s2">"comment"</span><span class="p">:</span> <span class="n">comment</span><span class="p">,</span>
+<a id="__codelineno-39-53" name="__codelineno-39-53" href="#__codelineno-39-53"></a>            <span class="s2">"ts"</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
+<a id="__codelineno-39-54" name="__codelineno-39-54" href="#__codelineno-39-54"></a>        <span class="p">})</span>
+<a id="__codelineno-39-55" name="__codelineno-39-55" href="#__codelineno-39-55"></a>
+<a id="__codelineno-39-56" name="__codelineno-39-56" href="#__codelineno-39-56"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">flush</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-39-57" name="__codelineno-39-57" href="#__codelineno-39-57"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<a id="__codelineno-39-58" name="__codelineno-39-58" href="#__codelineno-39-58"></a>
+<a id="__codelineno-39-59" name="__codelineno-39-59" href="#__codelineno-39-59"></a>
+<a id="__codelineno-39-60" name="__codelineno-39-60" href="#__codelineno-39-60"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+<a id="__codelineno-39-61" name="__codelineno-39-61" href="#__codelineno-39-61"></a>    <span class="n">emitter</span> <span class="o">=</span> <span class="n">LangfuseStyleEmitter</span><span class="p">()</span>
+<a id="__codelineno-39-62" name="__codelineno-39-62" href="#__codelineno-39-62"></a>    <span class="n">trace_id</span> <span class="o">=</span> <span class="n">emitter</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span>
+<a id="__codelineno-39-63" name="__codelineno-39-63" href="#__codelineno-39-63"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">"churn_analysis"</span><span class="p">,</span>
+<a id="__codelineno-39-64" name="__codelineno-39-64" href="#__codelineno-39-64"></a>        <span class="n">user_id</span><span class="o">=</span><span class="s2">"user_17"</span><span class="p">,</span>
+<a id="__codelineno-39-65" name="__codelineno-39-65" href="#__codelineno-39-65"></a>        <span class="n">input_text</span><span class="o">=</span><span class="s2">"帮我分析最近用户为什么不续费"</span><span class="p">,</span>
+<a id="__codelineno-39-66" name="__codelineno-39-66" href="#__codelineno-39-66"></a>        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">"agent_version"</span><span class="p">:</span> <span class="s2">"0.9.1"</span><span class="p">,</span> <span class="s2">"skill"</span><span class="p">:</span> <span class="s2">"churn-analysis/v3"</span><span class="p">},</span>
+<a id="__codelineno-39-67" name="__codelineno-39-67" href="#__codelineno-39-67"></a>    <span class="p">)</span>
+<a id="__codelineno-39-68" name="__codelineno-39-68" href="#__codelineno-39-68"></a>    <span class="n">emitter</span><span class="o">.</span><span class="n">span</span><span class="p">(</span>
+<a id="__codelineno-39-69" name="__codelineno-39-69" href="#__codelineno-39-69"></a>        <span class="n">trace_id</span><span class="p">,</span>
+<a id="__codelineno-39-70" name="__codelineno-39-70" href="#__codelineno-39-70"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">"tool.query_retention_metrics"</span><span class="p">,</span>
+<a id="__codelineno-39-71" name="__codelineno-39-71" href="#__codelineno-39-71"></a>        <span class="n">input_data</span><span class="o">=</span><span class="p">{</span><span class="s2">"time_window"</span><span class="p">:</span> <span class="s2">"last_30_days"</span><span class="p">,</span> <span class="s2">"segment"</span><span class="p">:</span> <span class="s2">"paid_users"</span><span class="p">},</span>
+<a id="__codelineno-39-72" name="__codelineno-39-72" href="#__codelineno-39-72"></a>        <span class="n">output_data</span><span class="o">=</span><span class="p">{</span><span class="s2">"renewal_rate_current"</span><span class="p">:</span> <span class="mf">0.68</span><span class="p">,</span> <span class="s2">"renewal_rate_previous"</span><span class="p">:</span> <span class="mf">0.77</span><span class="p">},</span>
+<a id="__codelineno-39-73" name="__codelineno-39-73" href="#__codelineno-39-73"></a>        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">"step_id"</span><span class="p">:</span> <span class="s2">"s1"</span><span class="p">,</span> <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"success"</span><span class="p">},</span>
+<a id="__codelineno-39-74" name="__codelineno-39-74" href="#__codelineno-39-74"></a>    <span class="p">)</span>
+<a id="__codelineno-39-75" name="__codelineno-39-75" href="#__codelineno-39-75"></a>    <span class="n">emitter</span><span class="o">.</span><span class="n">generation</span><span class="p">(</span>
+<a id="__codelineno-39-76" name="__codelineno-39-76" href="#__codelineno-39-76"></a>        <span class="n">trace_id</span><span class="p">,</span>
+<a id="__codelineno-39-77" name="__codelineno-39-77" href="#__codelineno-39-77"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">"claim_interpretation"</span><span class="p">,</span>
+<a id="__codelineno-39-78" name="__codelineno-39-78" href="#__codelineno-39-78"></a>        <span class="n">model</span><span class="o">=</span><span class="s2">"agent-model"</span><span class="p">,</span>
+<a id="__codelineno-39-79" name="__codelineno-39-79" href="#__codelineno-39-79"></a>        <span class="n">prompt</span><span class="o">=</span><span class="s2">"根据续费指标生成候选结论"</span><span class="p">,</span>
+<a id="__codelineno-39-80" name="__codelineno-39-80" href="#__codelineno-39-80"></a>        <span class="n">completion</span><span class="o">=</span><span class="s2">"续费率下降主要集中在付费用户，需要继续分群验证。"</span><span class="p">,</span>
+<a id="__codelineno-39-81" name="__codelineno-39-81" href="#__codelineno-39-81"></a>        <span class="n">usage</span><span class="o">=</span><span class="p">{</span><span class="s2">"input_tokens"</span><span class="p">:</span> <span class="mi">420</span><span class="p">,</span> <span class="s2">"output_tokens"</span><span class="p">:</span> <span class="mi">38</span><span class="p">},</span>
+<a id="__codelineno-39-82" name="__codelineno-39-82" href="#__codelineno-39-82"></a>    <span class="p">)</span>
+<a id="__codelineno-39-83" name="__codelineno-39-83" href="#__codelineno-39-83"></a>    <span class="n">emitter</span><span class="o">.</span><span class="n">score</span><span class="p">(</span>
+<a id="__codelineno-39-84" name="__codelineno-39-84" href="#__codelineno-39-84"></a>        <span class="n">trace_id</span><span class="p">,</span>
+<a id="__codelineno-39-85" name="__codelineno-39-85" href="#__codelineno-39-85"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">"claim_evidence_coverage"</span><span class="p">,</span>
+<a id="__codelineno-39-86" name="__codelineno-39-86" href="#__codelineno-39-86"></a>        <span class="n">value</span><span class="o">=</span><span class="mf">0.67</span><span class="p">,</span>
+<a id="__codelineno-39-87" name="__codelineno-39-87" href="#__codelineno-39-87"></a>        <span class="n">comment</span><span class="o">=</span><span class="s2">"3 个主要结论中有 2 个绑定了足够证据。"</span><span class="p">,</span>
+<a id="__codelineno-39-88" name="__codelineno-39-88" href="#__codelineno-39-88"></a>    <span class="p">)</span>
+<a id="__codelineno-39-89" name="__codelineno-39-89" href="#__codelineno-39-89"></a>    <span class="n">emitter</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</code></pre></div>
+<p>这段代码体现的是埋点结构，而不是绑定某个具体平台。真正接入 Langfuse 或其他工具时，核心仍然是同一件事：把模型生成、工具调用、验证评分和成本消耗放到同一条 Trace 里。</p>
+<h3 id="83-replay-service">8.3 Replay Service 最小伪代码<a class="headerlink" href="#83-replay-service" title="Permanent link">&para;</a></h3>
+<p>Replay Service 的核心职责，是按 <code>trace_id</code> 取回当时的事件、工具结果引用和版本信息，并决定以哪种模式回放。</p>
+<p>下面是一个最小伪代码：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">ReplayService</span><span class="p">:</span>
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_store</span><span class="p">,</span> <span class="n">artifact_store</span><span class="p">,</span> <span class="n">agent_factory</span><span class="p">,</span> <span class="n">tool_registry</span><span class="p">):</span>
+<a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">trace_store</span> <span class="o">=</span> <span class="n">trace_store</span>
+<a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">artifact_store</span> <span class="o">=</span> <span class="n">artifact_store</span>
+<a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">agent_factory</span> <span class="o">=</span> <span class="n">agent_factory</span>
+<a id="__codelineno-40-6" name="__codelineno-40-6" href="#__codelineno-40-6"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">tool_registry</span> <span class="o">=</span> <span class="n">tool_registry</span>
+<a id="__codelineno-40-7" name="__codelineno-40-7" href="#__codelineno-40-7"></a>
+<a id="__codelineno-40-8" name="__codelineno-40-8" href="#__codelineno-40-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">replay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_id</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"trace"</span><span class="p">):</span>
+<a id="__codelineno-40-9" name="__codelineno-40-9" href="#__codelineno-40-9"></a>        <span class="n">trace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trace_store</span><span class="o">.</span><span class="n">load_trace</span><span class="p">(</span><span class="n">trace_id</span><span class="p">)</span>
+<a id="__codelineno-40-10" name="__codelineno-40-10" href="#__codelineno-40-10"></a>        <span class="n">artifacts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_artifacts</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span>
+<a id="__codelineno-40-11" name="__codelineno-40-11" href="#__codelineno-40-11"></a>
+<a id="__codelineno-40-12" name="__codelineno-40-12" href="#__codelineno-40-12"></a>        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"trace"</span><span class="p">:</span>
+<a id="__codelineno-40-13" name="__codelineno-40-13" href="#__codelineno-40-13"></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trace_replay</span><span class="p">(</span><span class="n">trace</span><span class="p">,</span> <span class="n">artifacts</span><span class="p">)</span>
+<a id="__codelineno-40-14" name="__codelineno-40-14" href="#__codelineno-40-14"></a>
+<a id="__codelineno-40-15" name="__codelineno-40-15" href="#__codelineno-40-15"></a>        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"deterministic"</span><span class="p">:</span>
+<a id="__codelineno-40-16" name="__codelineno-40-16" href="#__codelineno-40-16"></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deterministic_replay</span><span class="p">(</span><span class="n">trace</span><span class="p">,</span> <span class="n">artifacts</span><span class="p">)</span>
+<a id="__codelineno-40-17" name="__codelineno-40-17" href="#__codelineno-40-17"></a>
+<a id="__codelineno-40-18" name="__codelineno-40-18" href="#__codelineno-40-18"></a>        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"live"</span><span class="p">:</span>
+<a id="__codelineno-40-19" name="__codelineno-40-19" href="#__codelineno-40-19"></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_live_replay</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span>
+<a id="__codelineno-40-20" name="__codelineno-40-20" href="#__codelineno-40-20"></a>
+<a id="__codelineno-40-21" name="__codelineno-40-21" href="#__codelineno-40-21"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unknown replay mode: </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-40-22" name="__codelineno-40-22" href="#__codelineno-40-22"></a>
+<a id="__codelineno-40-23" name="__codelineno-40-23" href="#__codelineno-40-23"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_trace_replay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace</span><span class="p">,</span> <span class="n">artifacts</span><span class="p">):</span>
+<a id="__codelineno-40-24" name="__codelineno-40-24" href="#__codelineno-40-24"></a>        <span class="k">return</span> <span class="p">{</span>
+<a id="__codelineno-40-25" name="__codelineno-40-25" href="#__codelineno-40-25"></a>            <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"trace"</span><span class="p">,</span>
+<a id="__codelineno-40-26" name="__codelineno-40-26" href="#__codelineno-40-26"></a>            <span class="s2">"trace_id"</span><span class="p">:</span> <span class="n">trace</span><span class="p">[</span><span class="s2">"trace_id"</span><span class="p">],</span>
+<a id="__codelineno-40-27" name="__codelineno-40-27" href="#__codelineno-40-27"></a>            <span class="s2">"events"</span><span class="p">:</span> <span class="n">trace</span><span class="p">[</span><span class="s2">"events"</span><span class="p">],</span>
+<a id="__codelineno-40-28" name="__codelineno-40-28" href="#__codelineno-40-28"></a>            <span class="s2">"artifacts"</span><span class="p">:</span> <span class="n">artifacts</span><span class="p">,</span>
+<a id="__codelineno-40-29" name="__codelineno-40-29" href="#__codelineno-40-29"></a>            <span class="s2">"note"</span><span class="p">:</span> <span class="s2">"只回放记录，不重新调用工具。"</span><span class="p">,</span>
+<a id="__codelineno-40-30" name="__codelineno-40-30" href="#__codelineno-40-30"></a>        <span class="p">}</span>
+<a id="__codelineno-40-31" name="__codelineno-40-31" href="#__codelineno-40-31"></a>
+<a id="__codelineno-40-32" name="__codelineno-40-32" href="#__codelineno-40-32"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_deterministic_replay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace</span><span class="p">,</span> <span class="n">artifacts</span><span class="p">):</span>
+<a id="__codelineno-40-33" name="__codelineno-40-33" href="#__codelineno-40-33"></a>        <span class="n">agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+<a id="__codelineno-40-34" name="__codelineno-40-34" href="#__codelineno-40-34"></a>            <span class="n">agent_version</span><span class="o">=</span><span class="n">trace</span><span class="p">[</span><span class="s2">"agent_version"</span><span class="p">],</span>
+<a id="__codelineno-40-35" name="__codelineno-40-35" href="#__codelineno-40-35"></a>            <span class="n">model</span><span class="o">=</span><span class="n">trace</span><span class="p">[</span><span class="s2">"model"</span><span class="p">],</span>
+<a id="__codelineno-40-36" name="__codelineno-40-36" href="#__codelineno-40-36"></a>            <span class="n">frozen_observations</span><span class="o">=</span><span class="n">artifacts</span><span class="p">,</span>
+<a id="__codelineno-40-37" name="__codelineno-40-37" href="#__codelineno-40-37"></a>        <span class="p">)</span>
+<a id="__codelineno-40-38" name="__codelineno-40-38" href="#__codelineno-40-38"></a>        <span class="k">return</span> <span class="n">agent</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+<a id="__codelineno-40-39" name="__codelineno-40-39" href="#__codelineno-40-39"></a>            <span class="n">goal</span><span class="o">=</span><span class="n">trace</span><span class="p">[</span><span class="s2">"goal"</span><span class="p">],</span>
+<a id="__codelineno-40-40" name="__codelineno-40-40" href="#__codelineno-40-40"></a>            <span class="n">tool_policy</span><span class="o">=</span><span class="s2">"use_frozen_observations_only"</span><span class="p">,</span>
+<a id="__codelineno-40-41" name="__codelineno-40-41" href="#__codelineno-40-41"></a>        <span class="p">)</span>
+<a id="__codelineno-40-42" name="__codelineno-40-42" href="#__codelineno-40-42"></a>
+<a id="__codelineno-40-43" name="__codelineno-40-43" href="#__codelineno-40-43"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_live_replay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace</span><span class="p">):</span>
+<a id="__codelineno-40-44" name="__codelineno-40-44" href="#__codelineno-40-44"></a>        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">trace</span><span class="p">[</span><span class="s2">"events"</span><span class="p">]:</span>
+<a id="__codelineno-40-45" name="__codelineno-40-45" href="#__codelineno-40-45"></a>            <span class="k">if</span> <span class="n">event</span><span class="p">[</span><span class="s2">"event_type"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"tool_call"</span><span class="p">:</span>
+<a id="__codelineno-40-46" name="__codelineno-40-46" href="#__codelineno-40-46"></a>                <span class="n">tool_name</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tool_name"</span><span class="p">)</span>
+<a id="__codelineno-40-47" name="__codelineno-40-47" href="#__codelineno-40-47"></a>                <span class="k">if</span> <span class="ow">not</span> <span class="n">tool_name</span><span class="p">:</span>
+<a id="__codelineno-40-48" name="__codelineno-40-48" href="#__codelineno-40-48"></a>                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"tool_call event missing tool_name"</span><span class="p">)</span>
+<a id="__codelineno-40-49" name="__codelineno-40-49" href="#__codelineno-40-49"></a>
+<a id="__codelineno-40-50" name="__codelineno-40-50" href="#__codelineno-40-50"></a>                <span class="n">tool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tool_registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tool_name</span><span class="p">)</span>
+<a id="__codelineno-40-51" name="__codelineno-40-51" href="#__codelineno-40-51"></a>                <span class="k">if</span> <span class="n">tool</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-40-52" name="__codelineno-40-52" href="#__codelineno-40-52"></a>                    <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"tool not found for live replay: </span><span class="si">{</span><span class="n">tool_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-40-53" name="__codelineno-40-53" href="#__codelineno-40-53"></a>
+<a id="__codelineno-40-54" name="__codelineno-40-54" href="#__codelineno-40-54"></a>                <span class="k">if</span> <span class="n">tool</span><span class="o">.</span><span class="n">side_effect</span><span class="p">:</span>
+<a id="__codelineno-40-55" name="__codelineno-40-55" href="#__codelineno-40-55"></a>                    <span class="k">raise</span> <span class="ne">PermissionError</span><span class="p">(</span>
+<a id="__codelineno-40-56" name="__codelineno-40-56" href="#__codelineno-40-56"></a>                        <span class="sa">f</span><span class="s2">"refuse to live replay side-effect tool: </span><span class="si">{</span><span class="n">tool</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+<a id="__codelineno-40-57" name="__codelineno-40-57" href="#__codelineno-40-57"></a>                    <span class="p">)</span>
+<a id="__codelineno-40-58" name="__codelineno-40-58" href="#__codelineno-40-58"></a>
+<a id="__codelineno-40-59" name="__codelineno-40-59" href="#__codelineno-40-59"></a>        <span class="n">agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+<a id="__codelineno-40-60" name="__codelineno-40-60" href="#__codelineno-40-60"></a>            <span class="n">agent_version</span><span class="o">=</span><span class="n">trace</span><span class="p">[</span><span class="s2">"agent_version"</span><span class="p">],</span>
+<a id="__codelineno-40-61" name="__codelineno-40-61" href="#__codelineno-40-61"></a>            <span class="n">model</span><span class="o">=</span><span class="n">trace</span><span class="p">[</span><span class="s2">"model"</span><span class="p">],</span>
+<a id="__codelineno-40-62" name="__codelineno-40-62" href="#__codelineno-40-62"></a>        <span class="p">)</span>
+<a id="__codelineno-40-63" name="__codelineno-40-63" href="#__codelineno-40-63"></a>        <span class="k">return</span> <span class="n">agent</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">goal</span><span class="o">=</span><span class="n">trace</span><span class="p">[</span><span class="s2">"goal"</span><span class="p">],</span> <span class="n">tool_policy</span><span class="o">=</span><span class="s2">"read_only_live"</span><span class="p">)</span>
+<a id="__codelineno-40-64" name="__codelineno-40-64" href="#__codelineno-40-64"></a>
+<a id="__codelineno-40-65" name="__codelineno-40-65" href="#__codelineno-40-65"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_load_artifacts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace</span><span class="p">):</span>
+<a id="__codelineno-40-66" name="__codelineno-40-66" href="#__codelineno-40-66"></a>        <span class="n">refs</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-40-67" name="__codelineno-40-67" href="#__codelineno-40-67"></a>            <span class="n">event</span><span class="p">[</span><span class="s2">"raw_result_ref"</span><span class="p">]</span>
+<a id="__codelineno-40-68" name="__codelineno-40-68" href="#__codelineno-40-68"></a>            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">trace</span><span class="p">[</span><span class="s2">"events"</span><span class="p">]</span>
+<a id="__codelineno-40-69" name="__codelineno-40-69" href="#__codelineno-40-69"></a>            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"raw_result_ref"</span><span class="p">)</span>
+<a id="__codelineno-40-70" name="__codelineno-40-70" href="#__codelineno-40-70"></a>        <span class="p">]</span>
+<a id="__codelineno-40-71" name="__codelineno-40-71" href="#__codelineno-40-71"></a>        <span class="k">return</span> <span class="p">{</span><span class="n">ref</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">artifact_store</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span> <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">refs</span><span class="p">}</span>
+</code></pre></div>
+<p>这段伪代码故意把 <code>trace</code>、<code>deterministic</code> 和 <code>live</code> 三种模式拆开。尤其要注意：只读工具可以在授权后 Live Replay，有副作用工具默认不能自动重放。</p>
+<h3 id="84">8.4 埋点成本和存储开销估算<a class="headerlink" href="#84" title="Permanent link">&para;</a></h3>
+<p>很多团队担心 Agent 可观测性太重。这个担心合理，但可以量化。</p>
+<p>假设一次中等复杂度任务包含：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>1 个 goal 事件
+<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a>1 个 plan 事件
+<a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a>8 个 step 事件
+<a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a>10 个 tool_call 事件
+<a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a>10 个 observation 事件
+<a id="__codelineno-41-6" name="__codelineno-41-6" href="#__codelineno-41-6"></a>5 个 validation 事件
+<a id="__codelineno-41-7" name="__codelineno-41-7" href="#__codelineno-41-7"></a>1 个 final_output 事件
+<a id="__codelineno-41-8" name="__codelineno-41-8" href="#__codelineno-41-8"></a>1 个 cost_summary 事件
+</code></pre></div>
+<p>合计大约 37 条结构化事件。</p>
+<p>如果每条事件只保存摘要、结构化字段、引用和少量 metadata，单条 JSON 通常可以控制在 0.8KB 到 2KB。按 1.5KB 估算：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>37 条事件 × 1.5KB ≈ 55.5KB / 任务
+</code></pre></div>
+<p>JSON 日志进入对象存储或日志平台后通常还能压缩。按 4:1 压缩估算：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a>55.5KB / 任务 ÷ 4 ≈ 14KB / 任务
+</code></pre></div>
+<p>如果每天 10 万次任务：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a>结构化事件原始量：约 5.5GB / 天
+<a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a>压缩后热存储：约 1.4GB / 天
+<a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a>30 天热存储：约 42GB
+</code></pre></div>
+<p>真正容易膨胀的是原始工具结果，而不是事件本身。</p>
+<p>假设每次任务有 10 个 <code>raw_result_ref</code>，每个原始结果平均 20KB：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a>10 × 20KB = 200KB / 任务
+<a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a>10 万任务 / 天 ≈ 20GB / 天
+<a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a>30 天 ≈ 600GB
+</code></pre></div>
+<p>所以推荐策略是：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">内容</th>
+<th style="text-align: left;">保存策略</th>
+<th style="text-align: left;">保留周期建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">结构化事件</td>
+<td style="text-align: left;">全量保存，压缩存储</td>
+<td style="text-align: left;">热存 30 到 90 天，冷存更久</td>
+</tr>
+<tr>
+<td style="text-align: left;">错误 Trace</td>
+<td style="text-align: left;">全量保存，延长保留</td>
+<td style="text-align: left;">至少 180 天</td>
+</tr>
+<tr>
+<td style="text-align: left;">成功 Trace</td>
+<td style="text-align: left;">可采样或降级存储</td>
+<td style="text-align: left;">高流量场景采样 10% 到 30%</td>
+</tr>
+<tr>
+<td style="text-align: left;">审计事件</td>
+<td style="text-align: left;">不采样，强一致保留</td>
+<td style="text-align: left;">按合规要求</td>
+</tr>
+<tr>
+<td style="text-align: left;">原始工具结果</td>
+<td style="text-align: left;">引用存储，按大小和敏感级别分层</td>
+<td style="text-align: left;">热存 7 到 30 天</td>
+</tr>
+<tr>
+<td style="text-align: left;">大文件、截图、报告</td>
+<td style="text-align: left;">对象存储，只在 Trace 中保存 ref 和 hash</td>
+<td style="text-align: left;">按业务价值分层</td>
+</tr>
+</tbody>
+</table>
+<p>从这个估算看，可观测性并不必然很重。重的是无节制保存原文、截图、长日志和重复工具结果。</p>
+<p>更稳妥的原则是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a>事件全量、原文引用、错误加厚、成功采样、审计不采样。
+</code></pre></div>
+<hr />
+<h2 id="metricstracereplay">九、生产级方案：日志、Metrics、Trace、Replay 的分层架构<a class="headerlink" href="#metricstracereplay" title="Permanent link">&para;</a></h2>
+<p>当 Agent 从 Demo 进入生产环境，可观测性需要分层设计。</p>
+<p>一个推荐架构如下：</p>
+<pre class="mermaid"><code>flowchart TD
+    A[Agent Runtime] --&gt; B[Event Collector]
+    B --&gt; C[Structured Logs]
+    B --&gt; D[Metrics]
+    B --&gt; E[Trace Store]
+    B --&gt; F[Artifact Store]
+    E --&gt; G[Replay Service]
+    F --&gt; G
+    C --&gt; H[Search / Audit]
+    D --&gt; I[Dashboard / Alert]
+    E --&gt; J[Trace Viewer]
+    G --&gt; K[Eval / Regression]</code></pre>
+<p>各层职责可以这样拆：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">层级</th>
+<th style="text-align: left;">职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Event Collector</td>
+<td style="text-align: left;">接收 Agent 运行时事件，统一补 trace_id、时间、版本信息</td>
+</tr>
+<tr>
+<td style="text-align: left;">Structured Logs</td>
+<td style="text-align: left;">保存可检索事件，服务排障和审计</td>
+</tr>
+<tr>
+<td style="text-align: left;">Metrics</td>
+<td style="text-align: left;">聚合成功率、耗时、成本、错误率、验证通过率</td>
+</tr>
+<tr>
+<td style="text-align: left;">Trace Store</td>
+<td style="text-align: left;">保存 span 层级和任务链路</td>
+</tr>
+<tr>
+<td style="text-align: left;">Artifact Store</td>
+<td style="text-align: left;">保存大对象，如工具原始返回、文件、截图、报告</td>
+</tr>
+<tr>
+<td style="text-align: left;">Replay Service</td>
+<td style="text-align: left;">基于 Trace 和 Artifact 回放任务过程</td>
+</tr>
+<tr>
+<td style="text-align: left;">Eval / Regression</td>
+<td style="text-align: left;">使用历史 Trace 构建评测集和回归测试</td>
+</tr>
+</tbody>
+</table>
+<p>生产级 Agent 至少应该有以下指标。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">维度</th>
+<th style="text-align: left;">指标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">任务完成</td>
+<td style="text-align: left;">task_success_rate、final_output_rate、user_cancel_rate</td>
+</tr>
+<tr>
+<td style="text-align: left;">工具调用</td>
+<td style="text-align: left;">tool_success_rate、tool_timeout_rate、retry_count</td>
+</tr>
+<tr>
+<td style="text-align: left;">验证质量</td>
+<td style="text-align: left;">validation_pass_rate、claim_evidence_coverage</td>
+</tr>
+<tr>
+<td style="text-align: left;">成本</td>
+<td style="text-align: left;">cost_per_task、tokens_per_task、tool_calls_per_task</td>
+</tr>
+<tr>
+<td style="text-align: left;">延迟</td>
+<td style="text-align: left;">task_duration_p50/p95、tool_duration_p95、queue_wait_ms</td>
+</tr>
+<tr>
+<td style="text-align: left;">安全</td>
+<td style="text-align: left;">permission_denied_count、policy_violation_count、human_gate_count</td>
+</tr>
+<tr>
+<td style="text-align: left;">体验</td>
+<td style="text-align: left;">user_correction_rate、thumbs_down_rate、rerun_rate</td>
+</tr>
+</tbody>
+</table>
+<p>指标只有采集还不够，还要进入阈值治理。下面是一组初始参考值，真实系统应根据业务风险、任务复杂度和历史基线校准。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;">正常区间</th>
+<th style="text-align: left;">告警阈值</th>
+<th style="text-align: left;">处置动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>task_success_rate</code></td>
+<td style="text-align: left;">85% 到 98%</td>
+<td style="text-align: left;">连续 30 分钟低于 80%，或较 7 日基线下降 15%</td>
+<td style="text-align: left;">回看失败 Trace，按目标理解、工具失败、验证失败分类</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>validation_pass_rate</code></td>
+<td style="text-align: left;">80% 到 95%</td>
+<td style="text-align: left;">连续 1 小时低于 75%，或单版本发布后下降 20%</td>
+<td style="text-align: left;">暂停灰度，抽样失败输出，检查 Skill 验证规则和模型版本</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>claim_evidence_coverage</code></td>
+<td style="text-align: left;">90% 以上</td>
+<td style="text-align: left;">低于 85%，高风险任务低于 95%</td>
+<td style="text-align: left;">降级无证据结论，要求 claim 绑定 evidence_id</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tool_success_rate</code></td>
+<td style="text-align: left;">98% 以上</td>
+<td style="text-align: left;">低于 95%，或某工具 5 分钟内失败超过 20 次</td>
+<td style="text-align: left;">检查 MCP Server、Worker、外部依赖和参数 schema</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tool_timeout_rate</code></td>
+<td style="text-align: left;">1% 以下</td>
+<td style="text-align: left;">高于 3%，或 P95 耗时超过 SLO 2 倍</td>
+<td style="text-align: left;">检查队列、超时配置、缓存命中率和外部 API 状态</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tool_parameter_error_rate</code></td>
+<td style="text-align: left;">2% 以下</td>
+<td style="text-align: left;">高于 5%，或发布后翻倍</td>
+<td style="text-align: left;">回看工具描述、参数枚举、Planner 到 Tool 的映射</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>cost_per_task</code></td>
+<td style="text-align: left;">不超过预算线</td>
+<td style="text-align: left;">超过预算线 30%，或连续 1 小时上升 50%</td>
+<td style="text-align: left;">检查上下文长度、无效重试、计划过细和大结果注入</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tokens_per_task</code></td>
+<td style="text-align: left;">贴近历史基线</td>
+<td style="text-align: left;">较 7 日基线上升 50%</td>
+<td style="text-align: left;">检查记忆注入、检索结果摘要和提示模板膨胀</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>plan_revised_rate</code></td>
+<td style="text-align: left;">按任务复杂度校准；简单任务可接近 0，复杂任务常见 5% 到 25%</td>
+<td style="text-align: left;">复杂任务突然高于 40%；或长任务持续接近 0 且失败率上升</td>
+<td style="text-align: left;">过高查工具/权限不稳定；过低只在失败率上升时检查重规划是否失效</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>permission_denied_count</code></td>
+<td style="text-align: left;">低且稳定</td>
+<td style="text-align: left;">同租户或同工具短时突增</td>
+<td style="text-align: left;">检查权限配置、用户角色、工具路由和越权请求</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>user_correction_rate</code></td>
+<td style="text-align: left;">低于 10%</td>
+<td style="text-align: left;">高于 20%，或某类任务持续上升</td>
+<td style="text-align: left;">抽样用户修正内容，沉淀到 Evals 和 Skill 规则</td>
+</tr>
+</tbody>
+</table>
+<p>告警不应该只看服务错误率，也应该看 Agent 语义层指标。</p>
+<p>例如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a>过去 1 小时 validation_pass_rate 从 92% 降到 64%。
+<a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a>过去 24 小时 tool_parameter_error 增加 3 倍。
+<a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a>某个 Agent 的 cost_per_task 超过预算上限 50%。
+<a id="__codelineno-47-4" name="__codelineno-47-4" href="#__codelineno-47-4"></a>某个版本上线后 plan_revised_rate 明显上升。
+</code></pre></div>
+<p>这些信号可能比 HTTP 500 更早暴露问题。</p>
+<p>Agent 很少只以“服务挂了”的方式失败。它更多是“还在运行，但质量变差了”。</p>
+<p>可观测系统必须能看见这种质量漂移。</p>
+<hr />
+<h2 id="skillmcpmemoryevals">十、和 Skill、MCP、Memory、Evals 的关系<a class="headerlink" href="#skillmcpmemoryevals" title="Permanent link">&para;</a></h2>
+<p>Agent 可观测性不是孤立模块，它和 Skill、MCP、Memory、Evals 都有关系。</p>
+<h3 id="101-skill">10.1 和 Skill 的关系<a class="headerlink" href="#101-skill" title="Permanent link">&para;</a></h3>
+<p>Skill 定义“这类任务应该怎么做”，可观测性记录“这次任务实际怎么做”。</p>
+<p>如果一个 Agent 声称使用了某个 Skill，Trace 中应该能看到：</p>
+<ul>
+<li>加载了哪个 Skill 版本。</li>
+<li>哪些步骤来自 Skill。</li>
+<li>哪些步骤发生了偏离。</li>
+<li>偏离原因是什么。</li>
+<li>Skill 的验证标准是否被执行。</li>
+</ul>
+<p>这样才能判断问题来自 Skill 设计，还是 Agent 执行偏航。</p>
+<h3 id="102-mcp">10.2 和 MCP 的关系<a class="headerlink" href="#102-mcp" title="Permanent link">&para;</a></h3>
+<p>MCP 提供工具、资源和提示模板。可观测性要记录 MCP 调用链路。</p>
+<p>这里需要显式划界：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a>MCP 层管工具有没有稳定工作；
+<a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a>Agent 层管工具结果有没有服务目标。
+</code></pre></div>
+<p>两层都需要日志、指标和 Trace，但观察对象不同。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">层级</th>
+<th style="text-align: left;">主要问题</th>
+<th style="text-align: left;">典型证据</th>
+<th style="text-align: left;">不应该越界做什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">MCP 层</td>
+<td style="text-align: left;">Tool 是否可发现、可调用、参数合法、返回稳定</td>
+<td style="text-align: left;"><code>tools/list</code>、<code>tools/call</code>、schema 校验、Worker 日志、错误码、耗时</td>
+<td style="text-align: left;">不判断业务结论是否成立</td>
+</tr>
+<tr>
+<td style="text-align: left;">Agent 层</td>
+<td style="text-align: left;">Tool 是否被正确选择，结果是否支撑计划和结论</td>
+<td style="text-align: left;"><code>goal_id</code>、<code>plan_id</code>、<code>step_id</code>、Observation、Validation、Cost</td>
+<td style="text-align: left;">不替代 MCP 做协议和 Worker 内部诊断</td>
+</tr>
+<tr>
+<td style="text-align: left;">关联边界</td>
+<td style="text-align: left;">一次 Agent 工具调用如何追到 MCP 执行细节</td>
+<td style="text-align: left;"><code>trace_id</code>、<code>request_id</code>、<code>tool_name</code>、<code>tool_version</code>、<code>raw_result_ref</code></td>
+<td style="text-align: left;">不把两层日志混成不可查询的长文本</td>
+</tr>
+</tbody>
+</table>
+<p>至少要关注：</p>
+<ul>
+<li>Tool 是否可发现。</li>
+<li>参数 schema 是否匹配。</li>
+<li>Tool 是否返回结构化结果。</li>
+<li>错误码是否清晰。</li>
+<li>request_id、trace_id 是否贯穿 Host、Server、Worker。</li>
+<li>工具返回是否被 Agent 正确解释。</li>
+</ul>
+<p>MCP 层的日志回答“工具有没有稳定工作”。Agent 层的 Trace 回答“工具结果有没有服务目标”。两者要关联，但不要混在一起。</p>
+<p>可以把《MCP 的第一性原理》第 17 章看作工具层可观测性的展开：它重点讲结构化日志、Metrics、分布式追踪和告警。本文则是在那个基础上继续往上走一层，讨论 Agent 如何记录目标、计划、解释、验证和 Replay。</p>
+<h3 id="103-memory">10.3 和 Memory 的关系<a class="headerlink" href="#103-memory" title="Permanent link">&para;</a></h3>
+<p>记忆系统会影响 Agent 决策，所以记忆也必须可观测。</p>
+<p>Trace 中应该记录：</p>
+<ul>
+<li>是否触发记忆检索。</li>
+<li>检索 query 是什么。</li>
+<li>召回了哪些 memory_id。</li>
+<li>哪些记忆被注入上下文。</li>
+<li>记忆是否影响了计划或结论。</li>
+<li>是否写入新记忆。</li>
+</ul>
+<p>否则，当 Agent 因为一条过期记忆做错判断时，很难定位。</p>
+<p>记忆不是背景资料，它是会改变行为的输入。凡是会改变 Agent 行为的输入，都应该进入可观测链路。</p>
+<h3 id="104-evals">10.4 和 Evals 的关系<a class="headerlink" href="#104-evals" title="Permanent link">&para;</a></h3>
+<p>Evals 需要样本，Trace 是最好的真实样本来源之一。</p>
+<p>失败 Trace 可以沉淀成回归测试：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a>这次任务里，旧 Agent 把证据不足的假设写成结论。
+<a id="__codelineno-49-2" name="__codelineno-49-2" href="#__codelineno-49-2"></a>下一版本必须在相同 Observation 下，把该内容标为未验证假设。
+</code></pre></div>
+<p>成功 Trace 也有价值。它可以成为 Golden Path，用来检查新版 Agent 是否仍然按合理步骤完成任务。</p>
+<p>所以，可观测性和评估不是两套系统。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a>可观测性负责收集真实执行过程；
+<a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a>Evals 负责把这些过程转化为可重复的质量门槛。
+</code></pre></div>
+<hr />
+<h2 id="_3">十一、常见误区<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h3 id="111">11.1 有日志就等于可观测<a class="headerlink" href="#111" title="Permanent link">&para;</a></h3>
+<p>日志只是可观测性的基础材料。</p>
+<p>如果日志没有结构、没有 trace_id、没有计划步骤、没有验证结果，就只能帮你知道“系统曾经输出过一些文字”。</p>
+<p>真正的可观测性要能关联目标、计划、工具、观察、验证和成本。</p>
+<h3 id="112">11.2 只记录最终答案<a class="headerlink" href="#112" title="Permanent link">&para;</a></h3>
+<p>最终答案是结果，不是过程。</p>
+<p>Agent 的错误经常藏在中间过程里。只记录最终答案，就像只保存一次手术的出院小结，却不保存诊断、检查、用药和手术记录。</p>
+<p>对 Agent 来说，中间过程不是噪声，而是责任链。</p>
+<h3 id="113-trace">11.3 Trace 只看耗时，不看决策<a class="headerlink" href="#113-trace" title="Permanent link">&para;</a></h3>
+<p>很多团队把 Trace 当性能工具，只看哪个 span 慢。</p>
+<p>这对 Agent 不够。</p>
+<p>Agent Trace 还要看：</p>
+<ul>
+<li>为什么有这个 span。</li>
+<li>它服务哪个计划步骤。</li>
+<li>它产生了什么 Observation。</li>
+<li>它是否支撑最终结论。</li>
+<li>它是否通过 Validation。</li>
+</ul>
+<p>否则你只能优化速度，不能优化质量。</p>
+<h3 id="114-replay">11.4 Replay 只是重新跑一遍<a class="headerlink" href="#114-replay" title="Permanent link">&para;</a></h3>
+<p>重新跑一遍可能得到完全不同的结果。</p>
+<p>数据变了、模型变了、工具变了、Prompt 变了，结果都会变。</p>
+<p>Replay 的重点是保留当时的执行证据，并在需要时用冻结上下文做可控对比。对于有副作用的工具，默认不能自动重放。</p>
+<h3 id="115-token">11.5 成本只看 Token，不看无效步骤<a class="headerlink" href="#115-token" title="Permanent link">&para;</a></h3>
+<p>Token 是显性成本，无效步骤是隐性成本。</p>
+<p>一个 Agent 可能 Token 不高，但反复调用慢工具、不断重试、频繁请求人工确认，整体成本仍然很高。</p>
+<p>成本治理要看完整任务链路，而不是只看模型账单。</p>
+<h3 id="116">11.6 把所有原始内容都写进日志<a class="headerlink" href="#116" title="Permanent link">&para;</a></h3>
+<p>这会带来三个问题：成本高、检索慢、风险大。</p>
+<p>更稳妥的做法是：日志保存摘要、结构化字段、引用和哈希；原始内容进入受控存储，并按权限读取。</p>
+<p>尤其是用户隐私、密钥、合同、财务数据和内部系统返回，不能直接进入普通日志。</p>
+<hr />
+<h2 id="_4">十二、设计检查清单<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>设计 Agent 可观测性时，可以用下面这份清单自查。</p>
+<h3 id="121">12.1 任务链路检查<a class="headerlink" href="#121" title="Permanent link">&para;</a></h3>
+<ul>
+<li>是否为每次任务生成唯一 trace_id？</li>
+<li>是否记录用户原始请求和 Agent 解释后的目标？</li>
+<li>是否记录成功标准、约束和默认假设？</li>
+<li>是否记录计划、步骤、依赖和重规划原因？</li>
+<li>是否能把每个工具调用关联到具体计划步骤？</li>
+</ul>
+<h3 id="122">12.2 工具调用检查<a class="headerlink" href="#122" title="Permanent link">&para;</a></h3>
+<ul>
+<li>是否记录 tool_name、tool_version 和参数？</li>
+<li>参数中的敏感字段是否脱敏？</li>
+<li>是否区分只读工具和有副作用工具？</li>
+<li>是否记录错误码、重试次数、超时和降级路径？</li>
+<li>MCP Server、Worker 和 Agent Runtime 是否共用 request_id 或 trace_id？</li>
+</ul>
+<h3 id="123-observation">12.3 Observation 检查<a class="headerlink" href="#123-observation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>是否保存工具原始返回的引用？</li>
+<li>是否生成结构化摘要？</li>
+<li>关键数据是否带来源、单位、时间窗和样本量？</li>
+<li>最终结论是否能反查到 observation_id？</li>
+<li>是否避免把长原文和敏感内容直接写入日志？</li>
+</ul>
+<h3 id="124-validation">12.4 Validation 检查<a class="headerlink" href="#124-validation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>是否有步骤级验证？</li>
+<li>是否有结论级验证？</li>
+<li>是否有最终交付验证？</li>
+<li>验证失败后是否会重试、降级、重规划或停止？</li>
+<li>证据不足的内容是否会被标记为假设，而不是写成结论？</li>
+</ul>
+<h3 id="125-cost">12.5 Cost 检查<a class="headerlink" href="#125-cost" title="Permanent link">&para;</a></h3>
+<ul>
+<li>是否记录模型调用次数、Token 和费用估算？</li>
+<li>是否记录工具调用次数、耗时和重试？</li>
+<li>是否有最大步骤数、最大工具调用数和预算上限？</li>
+<li>是否能定位成本异常来自模型、工具、重试、上下文还是人工复核？</li>
+<li>是否有缓存命中率和缓存失效原因？</li>
+</ul>
+<h3 id="126-replay">12.6 Replay 检查<a class="headerlink" href="#126-replay" title="Permanent link">&para;</a></h3>
+<ul>
+<li>是否能按 trace_id 回放完整任务过程？</li>
+<li>是否保存 Agent、模型、Prompt、Skill、Tool Registry 的版本？</li>
+<li>是否区分 Trace Replay、Deterministic Replay 和 Live Replay？</li>
+<li>有副作用工具是否默认禁止自动重放？</li>
+<li>历史失败 Trace 是否能进入 Evals 或回归测试？</li>
+</ul>
+<hr />
+<h2 id="agent_3">十三、总结：可观测性是 Agent 走向生产的飞行记录仪（黑匣子）<a class="headerlink" href="#agent_3" title="Permanent link">&para;</a></h2>
+<p>Agent 的能力越强，越不能只看最终答案。</p>
+<p>因为它不再只是生成文本，而是在目标约束下持续规划、调用工具、解释结果、验证输出和调整路径。这个过程中任何一环都可能出错。</p>
+<p>所以，生产级 Agent 必须把执行过程记录下来：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a>Goal：它认为自己要完成什么。
+<a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a>Plan：它准备怎样完成。
+<a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a>Tool Call：它实际调用了什么。
+<a id="__codelineno-51-4" name="__codelineno-51-4" href="#__codelineno-51-4"></a>Observation：它看到了什么结果。
+<a id="__codelineno-51-5" name="__codelineno-51-5" href="#__codelineno-51-5"></a>Validation：它如何判断结果是否可靠。
+<a id="__codelineno-51-6" name="__codelineno-51-6" href="#__codelineno-51-6"></a>Cost：它消耗了多少资源。
+<a id="__codelineno-51-7" name="__codelineno-51-7" href="#__codelineno-51-7"></a>Replay：失败后能否回放和对比。
+</code></pre></div>
+<p>可以用一句话概括：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a>没有可观测性的 Agent，只能相信它；有了可观测性的 Agent，才能调试它、评估它、治理它。
+</code></pre></div>
+<p>这也是 Agent 从 Demo 走向生产的关键分界线。</p>
+<p>Demo 阶段，最终答案好像对了就足够让人兴奋。</p>
+<p>生产阶段，系统必须能回答：为什么对、哪里可能错、错了怎么查、重跑会怎样、成本是否可控、责任链在哪里。</p>
+<p>Agent 可观测性不是附加功能，而是工程底座。它连接规划、工具、记忆、验证、评估、安全和成本治理。没有这层底座，Agent 越复杂，越难相信；有了这层底座，Agent 才能从一次次惊艳演示，变成可以持续运行的任务执行系统。</p>
+<hr />
+<h2 id="_5">附录：术语对照表<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">术语</th>
+<th style="text-align: left;">英文</th>
+<th style="text-align: left;">本文含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">请求 ID</td>
+<td style="text-align: left;">request_id</td>
+<td style="text-align: left;">单次外部请求或工具调用的唯一标识，常用于 Host、MCP Server、Worker 日志关联</td>
+</tr>
+<tr>
+<td style="text-align: left;">追踪 ID</td>
+<td style="text-align: left;">trace_id</td>
+<td style="text-align: left;">一次 Agent 任务的完整链路标识，覆盖 Goal、Plan、Tool Call、Observation、Validation、Cost</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>request_id</code> 和 <code>trace_id</code></td>
+<td style="text-align: left;">request_id / trace_id</td>
+<td style="text-align: left;">一个 <code>trace_id</code> 下通常会包含多个 <code>request_id</code>；前者管任务全局，后者管具体请求或工具调用</td>
+</tr>
+<tr>
+<td style="text-align: left;">追踪</td>
+<td style="text-align: left;">Trace</td>
+<td style="text-align: left;">一次任务的层级执行链路，由多个 span 和事件组成</td>
+</tr>
+<tr>
+<td style="text-align: left;">Span</td>
+<td style="text-align: left;">Span</td>
+<td style="text-align: left;">Trace 中的一个阶段，可以是认知步骤、工具调用或验证动作</td>
+</tr>
+<tr>
+<td style="text-align: left;">认知 Span</td>
+<td style="text-align: left;">Cognitive Span</td>
+<td style="text-align: left;">目标解释、计划生成、重规划、结论归纳等非工具调用步骤</td>
+</tr>
+<tr>
+<td style="text-align: left;">工具 Span</td>
+<td style="text-align: left;">Tool Span</td>
+<td style="text-align: left;">MCP Tool、API、数据库、文件、浏览器等外部调用步骤</td>
+</tr>
+<tr>
+<td style="text-align: left;">指标</td>
+<td style="text-align: left;">Metrics</td>
+<td style="text-align: left;">可聚合的数值信号，如成功率、验证通过率、成本、延迟、错误率</td>
+</tr>
+<tr>
+<td style="text-align: left;">回放</td>
+<td style="text-align: left;">Replay</td>
+<td style="text-align: left;">基于历史 Trace 和 Artifact 复盘或重新执行任务过程</td>
+</tr>
+<tr>
+<td style="text-align: left;">轨迹回放</td>
+<td style="text-align: left;">Trace Replay</td>
+<td style="text-align: left;">只回放当时记录，不重新调用工具，用于排查决策过程、审计和复盘</td>
+</tr>
+<tr>
+<td style="text-align: left;">确定性回放</td>
+<td style="text-align: left;">Deterministic Replay</td>
+<td style="text-align: left;">使用冻结上下文和工具结果复跑 Agent，用于版本对比和回归测试</td>
+</tr>
+<tr>
+<td style="text-align: left;">在线回放</td>
+<td style="text-align: left;">Live Replay</td>
+<td style="text-align: left;">在当前环境重新执行工具调用，默认只允许只读工具</td>
+</tr>
+<tr>
+<td style="text-align: left;">观察</td>
+<td style="text-align: left;">Observation</td>
+<td style="text-align: left;">工具或外部环境返回的事实结果，不等于模型解释</td>
+</tr>
+<tr>
+<td style="text-align: left;">解释</td>
+<td style="text-align: left;">Interpretation</td>
+<td style="text-align: left;">Agent 基于 Observation 形成的判断、归纳或候选结论</td>
+</tr>
+<tr>
+<td style="text-align: left;">验证</td>
+<td style="text-align: left;">Validation</td>
+<td style="text-align: left;">判断步骤、结论或最终交付是否满足目标和证据标准</td>
+</tr>
+<tr>
+<td style="text-align: left;">Artifact</td>
+<td style="text-align: left;">Artifact</td>
+<td style="text-align: left;">原始工具结果、文件、截图、报告等大对象，Trace 中通常只保存引用</td>
+</tr>
+<tr>
+<td style="text-align: left;">黑箱</td>
+<td style="text-align: left;">Black Box</td>
+<td style="text-align: left;">看不到内部过程的系统状态，强调不可解释</td>
+</tr>
+<tr>
+<td style="text-align: left;">黑匣子</td>
+<td style="text-align: left;">Flight Recorder</td>
+<td style="text-align: left;">保存执行过程用于事故复盘的记录系统，本文标题强调这一层含义</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_6">参考与延伸<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<ul>
+<li>《Agent 的第一性原理：从概念到范式演进》：https://blog.csdn.net/sinat_28228747/article/details/164114906</li>
+<li>《Agent 规划范式进化论：从 CoT 到 Plan-and-Execute》：https://blog.csdn.net/sinat_28228747/article/details/164120351</li>
+<li>《Agent 的任务拆解艺术：从目标到可执行子任务》：https://blog.csdn.net/sinat_28228747/article/details/164139285</li>
+<li>《Agent 记忆系统设计：从上下文管理到长期经验复用》：https://blog.csdn.net/sinat_28228747/article/details/164092820</li>
+<li>《MCP 的第一性原理：从工具调用到能力协议》：https://blog.csdn.net/sinat_28228747/article/details/163638431</li>
+<li>《MCP 的第一性原理：从工具调用到能力协议》第 17 章“可观测性”：./MCP的第一性原理：从工具调用到能力协议.md#17-可观测性</li>
+<li>《AI 能力工程：从 Skill、MCP 到 Agent》：https://blog.csdn.net/sinat_28228747/article/details/164061172</li>
+<li>OpenTelemetry：<code>https://opentelemetry.io</code></li>
+<li>Prometheus：<code>https://prometheus.io</code></li>
+<li>Langfuse：<code>https://langfuse.com</code></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.indexes", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

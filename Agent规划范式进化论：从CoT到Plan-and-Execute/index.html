@@ -1,0 +1,2574 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="构建可复用、可调用、可验证的 AI 执行系统 —— Skill · MCP · Agent 三层知识链路">
+      
+      
+        <meta name="author" content="ai-capability-engineering">
+      
+      
+      
+        <link rel="prev" href="../Agent%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E6%9C%80%E5%B0%8F%E9%97%AD%E7%8E%AF%E5%88%B0%E7%94%9F%E4%BA%A7%E7%BA%A7%E7%B3%BB%E7%BB%9F/">
+      
+      
+        <link rel="next" href="../Agent%E7%9A%84%E4%BB%BB%E5%8A%A1%E6%8B%86%E8%A7%A3%E8%89%BA%E6%9C%AF%EF%BC%9A%E4%BB%8E%E7%9B%AE%E6%A0%87%E5%88%B0%E5%8F%AF%E6%89%A7%E8%A1%8C%E5%AD%90%E4%BB%BB%E5%8A%A1/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Agent 规划范式进化论：从 CoT 到 Plan-and-Execute - AI 能力工程：从 Skill、MCP 到 Agent</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agent-cot-plan-and-execute" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="AI 能力工程：从 Skill、MCP 到 Agent" class="md-header__button md-logo" aria-label="AI 能力工程：从 Skill、MCP 到 Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.41 4 16 6.41v.18L18.41 9H22v2h-4.41L16 9.41V12h-1a2 2 0 0 1-2-2V7.5H9.86c-.09.37-.24.72-.44 1.05L15.18 19H20a2 2 0 0 1 2 2v1H2v-1a2 2 0 0 1 2-2h6.61l-4.69-8.5a4.006 4.006 0 0 1-3.81-3A4 4 0 0 1 5 2.63c2.13-.55 4.31.73 4.86 2.87H13V3a2 2 0 0 1 2-2h1v2.59L17.59 2H22v2zM6 4.5a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AI 能力工程：从 Skill、MCP 到 Agent
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Agent 规划范式进化论：从 CoT 到 Plan-and-Execute
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%EF%BC%9A%E4%BB%8ESkill%E3%80%81MCP%E5%88%B0Agent/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  总纲
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Skill%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%9A%E4%BB%8E%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E5%88%B0%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Skill 方法层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../MCP%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%88%B0%E8%83%BD%E5%8A%9B%E5%8D%8F%E8%AE%AE/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  MCP 能力层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%8E%E8%92%B8%E9%A6%8F%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%8F%96%E8%88%8D%E4%B8%8E%E5%8F%AF%E8%B7%91%E5%AE%9E%E4%BE%8B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  模型效率
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E6%A6%82%E5%BF%B5%E5%88%B0%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Agent 基础
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+    
+  
+  执行能力
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E6%A8%A1%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B1%82%E7%BA%A7%E3%80%81%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E7%BE%A4%E7%BB%84/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  协作编排
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  安全治理
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E4%BB%8E%E6%97%A5%E5%BF%97%E3%80%81Trace%E5%88%B0Replay/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  生产治理
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="AI 能力工程：从 Skill、MCP 到 Agent" class="md-nav__button md-logo" aria-label="AI 能力工程：从 Skill、MCP 到 Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.41 4 16 6.41v.18L18.41 9H22v2h-4.41L16 9.41V12h-1a2 2 0 0 1-2-2V7.5H9.86c-.09.37-.24.72-.44 1.05L15.18 19H20a2 2 0 0 1 2 2v1H2v-1a2 2 0 0 1 2-2h6.61l-4.69-8.5a4.006 4.006 0 0 1-3.81-3A4 4 0 0 1 5 2.63c2.13-.55 4.31.73 4.86 2.87H13V3a2 2 0 0 1 2-2h1v2.59L17.59 2H22v2zM6 4.5a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg>
+
+    </a>
+    AI 能力工程：从 Skill、MCP 到 Agent
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    总纲
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    总纲
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%EF%BC%9A%E4%BB%8ESkill%E3%80%81MCP%E5%88%B0Agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 能力工程：从 Skill、MCP 到 Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill 方法层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Skill 方法层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Skill%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%9A%E4%BB%8E%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E5%88%B0%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill 设计方法论：从专家经验到可复用能力
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E4%BB%8EPrompt%E5%88%B0Skill%EF%BC%9A%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96%E5%B0%81%E8%A3%85%E6%8C%87%E5%8D%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从 Prompt 到 Skill：专家经验的标准化封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP 能力层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MCP 能力层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MCP%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%88%B0%E8%83%BD%E5%8A%9B%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP 的第一性原理：从工具调用到能力协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模型效率
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模型效率
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%8E%E8%92%B8%E9%A6%8F%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%8F%96%E8%88%8D%E4%B8%8E%E5%8F%AF%E8%B7%91%E5%AE%9E%E4%BE%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模型量化与蒸馏：原理、取舍与可跑实例
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 基础
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Agent 基础
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E6%A6%82%E5%BF%B5%E5%88%B0%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的第一性原理：从概念到范式演进
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E6%9C%80%E5%B0%8F%E9%97%AD%E7%8E%AF%E5%88%B0%E7%94%9F%E4%BA%A7%E7%BA%A7%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 工程实践指南：从最小闭环到生产级系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    执行能力
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    执行能力
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 规划范式进化论：从 CoT 到 Plan-and-Execute
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 规划范式进化论：从 CoT 到 Plan-and-Execute
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、从一个简单问题开始：为什么“直接回答”不够
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、规划范式总览：从内部思考到外部执行
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、CoT：让模型先想清楚
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、CoT：让模型先想清楚">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 一个具体例子
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-cot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 CoT 的价值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-cot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 CoT 的局限
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#react" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、ReAct：让模型边想边行动
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、ReAct：让模型边想边行动">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 一个具体例子
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-react" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 ReAct 的价值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-react" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 ReAct 的局限
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plan-and-execute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、Plan-and-Execute：先规划，再执行
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、Plan-and-Execute：先规划，再执行">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-planner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Planner：先把目标拆成路径
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-executor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Executor：按步骤执行，不随意偏航
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-verifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Verifier：检查结果是否支撑目标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-replanner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Replanner：重规划不是失败
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-plan-and-execute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Plan-and-Execute 的价值和代价
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、三种范式的本质对比
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、演进动因：为什么不是谁替代谁
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、如何选择规划范式
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、从规划范式走向 Agent 工程
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、常见误区
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十、常见误区">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-cot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 CoT 越长越好
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-react-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 ReAct 就是 Agent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-plan-and-execute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Plan-and-Execute 一定更高级
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#104" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 规划等于一次性写死步骤
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、总结：Agent 规划的本质
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E4%BB%BB%E5%8A%A1%E6%8B%86%E8%A7%A3%E8%89%BA%E6%9C%AF%EF%BC%9A%E4%BB%8E%E7%9B%AE%E6%A0%87%E5%88%B0%E5%8F%AF%E6%89%A7%E8%A1%8C%E5%AD%90%E4%BB%BB%E5%8A%A1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的任务拆解艺术：从目标到可执行子任务
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E4%BB%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%88%B0%E9%95%BF%E6%9C%9F%E7%BB%8F%E9%AA%8C%E5%A4%8D%E7%94%A8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 记忆系统设计：从上下文管理到长期经验复用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    协作编排
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    协作编排
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E6%A8%A1%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B1%82%E7%BA%A7%E3%80%81%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E7%BE%A4%E7%BB%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多 Agent 协作模式深度解析：层级、流水线与群组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    安全治理
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    安全治理
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 安全护栏设计：权限控制、对抗鲁棒性与人工确认环
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    生产治理
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    生产治理
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E4%BB%8E%E6%97%A5%E5%BF%97%E3%80%81Trace%E5%88%B0Replay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 可观测性实战：从日志、Trace 到 Replay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E7%94%A8Tracing%E7%9C%8B%E6%B8%85%E4%BD%A0%E7%9A%84Agent%E2%80%9C%E5%A4%A7%E8%84%91%E2%80%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tracing 专项：看清 Agent 的“大脑”
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E4%B8%8E%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%EF%BC%9ACheckpointer%E6%9C%BA%E5%88%B6%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 状态管理与断点续传：Checkpointer 机制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%87%AA%E6%88%91%E7%BA%A0%E9%94%99%E4%B8%8E%E9%AA%8C%E8%AF%81%E6%9C%BA%E5%88%B6%E8%AE%BE%E8%AE%A1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 自我纠错与验证机制设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E8%AF%84%E4%BC%B0%E4%BD%93%E7%B3%BB%EF%BC%88Evals%EF%BC%89%EF%BC%9A%E4%BB%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%88%B0%E9%9B%86%E6%88%90%E8%AF%84%E6%B5%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 自动化评估体系（Evals）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="agent-cot-plan-and-execute">Agent 规划范式进化论：从 CoT 到 Plan-and-Execute<a class="headerlink" href="#agent-cot-plan-and-execute" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Agent 不是“会调用工具的大模型”，而是在目标约束下持续感知、规划、行动、验证并调整的执行系统。规划，就是把开放目标转化为可执行闭环的关键机制。</p>
+</blockquote>
+<hr />
+<h2 id="_1">一、从一个简单问题开始：为什么“直接回答”不够<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>先看一个很普通的需求：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>帮我分析这个 SaaS 产品最近用户流失的主要原因，并给出三个改进建议。
+</code></pre></div>
+<p>如果把这个问题直接交给一个普通 LLM，它很可能会给出一段看起来很合理的答案：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>用户流失可能来自价格过高、产品体验不好、竞品吸引、客服响应慢。建议优化价格体系、改善核心功能体验、加强客户运营和召回机制。
+</code></pre></div>
+<p>这段回答不能说完全错。它符合常识，也有一定启发性。但如果你真的要拿它做产品决策，它的问题就很明显了。</p>
+<p>第一，它没有确认“这个 SaaS 产品”到底是什么。是面向企业协作，还是面向开发者工具？是低客单价自助订阅，还是高客单价销售驱动？不同产品的流失原因完全不同。</p>
+<p>第二，它没有读取真实数据。用户流失究竟发生在注册后第一天、试用期结束时，还是付费续约阶段？如果不知道流失发生在哪个阶段，就很难判断是获客质量问题、激活问题、价格问题还是长期价值不足。</p>
+<p>第三，它没有区分事实和猜测。价格过高、体验不好、竞品吸引、客服慢，这些都是可能原因，但不是已经被证据支持的结论。</p>
+<p>第四，它没有说明为什么是这三个建议优先。真正的业务建议需要考虑影响面、实施成本、验证难度和风险，而不只是列出几个看似正确的方向。</p>
+<p>这个例子说明，复杂任务不是靠“一次生成”完成的。它需要一个推进过程：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>理解目标 -&gt; 分解问题 -&gt; 获取证据 -&gt; 形成判断 -&gt; 验证结论 -&gt; 输出方案
+</code></pre></div>
+<p>这就是 Agent 为什么需要规划。</p>
+<p>规划的本质不是“让模型写一个步骤列表”，而是让系统在开放目标面前知道：</p>
+<ul>
+<li>现在要解决的问题是什么？</li>
+<li>下一步应该做什么？</li>
+<li>需要哪些信息和工具？</li>
+<li>当前结果是否足够支撑结论？</li>
+<li>什么时候应该继续，什么时候应该停下？</li>
+<li>失败或证据不足时如何调整路径？</li>
+</ul>
+<p>如果没有规划，Agent 很容易退化成“会调用工具的问答模型”：它可能查一些资料，做一些总结，但不一定能稳定完成目标。真正可用的 Agent，需要把推理、工具、状态、验证和反馈组织成闭环。</p>
+<p>本文就围绕三种经典规划范式展开：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>CoT：让模型先想清楚。
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ReAct：让模型边想边行动。
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Plan-and-Execute：让模型先规划，再分步执行和验证。
+</code></pre></div>
+<p>它们不是简单的替代关系，而是一条能力逐步外化的演进路径。</p>
+<hr />
+<h2 id="_2">二、规划范式总览：从内部思考到外部执行<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>LLM 应用最早的形态很简单：用户输入一个问题，模型直接输出答案。</p>
+<p>这种方式适合单步任务，比如翻译一句话、解释一个概念、总结一段短文本。但一旦任务需要多步推理、外部信息或持续执行，直接回答就不够了。</p>
+<p>于是规划范式开始演化：</p>
+<pre class="mermaid"><code>flowchart LR
+    A[普通 Prompt&lt;br/&gt;直接回答] --&gt; B[CoT&lt;br/&gt;先推理再回答]
+    B --&gt; C[ReAct&lt;br/&gt;推理与行动交替]
+    C --&gt; D[Plan-and-Execute&lt;br/&gt;先规划再执行]
+    D --&gt; E[Agent 工程闭环&lt;br/&gt;状态、记忆、权限、验证、观测]</code></pre>
+<p>这条路径可以这样理解：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">范式</th>
+<th style="text-align: left;">核心动作</th>
+<th style="text-align: left;">解决的问题</th>
+<th style="text-align: left;">主要局限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">CoT</td>
+<td style="text-align: left;">先推理，再回答</td>
+<td style="text-align: left;">复杂问题不能一步到位</td>
+<td style="text-align: left;">只能内部推理，不能接触真实环境</td>
+</tr>
+<tr>
+<td style="text-align: left;">ReAct</td>
+<td style="text-align: left;">一边推理，一边行动</td>
+<td style="text-align: left;">需要外部工具和反馈</td>
+<td style="text-align: left;">容易局部最优，长任务会漂移</td>
+</tr>
+<tr>
+<td style="text-align: left;">Plan-and-Execute</td>
+<td style="text-align: left;">先规划，再分步执行</td>
+<td style="text-align: left;">长任务需要全局路径和验证</td>
+<td style="text-align: left;">需要状态管理、重规划和工程治理</td>
+</tr>
+</tbody>
+</table>
+<p>还是回到前面的 SaaS 用户流失案例。</p>
+<p>如果使用 CoT，模型会先分析用户流失的常见原因，再给出一个结构化判断。它的优势是思路更清楚，但它主要依赖内部知识。</p>
+<p>如果使用 ReAct，模型会一边分析，一边查询留存数据、用户反馈和客服工单。它的优势是能接触外部证据，但它可能想到哪里查到哪里，缺少全局计划。</p>
+<p>如果使用 Plan-and-Execute，Agent 会先制定完整调研计划：确认分析范围、读取核心指标、分析变化点、检索用户反馈、交叉验证证据、形成结论、输出建议。它的优势是更适合复杂交付物。</p>
+<p>所以，三种范式的演进不是从“笨”到“聪明”那么简单，而是从内部思考，走向外部交互，再走向工程化任务管理。</p>
+<hr />
+<h2 id="cot">三、CoT：让模型先想清楚<a class="headerlink" href="#cot" title="Permanent link">&para;</a></h2>
+<p>CoT，全称 Chain-of-Thought，通常翻译为“思维链”。它的基本思想是：不要让模型直接给出最终答案，而是让模型先经过若干中间推理步骤，再形成结论。</p>
+<p>它对应的基本结构是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Question -&gt; Reasoning -&gt; Final Answer
+</code></pre></div>
+<p>在 Agent 规划范式里，CoT 的价值在于：它让模型从“直接反应”变成“先组织思考”。</p>
+<h3 id="31">3.1 一个具体例子<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
+<p>用户问：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>一个 SaaS 产品最近用户留存下降，可能有哪些原因？请按优先级分析。
+</code></pre></div>
+<p>直接回答可能是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>可能是体验不好、价格过高、竞品影响、客服响应慢。
+</code></pre></div>
+<p>CoT 型处理方式会更有层次。它会先把问题拆成几个维度：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>第一步：判断留存下降发生在哪类用户身上，是新用户、活跃用户还是付费用户。
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>第二步：如果主要发生在新用户，优先怀疑激活路径、获客质量和新手引导。
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>第三步：如果主要发生在付费用户，优先怀疑价值感、价格、续费周期和竞品替代。
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>第四步：如果所有用户都下降，可能是产品稳定性、核心功能变化或外部市场变化。
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>第五步：输出时按“影响范围 + 可验证性 + 可干预性”排序。
+</code></pre></div>
+<p>即使这个过程不调用任何工具，它也比直接罗列原因更有分析价值。因为它开始考虑：问题发生在哪里，哪些原因更可能，哪些原因更容易验证。</p>
+<p>可以把 CoT 流程画成：</p>
+<pre class="mermaid"><code>flowchart TD
+    A[用户问题] --&gt; B[拆解问题]
+    B --&gt; C[生成中间推理]
+    C --&gt; D[整合判断]
+    D --&gt; E[输出答案]</code></pre>
+<h3 id="32-cot">3.2 CoT 的价值<a class="headerlink" href="#32-cot" title="Permanent link">&para;</a></h3>
+<p>CoT 的第一个价值，是提升复杂推理任务的稳定性。很多问题不能一步到位，必须先拆解条件，再形成结论。比如数学题、逻辑题、方案比较、风险分析，都需要中间步骤。</p>
+<p>第二个价值，是让模型的回答更结构化。即使最终不展示完整推理链，模型内部也需要先形成分析框架。</p>
+<p>第三个价值，是为后续 Agent 规划打基础。Planner 制定计划时需要推理，Executor 判断工具结果时需要推理，Verifier 检查结论时也需要推理。没有 CoT 这类内部推理能力，后面的 ReAct 和 Plan-and-Execute 都很难成立。</p>
+<h3 id="33-cot">3.3 CoT 的局限<a class="headerlink" href="#33-cot" title="Permanent link">&para;</a></h3>
+<p>CoT 的最大问题是：它仍然停留在模型内部世界。</p>
+<p>它可以推测 SaaS 用户流失的可能原因，但不知道真实原因。它可以说“可能是新手引导复杂”，但没有读取用户反馈。它可以说“价格可能过高”，但没有检查价格变更记录。它可以给出建议，但不能验证建议是否和真实数据一致。</p>
+<p>更麻烦的是，CoT 可能产生“自洽幻觉”。也就是说，它的推理过程看起来很顺，但前提可能是错的。比如模型可能假设用户流失主要发生在试用期结束后，然后围绕价格给出一整套建议。但真实数据可能显示，流失发生在注册后的第一天，根因是导入数据失败。</p>
+<p>所以，CoT 解决的是“怎么想”的问题，但没有解决“怎么接触真实世界”的问题。</p>
+<p>一句话总结：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>CoT 让模型从“直接回答”变成“先推理再回答”，但它仍然停留在模型内部世界。
+</code></pre></div>
+<hr />
+<h2 id="react">四、ReAct：让模型边想边行动<a class="headerlink" href="#react" title="Permanent link">&para;</a></h2>
+<p>CoT 的局限很快会暴露出来：真实任务不能只靠内部推理。尤其是 Agent 场景，模型必须通过工具获取外部信息。</p>
+<p>分析用户流失至少需要：</p>
+<ul>
+<li>查询留存数据。</li>
+<li>阅读用户反馈。</li>
+<li>查看客服工单。</li>
+<li>对比版本发布记录。</li>
+<li>检查渠道变化。</li>
+<li>必要时查看竞品和价格变化。</li>
+</ul>
+<p>这些信息不在模型当前上下文里，也不应该靠模型猜。</p>
+<p>于是 ReAct 出现了。</p>
+<p>ReAct 是 Reasoning and Acting 的组合。它把推理和行动放进同一个循环：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Thought -&gt; Action -&gt; Observation -&gt; Thought -&gt; Action -&gt; Observation -&gt; Final Answer
+</code></pre></div>
+<p>也就是：</p>
+<ul>
+<li>Thought：我现在应该判断什么？</li>
+<li>Action：我调用哪个工具？</li>
+<li>Observation：工具返回了什么？</li>
+<li>Thought：根据新结果，我下一步该做什么？</li>
+</ul>
+<p>流程图如下：</p>
+<pre class="mermaid"><code>flowchart TD
+    A[用户目标] --&gt; B[Thought&lt;br/&gt;判断下一步]
+    B --&gt; C[Action&lt;br/&gt;调用工具]
+    C --&gt; D[Observation&lt;br/&gt;读取工具结果]
+    D --&gt; E{是否完成?}
+    E -- 否 --&gt; B
+    E -- 是 --&gt; F[Final Answer]</code></pre>
+<h3 id="41">4.1 一个具体例子<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
+<p>还是用户流失分析。</p>
+<p>ReAct 型 Agent 可能这样运行：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Thought：要分析用户流失，先看最近 30 天留存数据。
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>Action：query_retention_metrics(product_id, last_30_days)
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>Observation：7 日留存从 42% 降到 31%，下降主要发生在新用户。
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>Thought：新用户下降明显，需要继续查新用户来源变化。
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>Action：query_acquisition_channels(product_id, last_30_days)
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>Observation：付费渠道流量占比从 30% 上升到 55%，但激活率明显低于自然流量。
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>Thought：可能是获客质量下降，也可能是新用户引导不顺。继续查用户反馈。
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>Action：search_feedback("onboarding", "activation", last_30_days)
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>Observation：大量反馈提到新手引导复杂、导入数据失败。
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>Thought：反馈指向激活阻塞，需要查版本发布记录。
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>Action：query_release_notes(last_30_days)
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>Observation：两周前上线了新的导入流程，相关错误率升高。
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>Final Answer：用户流失主要可能来自两个因素：付费渠道用户质量下降，以及新导入流程导致新用户激活受阻。
+</code></pre></div>
+<p>和 CoT 相比，ReAct 的进步非常明显。它不再只是在脑子里推理，而是让工具结果参与下一步判断。</p>
+<h3 id="42-react">4.2 ReAct 的价值<a class="headerlink" href="#42-react" title="Permanent link">&para;</a></h3>
+<p>ReAct 的第一个价值，是把模型和外部世界连接起来。工具返回结果后，模型可以基于真实观察继续推理。</p>
+<p>第二个价值，是适合探索式任务。有些任务一开始并不知道该查什么，必须边查边判断。比如排查 bug、搜索资料、分析异常数据，都很适合 ReAct。</p>
+<p>第三个价值，是它构成了很多早期 Agent 的原型。一个最小 Agent 往往就是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>理解目标 -&gt; 判断下一步 -&gt; 调用工具 -&gt; 读取结果 -&gt; 再判断
+</code></pre></div>
+<p>这已经比普通聊天机器人更接近“能做事”的系统。</p>
+<h3 id="43-react">4.3 ReAct 的局限<a class="headerlink" href="#43-react" title="Permanent link">&para;</a></h3>
+<p>但 ReAct 也有明显局限。</p>
+<p>首先，它容易局部最优。模型每一步都基于当前观察决定下一步，但不一定有全局计划。它可能看到留存下降就查留存，看到反馈提到导入失败就查导入，却忘了检查价格变化、竞品活动或客服响应。</p>
+<p>其次，它容易造成工具调用失控。如果没有预算和停止条件，Agent 可能不断搜索、不断查询、不断补充信息，却迟迟不给出结论。</p>
+<p>再次，它不天然知道什么叫“证据够了”。例如它查到了留存数据和反馈数据，但是否还需要查版本记录？是否需要查渠道变化？是否需要做分群？这些都需要更高层的计划来约束。</p>
+<p>最后，长任务中 ReAct 容易漂移。刚开始目标是“分析用户流失”，查着查着可能变成“优化新手引导”，再查着查着可能变成“重新设计导入流程”。如果没有明确计划和状态管理，任务会偏离原目标。</p>
+<p>一句话总结：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>ReAct 让模型从“内部推理”走向“外部交互”，但它更像即时决策，不天然擅长长程规划。
+</code></pre></div>
+<hr />
+<h2 id="plan-and-execute">五、Plan-and-Execute：先规划，再执行<a class="headerlink" href="#plan-and-execute" title="Permanent link">&para;</a></h2>
+<p>当任务从“回答一个问题”变成“交付一个结果”时，仅靠 ReAct 通常不够。</p>
+<p>比如用户说：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>帮我完成一份用户流失分析报告，包含数据证据、主要原因、改进建议和下一步实验设计。
+</code></pre></div>
+<p>这已经不是一个轻量问答任务，而是一个完整交付任务。它需要：</p>
+<ul>
+<li>明确输出结构。</li>
+<li>确定数据来源。</li>
+<li>按步骤收集证据。</li>
+<li>分析多个可能原因。</li>
+<li>交叉验证数据和反馈。</li>
+<li>形成优先级。</li>
+<li>给出可执行建议。</li>
+<li>说明不确定性和下一步验证方式。</li>
+</ul>
+<p>这时更合适的范式是 Plan-and-Execute。</p>
+<p>它的基本结构是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>用户目标
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>  -&gt; Planner 制定计划
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>  -&gt; Executor 执行步骤
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>  -&gt; Verifier 检查结果
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>  -&gt; Replanner 必要时重规划
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>  -&gt; Final Output
+</code></pre></div>
+<p>流程图如下：</p>
+<pre class="mermaid"><code>flowchart TD
+    A[用户目标] --&gt; B[Planner&lt;br/&gt;拆解任务]
+    B --&gt; C[任务计划]
+    C --&gt; D[Executor&lt;br/&gt;执行当前步骤]
+    D --&gt; E[工具调用或内容生成]
+    E --&gt; F[Verifier&lt;br/&gt;检查结果]
+    F --&gt; G{是否达标?}
+    G -- 是 --&gt; H{是否还有步骤?}
+    H -- 是 --&gt; D
+    H -- 否 --&gt; I[最终交付]
+    G -- 否 --&gt; J[Replanner&lt;br/&gt;调整计划]
+    J --&gt; C</code></pre>
+<h3 id="51-planner">5.1 Planner：先把目标拆成路径<a class="headerlink" href="#51-planner" title="Permanent link">&para;</a></h3>
+<p>对于用户流失分析任务，Planner 可以先输出这样的计划：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>1. 确认分析范围：产品、时间窗口、流失定义。
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>2. 获取核心指标：新增、激活、留存、付费、流失分群。
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>3. 查找变化点：渠道、版本、价格、客服、竞品。
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>4. 阅读用户反馈和客服工单，提取高频问题。
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>5. 将数据变化和反馈证据交叉验证。
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>6. 归纳 2 到 4 个主要流失原因。
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>7. 为每个原因生成改进建议、预期收益和验证指标。
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>8. 输出结构化报告，并标注不确定内容。
+</code></pre></div>
+<p>这个计划的价值不只是“看起来有条理”。它给后续执行提供了边界。</p>
+<p>Executor 不会随便查资料，而是按步骤推进。Verifier 也知道每一步该检查什么。用户或开发者可以看到当前进度。系统也可以设置最大步骤数、最大工具调用次数、失败重试策略和人工确认点。</p>
+<h3 id="52-executor">5.2 Executor：按步骤执行，不随意偏航<a class="headerlink" href="#52-executor" title="Permanent link">&para;</a></h3>
+<p>假设当前执行第 4 步：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>当前步骤：阅读用户反馈和客服工单，提取高频问题。
+</code></pre></div>
+<p>Executor 可以这样执行：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>Action 1：search_feedback("cancel", "churn", last_30_days)
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>Result：取消原因中 38% 提到“上手困难”。
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>Action 2：search_support_tickets("import failed", last_30_days)
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>Result：导入失败相关工单增加 64%。
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>Action 3：cluster_feedback(feedback_items)
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>Result：高频主题包括导入失败、新手引导复杂、价格不清晰。
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>步骤结论：用户流失与新手激活阻塞高度相关，需要和留存数据交叉验证。
+</code></pre></div>
+<p>注意，这里 Executor 并没有直接跳到最终结论。它只完成当前步骤，并给出中间结论。这个中间结论还需要后续验证。</p>
+<p>这就是 Plan-and-Execute 与普通 ReAct 的差异：ReAct 往往每一步都在即时决定下一步，而 Plan-and-Execute 让每一步都服务于全局计划。</p>
+<h3 id="53-verifier">5.3 Verifier：检查结果是否支撑目标<a class="headerlink" href="#53-verifier" title="Permanent link">&para;</a></h3>
+<p>没有验证的计划，只是更长的 Prompt。</p>
+<p>Verifier 要检查的不是“回答是否流畅”，而是结果是否满足目标。对于用户流失报告，它至少应该检查：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>1. 是否覆盖了用户要求的三个改进建议？
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>2. 每个结论是否有数据或反馈证据？
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>3. 是否区分事实、推断和建议？
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>4. 是否标注了不确定性？
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>5. 建议是否可执行、可验证？
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>6. 是否遗漏了关键维度，例如渠道、版本、价格和客服？
+</code></pre></div>
+<p>例如，Agent 输出：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>主要原因是价格过高。
+</code></pre></div>
+<p>Verifier 应该追问：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>有什么证据支持价格过高？
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>最近是否涨价？
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>取消反馈中有多少比例提到价格？
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>价格因素和新手引导问题相比，哪个影响更大？
+</code></pre></div>
+<p>如果这些问题回答不上来，这个结论就不能作为主要原因。</p>
+<h3 id="54-replanner">5.4 Replanner：重规划不是失败<a class="headerlink" href="#54-replanner" title="Permanent link">&para;</a></h3>
+<p>真实环境里，计划经常会失败。</p>
+<p>比如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>原计划：查询完整用户行为日志。
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>失败原因：当前账号没有日志权限。
+</code></pre></div>
+<p>一个脆弱的 Agent 可能直接报错退出。一个成熟的 Agent 应该重规划：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>新计划：
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>1. 改用聚合留存指标。
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>2. 补充客服工单和用户反馈。
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>3. 使用版本发布记录辅助判断。
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>4. 在报告中标注限制：由于缺少完整行为日志，结论置信度为中等。
+</code></pre></div>
+<p>这就是 Plan-and-Execute 的关键能力：计划不是一次性写死的步骤，而是可以根据环境反馈调整的任务结构。</p>
+<h3 id="55-plan-and-execute">5.5 Plan-and-Execute 的价值和代价<a class="headerlink" href="#55-plan-and-execute" title="Permanent link">&para;</a></h3>
+<p>Plan-and-Execute 的优势很明显：</p>
+<ul>
+<li>适合长任务。</li>
+<li>任务进度可见。</li>
+<li>更容易控制成本。</li>
+<li>更容易插入人工确认点。</li>
+<li>更容易结合记忆、权限、日志和验证。</li>
+<li>更接近生产级 Agent 架构。</li>
+</ul>
+<p>但它也有代价。</p>
+<p>初始计划可能不准确。计划太细，会增加执行开销；计划太粗，又无法指导行动。Planner 和 Executor 之间也可能出现信息断裂：Planner 设计的步骤很好，但 Executor 执行时丢了上下文。</p>
+<p>所以，Plan-and-Execute 不是“越复杂越好”，而是适合那些确实需要长期推进、分步验证和风险控制的任务。</p>
+<p>一句话总结：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>Plan-and-Execute 让 Agent 从“边想边做”走向“先组织任务，再受控执行”。
+</code></pre></div>
+<hr />
+<h2 id="_3">六、三种范式的本质对比<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>把 CoT、ReAct、Plan-and-Execute 放在一起看，会更清楚它们的边界。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">维度</th>
+<th style="text-align: left;">CoT</th>
+<th style="text-align: left;">ReAct</th>
+<th style="text-align: left;">Plan-and-Execute</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">核心范式</td>
+<td style="text-align: left;">推理链</td>
+<td style="text-align: left;">推理-行动循环</td>
+<td style="text-align: left;">计划-执行分离</td>
+</tr>
+<tr>
+<td style="text-align: left;">主要目标</td>
+<td style="text-align: left;">提升思考质量</td>
+<td style="text-align: left;">引入外部反馈</td>
+<td style="text-align: left;">管理复杂任务</td>
+</tr>
+<tr>
+<td style="text-align: left;">是否调用工具</td>
+<td style="text-align: left;">通常不调用</td>
+<td style="text-align: left;">会调用</td>
+<td style="text-align: left;">会调用，并按计划调用</td>
+</tr>
+<tr>
+<td style="text-align: left;">状态管理</td>
+<td style="text-align: left;">弱</td>
+<td style="text-align: left;">中</td>
+<td style="text-align: left;">强</td>
+</tr>
+<tr>
+<td style="text-align: left;">全局视角</td>
+<td style="text-align: left;">弱</td>
+<td style="text-align: left;">中</td>
+<td style="text-align: left;">强</td>
+</tr>
+<tr>
+<td style="text-align: left;">适合任务</td>
+<td style="text-align: left;">逻辑推理、解释、简单分析</td>
+<td style="text-align: left;">搜索、问答、轻量工具任务</td>
+<td style="text-align: left;">调研、编码、报告、多步骤任务</td>
+</tr>
+<tr>
+<td style="text-align: left;">主要风险</td>
+<td style="text-align: left;">自洽幻觉</td>
+<td style="text-align: left;">工具乱跳、循环</td>
+<td style="text-align: left;">计划僵化、执行开销高</td>
+</tr>
+<tr>
+<td style="text-align: left;">工程成熟度</td>
+<td style="text-align: left;">Prompt 技巧</td>
+<td style="text-align: left;">Agent 原型</td>
+<td style="text-align: left;">Agent 架构基础</td>
+</tr>
+</tbody>
+</table>
+<p>再看一个工程案例：修复登录接口 500 错误。</p>
+<p>用户说：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>登录接口线上偶发 500，帮我定位并修复。
+</code></pre></div>
+<p>如果用 CoT，模型可能根据报错文本推测：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>可能是空指针、数据库连接失败、参数缺失、session 过期、middleware 执行顺序错误。
+</code></pre></div>
+<p>这个分析有帮助，但还没有真正修复问题。</p>
+<p>如果用 ReAct，Agent 会开始行动：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>读取报错日志 -&gt; 查看 controller -&gt; 查看 session middleware -&gt; 运行测试 -&gt; 根据结果继续判断。
+</code></pre></div>
+<p>它能逐步接近问题，但如果没有全局计划，可能读很多文件、跑很多命令，却没有明确验收标准。</p>
+<p>如果用 Plan-and-Execute，Agent 会先制定修复路径：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>1. 复现错误。
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>2. 定位日志和失败测试。
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>3. 追踪请求链路。
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>4. 找到最小修改点。
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>5. 修改代码。
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>6. 运行相关测试。
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>7. 检查是否引入回归。
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>8. 总结根因和修复方案。
+</code></pre></div>
+<p>这个例子说明：任务越长、风险越高、验证越重要，就越需要显式计划。</p>
+<hr />
+<h2 id="_4">七、演进动因：为什么不是谁替代谁<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>CoT、ReAct、Plan-and-Execute 不是简单的替代关系。</p>
+<p>它们更像是三层能力外化：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>CoT 把推理显式化。
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>ReAct 把行动接入推理。
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>Plan-and-Execute 把任务管理从推理中拆出来。
+</code></pre></div>
+<p>可以画成：</p>
+<pre class="mermaid"><code>flowchart LR
+    A[模型内部能力] --&gt; B[推理外化&lt;br/&gt;CoT]
+    B --&gt; C[工具外化&lt;br/&gt;ReAct]
+    C --&gt; D[计划外化&lt;br/&gt;Plan-and-Execute]
+    D --&gt; E[工程外化&lt;br/&gt;状态、记忆、权限、验证、观测]</code></pre>
+<p>CoT 并没有因为 ReAct 出现而消失。Planner 制定计划时需要推理，Executor 判断工具结果时需要推理，Verifier 检查结论时也需要推理。CoT 更像底层认知能力。</p>
+<p>ReAct 也没有因为 Plan-and-Execute 出现而消失。Plan-and-Execute 的每个执行步骤内部，仍然可能是一个小型 ReAct 循环。</p>
+<p>比如计划中的一步是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>分析用户反馈中的高频流失原因。
+</code></pre></div>
+<p>Executor 在执行这一步时，可能仍然需要：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>搜索反馈 -&gt; 读取结果 -&gt; 判断主题是否足够 -&gt; 继续检索 -&gt; 聚类总结
+</code></pre></div>
+<p>这就是 ReAct。</p>
+<p>所以，成熟 Agent 系统不是在三者中只选一个，而是分层使用：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>CoT 支撑内部推理。
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>ReAct 支撑局部工具交互。
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>Plan-and-Execute 支撑全局任务推进。
+</code></pre></div>
+<hr />
+<h2 id="_5">八、如何选择规划范式<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>实际工程里，不要一上来就套最复杂的架构。选择范式时，可以先看任务复杂度。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">场景</th>
+<th style="text-align: left;">推荐范式</th>
+<th style="text-align: left;">原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">单步解释、概念分析</td>
+<td style="text-align: left;">CoT</td>
+<td style="text-align: left;">不需要工具，重点是思考清楚</td>
+</tr>
+<tr>
+<td style="text-align: left;">需要查资料或调用少量工具</td>
+<td style="text-align: left;">ReAct</td>
+<td style="text-align: left;">边查边判断更灵活</td>
+</tr>
+<tr>
+<td style="text-align: left;">长报告、代码修复、复杂分析</td>
+<td style="text-align: left;">Plan-and-Execute</td>
+<td style="text-align: left;">需要全局计划和分步验证</td>
+</tr>
+<tr>
+<td style="text-align: left;">高风险业务流程</td>
+<td style="text-align: left;">Plan-and-Execute + Human-in-the-loop</td>
+<td style="text-align: left;">需要权限、审计和人工确认</td>
+</tr>
+<tr>
+<td style="text-align: left;">多角色协作任务</td>
+<td style="text-align: left;">Plan-and-Execute + Multi-Agent</td>
+<td style="text-align: left;">需要分工、互评和合并结果</td>
+</tr>
+</tbody>
+</table>
+<p>一个简单判断规则是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>如果问题只需要想清楚，用 CoT。
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>如果问题需要边查边判断，用 ReAct。
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>如果问题需要交付一个复杂结果，用 Plan-and-Execute。
+</code></pre></div>
+<p>也可以问四个问题：</p>
+<ol>
+<li>是否需要外部工具？</li>
+<li>是否超过 3 个步骤？</li>
+<li>是否需要验证结果？</li>
+<li>是否有失败重试或权限风险？</li>
+</ol>
+<p>如果答案大多是“是”，就应该考虑 Plan-and-Execute。</p>
+<p>例如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>请解释什么是 MCP。
+</code></pre></div>
+<p>这类任务用 CoT 或普通结构化回答就够了。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>请帮我查一下某个开源框架最近版本变化，并总结影响。
+</code></pre></div>
+<p>这类任务需要搜索和阅读资料，ReAct 更合适。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>请帮我基于现有代码实现一个功能，补测试，并说明修改点。
+</code></pre></div>
+<p>这类任务涉及读取代码、制定计划、修改文件、运行测试、验证结果，明显更适合 Plan-and-Execute。</p>
+<hr />
+<h2 id="agent">九、从规划范式走向 Agent 工程<a class="headerlink" href="#agent" title="Permanent link">&para;</a></h2>
+<p>如果把本文放回“AI 能力工程”的整体框架里，规划范式只是 Agent 系统的一部分。</p>
+<p>完整工程链路可以概括为：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>Skill：沉淀“怎么做”的方法论
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a>MCP：提供“靠什么做”的工具接口
+<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a>Agent：负责“谁来规划、调度、执行和验证”
+</code></pre></div>
+<p>CoT、ReAct、Plan-and-Execute 分别对应 Agent 内部的不同能力层：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">能力</th>
+<th style="text-align: left;">对应位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">CoT</td>
+<td style="text-align: left;">模型内部推理能力</td>
+</tr>
+<tr>
+<td style="text-align: left;">ReAct</td>
+<td style="text-align: left;">工具调用和反馈循环能力</td>
+</tr>
+<tr>
+<td style="text-align: left;">Plan-and-Execute</td>
+<td style="text-align: left;">任务管理和执行编排能力</td>
+</tr>
+<tr>
+<td style="text-align: left;">Skill</td>
+<td style="text-align: left;">可复用的方法和流程</td>
+</tr>
+<tr>
+<td style="text-align: left;">MCP</td>
+<td style="text-align: left;">标准化工具、资源和上下文接口</td>
+</tr>
+<tr>
+<td style="text-align: left;">Memory</td>
+<td style="text-align: left;">跨会话状态延续</td>
+</tr>
+<tr>
+<td style="text-align: left;">Verifier</td>
+<td style="text-align: left;">结果可靠性边界</td>
+</tr>
+<tr>
+<td style="text-align: left;">Permission</td>
+<td style="text-align: left;">行动安全边界</td>
+</tr>
+<tr>
+<td style="text-align: left;">Observability</td>
+<td style="text-align: left;">可调试和可审计能力</td>
+</tr>
+</tbody>
+</table>
+<p>生产级 Agent 的规划闭环可以写成：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>用户目标
+<a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a>  -&gt; 读取相关 Skill
+<a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a>  -&gt; 制定任务计划
+<a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a>  -&gt; 调用 MCP 工具
+<a id="__codelineno-37-5" name="__codelineno-37-5" href="#__codelineno-37-5"></a>  -&gt; 记录状态和记忆
+<a id="__codelineno-37-6" name="__codelineno-37-6" href="#__codelineno-37-6"></a>  -&gt; 验证结果
+<a id="__codelineno-37-7" name="__codelineno-37-7" href="#__codelineno-37-7"></a>  -&gt; 必要时请求人工确认
+<a id="__codelineno-37-8" name="__codelineno-37-8" href="#__codelineno-37-8"></a>  -&gt; 交付结果
+<a id="__codelineno-37-9" name="__codelineno-37-9" href="#__codelineno-37-9"></a>  -&gt; 写入经验和日志
+</code></pre></div>
+<p>这也解释了为什么只讨论 Prompt 不够。Prompt 可以改善模型行为，但不能单独解决工具权限、执行状态、结果验证、成本预算和审计追踪。</p>
+<p>Agent 真正的工程问题，是把不确定的模型能力放进确定的系统边界里。</p>
+<hr />
+<h2 id="_6">十、常见误区<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h3 id="101-cot">10.1 CoT 越长越好<a class="headerlink" href="#101-cot" title="Permanent link">&para;</a></h3>
+<p>长推理不等于正确推理。推理链越长，错误累积风险越高。对于简单任务，过长的推理反而会引入噪声。</p>
+<p>例如用户只问：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>什么是 MCP？
+</code></pre></div>
+<p>这时不需要十步推理。直接给定义、结构和例子，效果更好。</p>
+<h3 id="102-react-agent">10.2 ReAct 就是 Agent<a class="headerlink" href="#102-react-agent" title="Permanent link">&para;</a></h3>
+<p>ReAct 是一种推理-行动模式，但不是完整 Agent。</p>
+<p>一个系统能搜索网页并总结，并不代表它能长期推进调研项目。完整 Agent 还需要目标、状态、记忆、权限、验证和观测。</p>
+<h3 id="103-plan-and-execute">10.3 Plan-and-Execute 一定更高级<a class="headerlink" href="#103-plan-and-execute" title="Permanent link">&para;</a></h3>
+<p>Plan-and-Execute 更适合复杂任务，但不适合所有任务。</p>
+<p>如果用户只是说：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>帮我把这句话翻译成英文。
+</code></pre></div>
+<p>这时不需要 Planner、Executor、Verifier 三件套。过度规划会增加延迟和成本。</p>
+<p>好的 Agent 应该根据任务复杂度选择规划粒度，而不是默认把所有问题都包装成长流程。</p>
+<h3 id="104">10.4 规划等于一次性写死步骤<a class="headerlink" href="#104" title="Permanent link">&para;</a></h3>
+<p>真实 Agent 的计划应该可执行、可验证、可调整。</p>
+<p>如果搜索不到官方财报，Agent 不应该直接失败，而应该改查监管机构公告、公司投资者关系页面或可信新闻源，并在最终输出里说明来源限制。</p>
+<p>重规划不是失败，而是 Agent 面对真实环境变化时的正常能力。</p>
+<hr />
+<h2 id="agent_1">十一、总结：Agent 规划的本质<a class="headerlink" href="#agent_1" title="Permanent link">&para;</a></h2>
+<p>可以用三句话总结三种范式：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>CoT 解决“怎么想”。
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a>ReAct 解决“怎么边想边做”。
+<a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a>Plan-and-Execute 解决“怎么围绕目标组织长期行动”。
+</code></pre></div>
+<p>再回到第一性原理：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>规划不是 Agent 的装饰能力，而是开放目标转化为可执行闭环的核心机制。
+</code></pre></div>
+<p>没有规划，Agent 只是会调用工具的模型。它可能完成一些局部动作，但不一定能稳定交付目标。</p>
+<p>有了规划，Agent 才能把目标、状态、工具、反馈和验证组织成连续行动。</p>
+<p>如果说规划解决“下一步做什么”，记忆解决“过去什么信息仍然有用”；如果说 ReAct 让 Agent 能调用工具，MCP 让工具调用变成可标准化、可治理的能力接口；如果说 Plan-and-Execute 让 Agent 能长期推进任务，Skill 则让可复用方法沉淀成稳定执行范式。</p>
+<p>所以，从 CoT 到 ReAct，再到 Plan-and-Execute，本质上不是 Prompt 技巧的升级，而是 Agent 从“会思考”走向“能行动”，再走向“可治理执行系统”的过程。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.indexes", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

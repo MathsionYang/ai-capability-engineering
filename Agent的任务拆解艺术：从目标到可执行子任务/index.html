@@ -1,0 +1,3291 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="构建可复用、可调用、可验证的 AI 执行系统 —— Skill · MCP · Agent 三层知识链路">
+      
+      
+        <meta name="author" content="ai-capability-engineering">
+      
+      
+      
+        <link rel="prev" href="../Agent%E8%A7%84%E5%88%92%E8%8C%83%E5%BC%8F%E8%BF%9B%E5%8C%96%E8%AE%BA%EF%BC%9A%E4%BB%8ECoT%E5%88%B0Plan-and-Execute/">
+      
+      
+        <link rel="next" href="../Agent%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E4%BB%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%88%B0%E9%95%BF%E6%9C%9F%E7%BB%8F%E9%AA%8C%E5%A4%8D%E7%94%A8/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Agent 的任务拆解艺术：从目标到可执行子任务 - AI 能力工程：从 Skill、MCP 到 Agent</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agent" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="AI 能力工程：从 Skill、MCP 到 Agent" class="md-header__button md-logo" aria-label="AI 能力工程：从 Skill、MCP 到 Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.41 4 16 6.41v.18L18.41 9H22v2h-4.41L16 9.41V12h-1a2 2 0 0 1-2-2V7.5H9.86c-.09.37-.24.72-.44 1.05L15.18 19H20a2 2 0 0 1 2 2v1H2v-1a2 2 0 0 1 2-2h6.61l-4.69-8.5a4.006 4.006 0 0 1-3.81-3A4 4 0 0 1 5 2.63c2.13-.55 4.31.73 4.86 2.87H13V3a2 2 0 0 1 2-2h1v2.59L17.59 2H22v2zM6 4.5a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AI 能力工程：从 Skill、MCP 到 Agent
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Agent 的任务拆解艺术：从目标到可执行子任务
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%EF%BC%9A%E4%BB%8ESkill%E3%80%81MCP%E5%88%B0Agent/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  总纲
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Skill%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%9A%E4%BB%8E%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E5%88%B0%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Skill 方法层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../MCP%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%88%B0%E8%83%BD%E5%8A%9B%E5%8D%8F%E8%AE%AE/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  MCP 能力层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%8E%E8%92%B8%E9%A6%8F%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%8F%96%E8%88%8D%E4%B8%8E%E5%8F%AF%E8%B7%91%E5%AE%9E%E4%BE%8B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  模型效率
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E6%A6%82%E5%BF%B5%E5%88%B0%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Agent 基础
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../Agent%E8%A7%84%E5%88%92%E8%8C%83%E5%BC%8F%E8%BF%9B%E5%8C%96%E8%AE%BA%EF%BC%9A%E4%BB%8ECoT%E5%88%B0Plan-and-Execute/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  执行能力
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E6%A8%A1%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B1%82%E7%BA%A7%E3%80%81%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E7%BE%A4%E7%BB%84/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  协作编排
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  安全治理
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E4%BB%8E%E6%97%A5%E5%BF%97%E3%80%81Trace%E5%88%B0Replay/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  生产治理
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="AI 能力工程：从 Skill、MCP 到 Agent" class="md-nav__button md-logo" aria-label="AI 能力工程：从 Skill、MCP 到 Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.41 4 16 6.41v.18L18.41 9H22v2h-4.41L16 9.41V12h-1a2 2 0 0 1-2-2V7.5H9.86c-.09.37-.24.72-.44 1.05L15.18 19H20a2 2 0 0 1 2 2v1H2v-1a2 2 0 0 1 2-2h6.61l-4.69-8.5a4.006 4.006 0 0 1-3.81-3A4 4 0 0 1 5 2.63c2.13-.55 4.31.73 4.86 2.87H13V3a2 2 0 0 1 2-2h1v2.59L17.59 2H22v2zM6 4.5a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg>
+
+    </a>
+    AI 能力工程：从 Skill、MCP 到 Agent
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    总纲
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    总纲
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%EF%BC%9A%E4%BB%8ESkill%E3%80%81MCP%E5%88%B0Agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 能力工程：从 Skill、MCP 到 Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill 方法层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Skill 方法层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Skill%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%9A%E4%BB%8E%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E5%88%B0%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill 设计方法论：从专家经验到可复用能力
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E4%BB%8EPrompt%E5%88%B0Skill%EF%BC%9A%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96%E5%B0%81%E8%A3%85%E6%8C%87%E5%8D%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从 Prompt 到 Skill：专家经验的标准化封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP 能力层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MCP 能力层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MCP%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%88%B0%E8%83%BD%E5%8A%9B%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP 的第一性原理：从工具调用到能力协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模型效率
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模型效率
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%8E%E8%92%B8%E9%A6%8F%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%8F%96%E8%88%8D%E4%B8%8E%E5%8F%AF%E8%B7%91%E5%AE%9E%E4%BE%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模型量化与蒸馏：原理、取舍与可跑实例
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 基础
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Agent 基础
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E6%A6%82%E5%BF%B5%E5%88%B0%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的第一性原理：从概念到范式演进
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E6%9C%80%E5%B0%8F%E9%97%AD%E7%8E%AF%E5%88%B0%E7%94%9F%E4%BA%A7%E7%BA%A7%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 工程实践指南：从最小闭环到生产级系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    执行能力
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    执行能力
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%A7%84%E5%88%92%E8%8C%83%E5%BC%8F%E8%BF%9B%E5%8C%96%E8%AE%BA%EF%BC%9A%E4%BB%8ECoT%E5%88%B0Plan-and-Execute/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 规划范式进化论：从 CoT 到 Plan-and-Execute
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的任务拆解艺术：从目标到可执行子任务
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的任务拆解艺术：从目标到可执行子任务
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#agent_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、从一个简单问题开始：为什么 Agent 不能直接开干
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、任务拆解的第一性原理：从目标到行动闭环
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、第一种模式：层级分解，把大目标拆成小目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、第二种模式：依赖图，把任务关系讲清楚
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、第三种模式：输入输出分解，让每个子任务可交付
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、第四种模式：工具映射分解，把任务接到 MCP 能力上
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、第五种模式：验证导向分解，从终局倒推任务
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、Prompt 工程如何实现可靠拆解
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、结构化编程如何实现可靠拆解
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、如何评估任务拆解质量
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十、如何评估任务拆解质量">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 一组可操作的评估指标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 运行期指标：让拆解质量可观测
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 一个简单评分方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#104" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 比评分更重要的硬性门槛
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#105" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5 本节小结
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、任务拆解中的常见错误
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十一、任务拆解中的常见错误">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 把目标当任务
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 把抽象动词当可执行动作
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 没有依赖顺序
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 没有完成标准
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#115" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5 不考虑失败路径
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#116" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6 拆得太碎，反而不可控
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#117" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.7 忽略人工确认
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skillmcp-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、从任务拆解回到 Skill、MCP、记忆和 Agent 工程
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十二、从任务拆解回到 Skill、MCP、记忆和 Agent 工程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121-skill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 任务拆解和 Skill
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122-mcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2 任务拆解和 MCP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3 任务拆解和记忆系统
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#124" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.4 任务拆解和验证器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#125-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.5 任务拆解和多 Agent 分配
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#126-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.6 任务拆解和 Agent 工程闭环
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、总结：任务拆解的本质
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        参考与延伸
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E4%BB%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%88%B0%E9%95%BF%E6%9C%9F%E7%BB%8F%E9%AA%8C%E5%A4%8D%E7%94%A8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 记忆系统设计：从上下文管理到长期经验复用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    协作编排
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    协作编排
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E6%A8%A1%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B1%82%E7%BA%A7%E3%80%81%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E7%BE%A4%E7%BB%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多 Agent 协作模式深度解析：层级、流水线与群组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    安全治理
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    安全治理
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 安全护栏设计：权限控制、对抗鲁棒性与人工确认环
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    生产治理
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    生产治理
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E4%BB%8E%E6%97%A5%E5%BF%97%E3%80%81Trace%E5%88%B0Replay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 可观测性实战：从日志、Trace 到 Replay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E7%94%A8Tracing%E7%9C%8B%E6%B8%85%E4%BD%A0%E7%9A%84Agent%E2%80%9C%E5%A4%A7%E8%84%91%E2%80%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tracing 专项：看清 Agent 的“大脑”
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E4%B8%8E%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%EF%BC%9ACheckpointer%E6%9C%BA%E5%88%B6%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 状态管理与断点续传：Checkpointer 机制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%87%AA%E6%88%91%E7%BA%A0%E9%94%99%E4%B8%8E%E9%AA%8C%E8%AF%81%E6%9C%BA%E5%88%B6%E8%AE%BE%E8%AE%A1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 自我纠错与验证机制设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E8%AF%84%E4%BC%B0%E4%BD%93%E7%B3%BB%EF%BC%88Evals%EF%BC%89%EF%BC%9A%E4%BB%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%88%B0%E9%9B%86%E6%88%90%E8%AF%84%E6%B5%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 自动化评估体系（Evals）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="agent">Agent 的任务拆解艺术：从目标到可执行子任务<a class="headerlink" href="#agent" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>好的任务拆解，不是把目标切碎，而是把目标转化为一条可执行、可观察、可验证的行动路径。<br />
+对 Agent 来说，任务拆解不是写一份待办列表，而是在目标和行动之间建立稳定的工程桥梁。</p>
+</blockquote>
+<hr />
+<h2 id="agent_1">一、从一个简单问题开始：为什么 Agent 不能直接开干<a class="headerlink" href="#agent_1" title="Permanent link">&para;</a></h2>
+<p>先看一个很常见的工程需求。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>登录接口线上偶发 500，帮我定位并修复。
+</code></pre></div>
+<p>如果把这个问题直接交给一个普通 LLM，它很可能马上给出一段看起来合理的回答：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>登录接口 500 可能来自数据库连接异常、Token 校验失败、缓存超时、并发过高或空指针问题。
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>建议检查日志、重启服务、优化数据库连接池，并增加异常捕获。
+</code></pre></div>
+<p>这段回答不能说完全错误。它列出的确实是常见原因，也给出了一些常见动作。但如果你真的要让 Agent 去修线上问题，这样的回答几乎不能直接使用。</p>
+<p>它的问题很明显：</p>
+<ul>
+<li>它没有确认错误发生在哪个环境、哪个接口版本、哪类用户请求上。</li>
+<li>它没有拿到请求样本、trace id、日志堆栈或监控指标。</li>
+<li>它没有区分“可能原因”和“已经被证据支持的根因”。</li>
+<li>它没有判断最近是否有发布、配置变更、依赖波动或流量异常。</li>
+<li>它没有说明应该先查什么、后查什么，哪些任务可以并行。</li>
+<li>它没有给出最小修复范围，也没有补充回归测试。</li>
+<li>它没有定义验收标准：怎样证明这个 500 已经被修复，并且没有引入新问题。</li>
+</ul>
+<p>这就是很多 Agent 系统在早期阶段容易出现的问题：看起来会回答，实际上没有完成任务。</p>
+<p>一个线上故障目标通常不是一个动作，而是一组互相依赖的动作。用户说“登录接口偶发 500”，这句话里面至少包含了几个隐含问题：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>错误发生在哪个接口和环境？
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>偶发的比例是多少，影响哪些用户？
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>有没有可复现样本或 trace id？
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>日志堆栈指向哪一层？
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>最近是否有代码、配置或依赖变更？
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>最小修复点在哪里？
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>需要补什么测试？
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>怎样验证修复已经生效？
+</code></pre></div>
+<p>如果 Agent 不先把这些问题拆开，就会把“定位并修复”误认为一个动作，最后要么停留在泛泛建议，要么贸然修改代码。</p>
+<p>所以，任务拆解的第一个价值，就是把一句模糊目标转成一组可执行问题。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>目标不是任务，任务不是动作，动作不是结果，结果还需要验证。
+</code></pre></div>
+<p>对 Agent 来说，任务拆解不是锦上添花，而是从“会说”走向“会做”的必要步骤。</p>
+<hr />
+<h2 id="_1">二、任务拆解的第一性原理：从目标到行动闭环<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>在 Agent 的执行闭环里，任务拆解位于“目标理解”和“工具执行”之间。</p>
+<p>如果用一条链路表示，一个完整 Agent 通常会经历：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>目标 -&gt; 上下文 -&gt; 计划 -&gt; 任务拆解 -&gt; 工具/动作 -&gt; 反馈 -&gt; 验证 -&gt; 状态更新 -&gt; 输出或继续
+</code></pre></div>
+<p>这里的“计划”和“任务拆解”很接近，但重点不同。</p>
+<p>计划回答的是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>为了完成目标，大体要经过哪些阶段？
+</code></pre></div>
+<p>任务拆解回答的是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>每个阶段具体由谁来做、用什么做、输入是什么、输出是什么、怎样算完成？
+</code></pre></div>
+<p>可以把它们的关系理解成：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>规划告诉 Agent 应该走哪条路；
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>任务拆解告诉 Agent 每一步具体怎么走、谁来做、怎么验收。
+</code></pre></div>
+<p>一个比较完整的任务闭环可以画成这样：</p>
+<pre class="mermaid"><code>flowchart LR
+    A[用户目标] --&gt; B[理解约束]
+    B --&gt; C[拆解任务]
+    C --&gt; D[生成子任务]
+    D --&gt; E[匹配工具或执行者]
+    E --&gt; F[执行]
+    F --&gt; G[验证]
+    G --&gt; H{是否达标}
+    H -- 是 --&gt; I[交付结果]
+    H -- 否 --&gt; J[重新拆解或重新规划]
+    J --&gt; C</code></pre>
+<p>这张图里面最关键的不是“拆解”两个字，而是闭环。</p>
+<p>很多系统会把任务拆成一串步骤，但拆完以后就不管了。这样的拆解仍然很脆弱。真正可靠的任务拆解，必须让每个子任务都进入可执行闭环。</p>
+<p>一个好的子任务至少要满足六个条件。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">标准</th>
+<th style="text-align: left;">说明</th>
+<th style="text-align: left;">反例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">清晰</td>
+<td style="text-align: left;">子任务知道要做什么</td>
+<td style="text-align: left;">分析一下情况</td>
+</tr>
+<tr>
+<td style="text-align: left;">可执行</td>
+<td style="text-align: left;">能映射到动作、工具或人工确认</td>
+<td style="text-align: left;">修一下登录</td>
+</tr>
+<tr>
+<td style="text-align: left;">可验证</td>
+<td style="text-align: left;">有完成标准</td>
+<td style="text-align: left;">尽量稳定一点</td>
+</tr>
+<tr>
+<td style="text-align: left;">有边界</td>
+<td style="text-align: left;">知道不做什么</td>
+<td style="text-align: left;">把所有代码都看看</td>
+</tr>
+<tr>
+<td style="text-align: left;">有依赖</td>
+<td style="text-align: left;">知道前置条件</td>
+<td style="text-align: left;">先改代码，再看日志</td>
+</tr>
+<tr>
+<td style="text-align: left;">可恢复</td>
+<td style="text-align: left;">失败后知道怎么处理</td>
+<td style="text-align: left;">查不到日志就停止</td>
+</tr>
+</tbody>
+</table>
+<p>比如，“排查登录问题”不是一个好的子任务，因为它太宽泛。更好的写法是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>检索过去 24 小时 /api/login 的 500 错误日志，按异常堆栈和请求来源聚类，输出 Top 3 堆栈、样本 trace id、影响比例和首次出现时间。
+</code></pre></div>
+<p>它有时间范围，有数据对象，有动作，有输出格式，也有验收标准。这样的子任务才有可能被 Agent 稳定执行。</p>
+<p>一句话总结：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>任务拆解不是列待办项，而是为 Agent 创建可执行、可验证、可恢复的工作单元。
+</code></pre></div>
+<hr />
+<h2 id="_2">三、第一种模式：层级分解，把大目标拆成小目标<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>最容易理解的任务拆解方式，是层级分解。</p>
+<p>它的基本思路是：先从总目标开始，把目标拆成几个阶段，再把每个阶段继续拆成更小的子任务，直到拆到可以执行的粒度。</p>
+<p>结构类似这样：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>总目标
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  -&gt; 阶段任务
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>      -&gt; 子任务
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>          -&gt; 原子动作
+</code></pre></div>
+<p>以前面的登录接口 500 为例。</p>
+<p>总目标是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>定位并修复登录接口线上偶发 500。
+</code></pre></div>
+<p>如果使用层级分解，可以拆成五个阶段。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>1. 明确问题范围
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>   1.1 确认接口路径、环境和服务版本
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>   1.2 确认错误时间窗口和影响范围
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>   1.3 收集失败请求样本、trace id 和用户上下文
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>   1.4 明确是否允许修改代码、配置或只做诊断
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>2. 收集证据
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>   2.1 检索应用日志和异常堆栈
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>   2.2 查询 APM trace 和慢请求记录
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>   2.3 查看登录链路依赖：DB、Redis、Session、第三方认证
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>   2.4 检查最近发布记录、配置变更和依赖变更
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>   2.5 检查监控指标：错误率、延迟、连接池、缓存命中率
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>3. 定位根因
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>   3.1 按堆栈、请求参数、用户分群和时间分布聚类
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>   3.2 判断错误是否集中在某条代码路径或某个依赖
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>   3.3 建立“现象-证据-假设”映射
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>   3.4 找到最小复现条件
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>   3.5 选出最小修复点
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>4. 执行修复
+<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>   4.1 补充能复现问题的测试用例
+<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>   4.2 修改最小范围代码或配置
+<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>   4.3 增加必要的边界处理和日志
+<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>   4.4 运行相关测试和静态检查
+<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>
+<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>5. 验证交付
+<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>   5.1 确认新增测试通过
+<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>   5.2 确认登录主路径和异常路径不回归
+<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>   5.3 输出根因、修改点、验证结果和剩余风险
+<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>   5.4 如涉及生产发布，给出发布和回滚建议
+</code></pre></div>
+<p>这比直接回答“检查日志、重启服务、优化连接池”要可靠得多。因为它让 Agent 先意识到：线上问题不是靠猜原因解决的，而是靠证据链、最小复现、最小修改和验证闭环解决的。</p>
+<p>也可以画成一个任务树：</p>
+<pre class="mermaid"><code>flowchart TD
+    A[定位并修复登录接口 500] --&gt; B[明确问题范围]
+    A --&gt; C[收集证据]
+    A --&gt; D[定位根因]
+    A --&gt; E[执行修复]
+    A --&gt; F[验证交付]
+    B --&gt; B1[确认接口和时间窗口]
+    B --&gt; B2[收集 trace id 和样本]
+    C --&gt; C1[检索日志和堆栈]
+    C --&gt; C2[查询 APM trace]
+    C --&gt; C3[检查最近变更]
+    D --&gt; D1[聚类失败模式]
+    D --&gt; D2[建立证据-假设映射]
+    E --&gt; E1[补充复现测试]
+    E --&gt; E2[做最小修复]
+    F --&gt; F1[运行测试并总结风险]</code></pre>
+<p>层级分解的优点很明显：结构清晰，容易理解，适合工程排障、调研分析、方案设计、文档整理这类复杂任务。</p>
+<p>但它也有局限。</p>
+<p>第一，层级分解容易生成漂亮的大纲，却不一定生成可执行任务。比如“收集证据”“定位根因”仍然偏抽象，需要继续拆成具体动作。</p>
+<p>第二，层级结构不能充分表达依赖关系。它能告诉我们有哪些任务，却不能清楚说明哪些任务必须先做，哪些任务可以并行。</p>
+<p>第三，层级太深会增加管理成本。如果一个目标被拆成几十个小步骤，Agent 反而可能迷失在任务树里，不知道当前最重要的路径是什么。</p>
+<p>因此，层级分解适合作为第一步。它负责展开任务全貌，但不能止步于任务树。</p>
+<p>工程上更好的做法，是把任务树的叶子节点继续转成可执行任务对象。</p>
+<p>例如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">{</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"task_login_error_logs"</span><span class="p">,</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"检索登录接口 500 错误日志"</span><span class="p">,</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="nt">"goal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"找到登录接口偶发 500 的主要失败模式和样本证据"</span><span class="p">,</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"collect"</span><span class="p">,</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">  </span><span class="nt">"depends_on"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"confirm_scope"</span><span class="p">],</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">  </span><span class="nt">"input"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">    </span><span class="nt">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"auth-service"</span><span class="p">,</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">    </span><span class="nt">"endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/login"</span><span class="p">,</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">    </span><span class="nt">"date_range"</span><span class="p">:</span><span class="w"> </span><span class="s2">"last_24_hours"</span><span class="p">,</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">    </span><span class="nt">"status_code"</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="w">  </span><span class="nt">"action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"检索并聚类登录接口 500 错误日志"</span><span class="p">,</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="w">  </span><span class="nt">"tool"</span><span class="p">:</span><span class="w"> </span><span class="s2">"search_application_logs"</span><span class="p">,</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="w">  </span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="w">    </span><span class="nt">"error_clusters"</span><span class="p">:</span><span class="w"> </span><span class="s2">"按异常堆栈聚类的错误样本"</span><span class="p">,</span>
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="w">    </span><span class="nt">"sample_trace_ids"</span><span class="p">:</span><span class="w"> </span><span class="s2">"代表性 trace id"</span><span class="p">,</span>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="w">    </span><span class="nt">"impact_ratio"</span><span class="p">:</span><span class="w"> </span><span class="s2">"影响比例"</span><span class="p">,</span>
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="w">    </span><span class="nt">"first_seen"</span><span class="p">:</span><span class="w"> </span><span class="s2">"首次出现时间"</span>
+<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a><span class="w">  </span><span class="nt">"done_when"</span><span class="p">:</span><span class="w"> </span><span class="s2">"得到至少一个可追踪的失败模式，或明确日志不足并给出替代证据路径"</span><span class="p">,</span>
+<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a><span class="w">  </span><span class="nt">"failure_policy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"如果应用日志不可用，则改查 APM trace、网关日志和监控告警"</span><span class="p">,</span>
+<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a><span class="w">  </span><span class="nt">"permission"</span><span class="p">:</span><span class="w"> </span><span class="s2">"auto"</span><span class="p">,</span>
+<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a><span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span>
+<a id="__codelineno-13-25" name="__codelineno-13-25" href="#__codelineno-13-25"></a><span class="p">}</span>
+</code></pre></div>
+<p>当一个子任务能写到这个程度，它才真正从“思路”变成了“工作单元”。</p>
+<hr />
+<h2 id="_3">四、第二种模式：依赖图，把任务关系讲清楚<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>层级分解回答的是“有哪些任务”，依赖图回答的是“任务之间是什么关系”。</p>
+<p>真实任务里，很多子任务不是线性排列的。有些任务必须先做，有些任务可以并行，有些任务只有在前一个结果失败时才会触发。</p>
+<p>比如在登录接口排障里：</p>
+<ul>
+<li>没有错误样本，就很难判断偶发 500 是否真实存在。</li>
+<li>没有 trace id，就很难从网关日志一路追到应用堆栈。</li>
+<li>没有堆栈和监控，就很难区分代码缺陷、依赖异常和流量问题。</li>
+<li>没有最小复现条件，就很难判断修复是否命中根因。</li>
+<li>没有测试验证，就不能证明修复没有引入回归。</li>
+</ul>
+<p>这时候，仅仅有任务树是不够的。我们需要把任务之间的依赖关系表达出来。</p>
+<pre class="mermaid"><code>flowchart TD
+    A[确认错误范围和样本] --&gt; B[收集日志和 trace]
+    A --&gt; C[检查最近发布和配置变更]
+    B --&gt; D[定位失败请求路径]
+    B --&gt; E[聚类异常堆栈]
+    D --&gt; F[查看 Controller / Handler]
+    D --&gt; G[查看 Middleware / Auth Filter]
+    D --&gt; H[查看 Session / DB / Redis 依赖]
+    C --&gt; I[筛选高风险变更]
+    E --&gt; J[形成根因假设]
+    F --&gt; J
+    G --&gt; J
+    H --&gt; J
+    I --&gt; J
+    J --&gt; K[设计最小复现用例]
+    K --&gt; L[补充回归测试]
+    L --&gt; M[执行最小修复]
+    M --&gt; N[运行测试和验证指标]
+    N --&gt; O{是否通过}
+    O -- 是 --&gt; P[总结根因和修复]
+    O -- 否 --&gt; Q[回到日志和失败用例]
+    Q --&gt; B</code></pre>
+<p>这张图比任务树多表达了三类信息。</p>
+<p>第一，前置条件。比如“收集日志和 trace”必须在“形成根因假设”之前完成，否则很容易靠猜测改代码。</p>
+<p>第二，并行机会。检查最近发布、查询监控指标、读取应用日志可以并行执行，因为它们都依赖同一个错误范围。</p>
+<p>第三，汇聚节点。真正的根因判断不是来自单一线索，而是来自日志、trace、代码路径、依赖状态和最近变更的交叉验证。</p>
+<p>这个例子也说明，任务拆解不是为了让 Agent 显得“考虑周全”，而是为了避免错误行动。</p>
+<p>修复登录接口前，Agent 需要先知道错误发生在哪条路径、什么条件触发、堆栈指向哪里、相关依赖是否异常。否则它可能只是随机修改登录代码，甚至引入新的问题。</p>
+<p>依赖图的工程价值主要有四个：</p>
+<ul>
+<li>它能表达前置条件，避免顺序错误。</li>
+<li>它能发现可并行任务，提高执行效率。</li>
+<li>它能识别关键路径，让 Agent 优先处理阻塞节点。</li>
+<li>它能支持失败重试和重新规划。</li>
+</ul>
+<p>当然，依赖图也有局限。初始依赖可能判断错误，图太复杂会难以维护，动态任务还需要支持执行过程中调整图结构。</p>
+<p>这里就涉及动态重规划。动态重规划不是任务失败后把整张图推倒重拆，而是在已有依赖图上做增量更新：保留已经完成且仍然有效的节点，只替换、追加或跳过受影响的局部分支。</p>
+<p>以登录接口 500 为例，Agent 一开始可能假设问题来自数据库连接池，于是生成了“检查 DB 连接池”“查看慢查询”“验证连接泄漏”几个节点。但日志聚类后出现了新证据：所有 500 都集中在 OAuth 回调路径，堆栈指向 <code>user_profile.email</code> 为空。这时系统不应该整体重拆，而应该这样更新任务图：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>1. 保留已完成节点：错误范围确认、日志收集、trace 聚类。
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>2. 标记受影响节点：DB 连接池相关排查降级为 skipped 或 low_priority。
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>3. 追加新节点：阅读 OAuth 回调代码、构造 email 为空的复现用例、检查第三方用户资料契约。
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>4. 重连依赖边：让新复现用例依赖日志样本，让最小修复依赖 OAuth 代码阅读和复现测试。
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>5. 继续执行：Scheduler 只调度新增或重新打开的 pending 节点，不重复执行已经验证过的任务。
+</code></pre></div>
+<p>动态重规划通常由几类事件触发：任务失败、工具返回空结果、Verifier 判定不达标、出现新证据、用户修改目标、权限被拒绝。每次触发时，Replanner 都应该先判断影响范围，而不是重新生成完整计划。</p>
+<p>工程上可以把它写成一个很简单的策略：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>新证据只推翻局部假设 -&gt; 局部改图。
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>目标发生变化 -&gt; 重新评估关键路径。
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>核心前提被推翻 -&gt; 才整体重规划。
+</code></pre></div>
+<p>所以在实际系统里，不要一开始就追求完美 DAG。更实用的方式是：先生成一版粗粒度依赖图，在执行过程中根据反馈增量更新。</p>
+<p>一句话总结：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>层级分解解决“任务有哪些”，依赖图解决“任务之间如何协作”。
+</code></pre></div>
+<hr />
+<h2 id="_4">五、第三种模式：输入输出分解，让每个子任务可交付<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>很多 Agent 计划失败，不是因为没有拆任务，而是因为子任务只有名字，没有输入、输出和完成标准。</p>
+<p>比如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>查看日志。
+</code></pre></div>
+<p>这句话看起来像任务，其实不够可靠。它没有说明：</p>
+<ul>
+<li>查看哪个服务的日志？</li>
+<li>查看哪个接口、哪个状态码、哪个时间范围？</li>
+<li>输出原始日志、异常聚类、trace id 还是根因假设？</li>
+<li>怎样算查看完成？</li>
+<li>如果日志权限不足或日志缺失怎么办？</li>
+</ul>
+<p>更好的写法是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="p">{</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cluster_login_errors"</span><span class="p">,</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"聚类登录接口 500 错误"</span><span class="p">,</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">  </span><span class="nt">"goal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"聚类登录接口最近 24 小时的 500 错误，找到主要失败模式"</span><span class="p">,</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"analyze"</span><span class="p">,</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">  </span><span class="nt">"depends_on"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"collect_logs"</span><span class="p">],</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="w">  </span><span class="nt">"input"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="w">    </span><span class="nt">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"auth-service"</span><span class="p">,</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="w">    </span><span class="nt">"endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/login"</span><span class="p">,</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="w">    </span><span class="nt">"date_range"</span><span class="p">:</span><span class="w"> </span><span class="s2">"last_24_hours"</span><span class="p">,</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="w">    </span><span class="nt">"status_code"</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="w">    </span><span class="nt">"min_sample_size"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="w">  </span><span class="nt">"action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"按 exception type 和 stack trace 聚类错误日志，抽取代表性 trace id，并统计每类错误占比"</span><span class="p">,</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a><span class="w">  </span><span class="nt">"tool"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cluster_error_logs"</span><span class="p">,</span>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a><span class="w">  </span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="w">    </span><span class="nt">"error_clusters"</span><span class="p">:</span><span class="w"> </span><span class="s2">"错误类型和堆栈聚类"</span><span class="p">,</span>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a><span class="w">    </span><span class="nt">"sample_trace_ids"</span><span class="p">:</span><span class="w"> </span><span class="s2">"代表性请求样本"</span><span class="p">,</span>
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a><span class="w">    </span><span class="nt">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="s2">"每类错误占比"</span><span class="p">,</span>
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a><span class="w">    </span><span class="nt">"first_seen"</span><span class="p">:</span><span class="w"> </span><span class="s2">"首次出现时间"</span><span class="p">,</span>
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a><span class="w">    </span><span class="nt">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="s2">"置信度"</span>
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a><span class="w">  </span><span class="nt">"done_when"</span><span class="p">:</span><span class="w"> </span><span class="s2">"至少识别一个主要失败模式，或明确样本不足并给出下一步证据来源"</span><span class="p">,</span>
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a><span class="w">  </span><span class="nt">"failure_policy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"如果日志样本不足，则改查网关日志、APM trace 和告警记录"</span><span class="p">,</span>
+<a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a><span class="w">  </span><span class="nt">"permission"</span><span class="p">:</span><span class="w"> </span><span class="s2">"auto"</span><span class="p">,</span>
+<a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a><span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span>
+<a id="__codelineno-18-27" name="__codelineno-18-27" href="#__codelineno-18-27"></a><span class="p">}</span>
+</code></pre></div>
+<p>这就是输入输出分解。</p>
+<p>它的核心问题不是“这个任务叫什么”，而是“这个任务接收什么，产出什么”。</p>
+<p>一个可交付子任务通常可以用下面这个模板描述：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="p">{</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"task_id"</span><span class="p">,</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"子任务名称"</span><span class="p">,</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">  </span><span class="nt">"goal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"这个子任务要完成什么"</span><span class="p">,</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"collect|analyze|execute|verify|confirm"</span><span class="p">,</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">  </span><span class="nt">"depends_on"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">  </span><span class="nt">"input"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="w">  </span><span class="nt">"action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"具体执行动作"</span><span class="p">,</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="w">  </span><span class="nt">"tool"</span><span class="p">:</span><span class="w"> </span><span class="s2">"使用的工具；如果不需要工具则为 null"</span><span class="p">,</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">  </span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="w">  </span><span class="nt">"done_when"</span><span class="p">:</span><span class="w"> </span><span class="s2">"完成标准"</span><span class="p">,</span>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="w">  </span><span class="nt">"failure_policy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"失败时如何处理"</span><span class="p">,</span>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="w">  </span><span class="nt">"permission"</span><span class="p">:</span><span class="w"> </span><span class="s2">"auto|requires_human_confirmation"</span><span class="p">,</span>
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending|running|awaiting_confirmation|done|failed|skipped"</span>
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="p">}</span>
+</code></pre></div>
+<p>这个模板看起来有点工程化，但它解决了一个关键问题：让子任务可以被调度。这里可以把它当作全文统一的权威 schema：后面的 Prompt 输出和 Python <code>Task</code> 类，都应与这组字段保持一致。</p>
+<p>如果一个任务没有输入，Executor 不知道从哪里开始。<br />
+如果一个任务没有输出，后续任务不知道依赖什么。<br />
+如果一个任务没有完成标准，Verifier 不知道怎么验收。<br />
+如果一个任务没有失败策略，系统就无法恢复。</p>
+<p>这也是为什么生产级 Agent 不能只依赖自然语言步骤，而要把任务变成结构化对象。</p>
+<p>一句话总结：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>没有输入输出的子任务只是想法，有完成标准的子任务才是可执行工作单元。
+</code></pre></div>
+<hr />
+<h2 id="mcp">六、第四种模式：工具映射分解，把任务接到 MCP 能力上<a class="headerlink" href="#mcp" title="Permanent link">&para;</a></h2>
+<p>Agent 的任务拆解不能只停留在自然语言层。最终，每个子任务要么由模型生成内容，要么由工具执行，要么需要人工确认。</p>
+<p>所以拆解之后，还要继续问一个问题：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>这个子任务靠什么完成？
+</code></pre></div>
+<p>以前面的登录接口排障为例，任务和能力可以这样映射：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">子任务</th>
+<th style="text-align: left;">需要的能力</th>
+<th style="text-align: left;">可能的工具</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">检索应用日志</td>
+<td style="text-align: left;">日志查询</td>
+<td style="text-align: left;"><code>search_logs</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">查询请求链路</td>
+<td style="text-align: left;">APM / Trace 查询</td>
+<td style="text-align: left;"><code>query_traces</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">查看最近发布</td>
+<td style="text-align: left;">CI/CD 或发布系统读取</td>
+<td style="text-align: left;"><code>list_deployments</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">检查配置变更</td>
+<td style="text-align: left;">配置中心读取</td>
+<td style="text-align: left;"><code>read_config_history</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">阅读相关代码</td>
+<td style="text-align: left;">代码检索和文件读取</td>
+<td style="text-align: left;"><code>repo_search</code> / <code>read_file</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">补充测试</td>
+<td style="text-align: left;">代码编辑</td>
+<td style="text-align: left;"><code>edit_file</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">运行测试</td>
+<td style="text-align: left;">命令执行</td>
+<td style="text-align: left;"><code>run_tests</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">验证错误率</td>
+<td style="text-align: left;">指标查询</td>
+<td style="text-align: left;"><code>query_metrics</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">总结修复</td>
+<td style="text-align: left;">内容生成</td>
+<td style="text-align: left;">LLM 写作能力</td>
+</tr>
+</tbody>
+</table>
+<p>这就把任务拆解和 MCP 连接起来了。</p>
+<p>MCP 解决的是：工具和资源如何标准化暴露。<br />
+任务拆解解决的是：Agent 应该在什么时候调用哪个工具和资源。</p>
+<p>可以理解为：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>MCP 提供能力货架；
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>任务拆解决定拿哪件工具、在什么步骤使用、产出给谁。
+</code></pre></div>
+<p>一个子任务如果无法映射到任何工具、数据源、模型能力或人工确认，通常说明它还不够具体。</p>
+<p>比如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>判断登录为什么不稳定。
+</code></pre></div>
+<p>这个任务太抽象，无法直接映射到工具。应该继续拆成：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>1. 查询登录接口 500 错误率曲线。
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>2. 检索对应时间窗口的异常日志。
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>3. 按堆栈聚类失败样本。
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>4. 对照最近发布和配置变更。
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>5. 阅读命中堆栈对应的代码路径。
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>6. 编写复现测试并验证修复。
+</code></pre></div>
+<p>每一步都可以找到对应能力。</p>
+<p>在工程实现中，工具映射还需要考虑权限和风险。</p>
+<p>比如“读取日志”是只读操作，可以自动执行；“修改代码”需要限定范围；“发布到生产环境”会影响真实用户，必须进入人工确认；“修改线上配置”可能扩大故障，也必须设置权限门禁。</p>
+<p>所以一个更完整的任务对象，还应该包含权限等级。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="p">{</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"deploy_login_fix"</span><span class="p">,</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"发布登录接口修复"</span><span class="p">,</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">  </span><span class="nt">"goal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"在用户确认后发布登录接口修复，并保留回滚路径"</span><span class="p">,</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"execute"</span><span class="p">,</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="w">  </span><span class="nt">"depends_on"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"run_login_tests"</span><span class="p">,</span><span class="w"> </span><span class="s2">"summarize_fix"</span><span class="p">],</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="w">  </span><span class="nt">"input"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="w">    </span><span class="nt">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"auth-service"</span><span class="p">,</span>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="w">    </span><span class="nt">"change_summary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"待生成"</span><span class="p">,</span>
+<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="w">    </span><span class="nt">"rollback_plan"</span><span class="p">:</span><span class="w"> </span><span class="s2">"待生成"</span>
+<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-25-12" name="__codelineno-25-12" href="#__codelineno-25-12"></a><span class="w">  </span><span class="nt">"action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"创建发布任务并绑定回滚方案"</span><span class="p">,</span>
+<a id="__codelineno-25-13" name="__codelineno-25-13" href="#__codelineno-25-13"></a><span class="w">  </span><span class="nt">"tool"</span><span class="p">:</span><span class="w"> </span><span class="s2">"deployment_tool"</span><span class="p">,</span>
+<a id="__codelineno-25-14" name="__codelineno-25-14" href="#__codelineno-25-14"></a><span class="w">  </span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-25-15" name="__codelineno-25-15" href="#__codelineno-25-15"></a><span class="w">    </span><span class="nt">"deployment_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"发布任务 ID"</span><span class="p">,</span>
+<a id="__codelineno-25-16" name="__codelineno-25-16" href="#__codelineno-25-16"></a><span class="w">    </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"发布版本号"</span><span class="p">,</span>
+<a id="__codelineno-25-17" name="__codelineno-25-17" href="#__codelineno-25-17"></a><span class="w">    </span><span class="nt">"rollback_plan"</span><span class="p">:</span><span class="w"> </span><span class="s2">"回滚方案"</span>
+<a id="__codelineno-25-18" name="__codelineno-25-18" href="#__codelineno-25-18"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-25-19" name="__codelineno-25-19" href="#__codelineno-25-19"></a><span class="w">  </span><span class="nt">"done_when"</span><span class="p">:</span><span class="w"> </span><span class="s2">"用户确认发布窗口、影响范围和回滚方案后，创建发布任务"</span><span class="p">,</span>
+<a id="__codelineno-25-20" name="__codelineno-25-20" href="#__codelineno-25-20"></a><span class="w">  </span><span class="nt">"failure_policy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"如果未获得确认，则只输出发布建议，不调用发布工具"</span><span class="p">,</span>
+<a id="__codelineno-25-21" name="__codelineno-25-21" href="#__codelineno-25-21"></a><span class="w">  </span><span class="nt">"permission"</span><span class="p">:</span><span class="w"> </span><span class="s2">"requires_human_confirmation"</span><span class="p">,</span>
+<a id="__codelineno-25-22" name="__codelineno-25-22" href="#__codelineno-25-22"></a><span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span>
+<a id="__codelineno-25-23" name="__codelineno-25-23" href="#__codelineno-25-23"></a><span class="p">}</span>
+</code></pre></div>
+<p>这类设计可以避免 Agent 从“排障助手”突然变成“未经确认的生产执行器”。</p>
+<p>工具映射分解的本质，是把自然语言任务接入真实世界能力，同时保留边界、权限和可恢复性。</p>
+<hr />
+<h2 id="_5">七、第五种模式：验证导向分解，从终局倒推任务<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>很多 Agent 输出失败，不是因为没有做事，而是因为不知道“做对了”是什么。</p>
+<p>所以任务拆解时，可以先定义最终验收标准，再倒推需要哪些子任务。</p>
+<p>还是登录接口 500 这个例子。最终交付必须满足：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>1. 说明错误范围：接口、环境、时间窗口、影响比例。
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>2. 给出证据链：日志、trace、监控、最近变更或复现用例。
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>3. 说明根因，而不是只列可能原因。
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>4. 修复范围尽量小，并解释为什么改这里。
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>5. 至少补充一个能覆盖问题的回归测试。
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>6. 相关测试通过。
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a>7. 标注剩余风险、上线建议和回滚方式。
+</code></pre></div>
+<p>从这些验收标准往回倒推，就会得到对应的子任务。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">验收标准</th>
+<th style="text-align: left;">倒推出的子任务</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">说明错误范围</td>
+<td style="text-align: left;">查询错误率、确认接口路径和时间窗口</td>
+</tr>
+<tr>
+<td style="text-align: left;">给出证据链</td>
+<td style="text-align: left;">收集日志、trace、监控和最近变更</td>
+</tr>
+<tr>
+<td style="text-align: left;">说明根因</td>
+<td style="text-align: left;">建立现象-证据-假设映射并验证</td>
+</tr>
+<tr>
+<td style="text-align: left;">修复范围小</td>
+<td style="text-align: left;">定位最小修改点，避免无关重构</td>
+</tr>
+<tr>
+<td style="text-align: left;">补充回归测试</td>
+<td style="text-align: left;">设计复现用例并加入测试集</td>
+</tr>
+<tr>
+<td style="text-align: left;">测试通过</td>
+<td style="text-align: left;">运行相关测试、必要时运行回归测试</td>
+</tr>
+<tr>
+<td style="text-align: left;">标注风险</td>
+<td style="text-align: left;">总结影响范围、残余风险、上线和回滚建议</td>
+</tr>
+</tbody>
+</table>
+<p>这类拆解很适合代码修复、故障排查、数据分析、研究报告、内容交付等任务。</p>
+<p>如果最终验收标准只是“回答看起来合理”，Agent 会倾向于生成一段漂亮总结。<br />
+如果最终验收标准包含“测试通过、根因明确、风险可控”，Agent 才会围绕工程质量组织行动。</p>
+<p>这就是验证导向分解。</p>
+<p>它的好处是让 Agent 不会只追求“完成动作”，而是围绕“交付质量”组织行动。</p>
+<p>一句话总结：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>验证导向分解的关键，是先定义终点，再倒推路径。
+</code></pre></div>
+<hr />
+<h2 id="prompt">八、Prompt 工程如何实现可靠拆解<a class="headerlink" href="#prompt" title="Permanent link">&para;</a></h2>
+<p>很多人第一次做 Agent Planner 时，会写一个很短的 Prompt：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>请把这个任务拆解一下。
+</code></pre></div>
+<p>这个 Prompt 太松了。模型可能会生成一份漂亮大纲，但大纲不一定可执行。</p>
+<p>更可靠的 Prompt 应该明确拆解目标、任务类型、输出结构、反例约束和验收规则。</p>
+<p>例如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>你是一个 Agent Planner。
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>请把用户目标拆成可执行子任务。
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>要求：
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>1. 先复述目标和已知约束。
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>2. 区分信息收集、分析判断、执行产出、验证检查、人工确认五类任务。
+<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a>3. 每个子任务必须包含：输入、动作、工具、输出、完成标准、失败处理、权限、状态。
+<a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a>4. 标明任务依赖关系。
+<a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a>5. 标明哪些任务需要工具，哪些任务需要人工确认。
+<a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a>6. 不要输出无法执行的泛化动作，例如“优化稳定性”“深入排查”“提升质量”。
+<a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a>7. 如果信息不足，生成“需要确认”的子任务，而不是编造前提。
+<a id="__codelineno-29-12" name="__codelineno-29-12" href="#__codelineno-29-12"></a>
+<a id="__codelineno-29-13" name="__codelineno-29-13" href="#__codelineno-29-13"></a>输出 JSON：
+<a id="__codelineno-29-14" name="__codelineno-29-14" href="#__codelineno-29-14"></a>{
+<a id="__codelineno-29-15" name="__codelineno-29-15" href="#__codelineno-29-15"></a>  "goal": "",
+<a id="__codelineno-29-16" name="__codelineno-29-16" href="#__codelineno-29-16"></a>  "assumptions": [],
+<a id="__codelineno-29-17" name="__codelineno-29-17" href="#__codelineno-29-17"></a>  "questions": [],
+<a id="__codelineno-29-18" name="__codelineno-29-18" href="#__codelineno-29-18"></a>  "tasks": [
+<a id="__codelineno-29-19" name="__codelineno-29-19" href="#__codelineno-29-19"></a>    {
+<a id="__codelineno-29-20" name="__codelineno-29-20" href="#__codelineno-29-20"></a>      "id": "",
+<a id="__codelineno-29-21" name="__codelineno-29-21" href="#__codelineno-29-21"></a>      "name": "",
+<a id="__codelineno-29-22" name="__codelineno-29-22" href="#__codelineno-29-22"></a>      "goal": "",
+<a id="__codelineno-29-23" name="__codelineno-29-23" href="#__codelineno-29-23"></a>      "type": "collect|analyze|execute|verify|confirm",
+<a id="__codelineno-29-24" name="__codelineno-29-24" href="#__codelineno-29-24"></a>      "depends_on": [],
+<a id="__codelineno-29-25" name="__codelineno-29-25" href="#__codelineno-29-25"></a>      "input": {},
+<a id="__codelineno-29-26" name="__codelineno-29-26" href="#__codelineno-29-26"></a>      "action": "",
+<a id="__codelineno-29-27" name="__codelineno-29-27" href="#__codelineno-29-27"></a>      "tool": "",
+<a id="__codelineno-29-28" name="__codelineno-29-28" href="#__codelineno-29-28"></a>      "output": {},
+<a id="__codelineno-29-29" name="__codelineno-29-29" href="#__codelineno-29-29"></a>      "done_when": "",
+<a id="__codelineno-29-30" name="__codelineno-29-30" href="#__codelineno-29-30"></a>      "failure_policy": "",
+<a id="__codelineno-29-31" name="__codelineno-29-31" href="#__codelineno-29-31"></a>      "permission": "auto|requires_human_confirmation",
+<a id="__codelineno-29-32" name="__codelineno-29-32" href="#__codelineno-29-32"></a>      "status": "pending|running|awaiting_confirmation|done|failed|skipped"
+<a id="__codelineno-29-33" name="__codelineno-29-33" href="#__codelineno-29-33"></a>    }
+<a id="__codelineno-29-34" name="__codelineno-29-34" href="#__codelineno-29-34"></a>  ]
+<a id="__codelineno-29-35" name="__codelineno-29-35" href="#__codelineno-29-35"></a>}
+</code></pre></div>
+<p>这个 Prompt 的重点不是让模型“多想一点”，而是约束它生成可以进入系统执行的结构。</p>
+<p>对登录接口 500，Planner 的输出可以类似这样：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="p">{</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="w">  </span><span class="nt">"goal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"定位并修复登录接口线上偶发 500"</span><span class="p">,</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="w">  </span><span class="nt">"assumptions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"如果用户未提供时间窗口，默认先分析最近 24 小时，并在总结中标注"</span><span class="p">],</span>
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="w">  </span><span class="nt">"questions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"服务名和接口路径是否为 auth-service /api/login？"</span><span class="p">,</span><span class="w"> </span><span class="s2">"是否允许修改代码并运行测试？"</span><span class="p">],</span>
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="w">  </span><span class="nt">"tasks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="w">      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"confirm_scope"</span><span class="p">,</span>
+<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"确认错误范围"</span><span class="p">,</span>
+<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a><span class="w">      </span><span class="nt">"goal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"确认登录接口排障所需的最小上下文和执行边界"</span><span class="p">,</span>
+<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"confirm"</span><span class="p">,</span>
+<a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a><span class="w">      </span><span class="nt">"depends_on"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a><span class="w">      </span><span class="nt">"input"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"user_goal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"原始需求"</span><span class="p">},</span>
+<a id="__codelineno-30-13" name="__codelineno-30-13" href="#__codelineno-30-13"></a><span class="w">      </span><span class="nt">"action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"确认服务名、接口路径、环境、时间窗口和可执行权限"</span><span class="p">,</span>
+<a id="__codelineno-30-14" name="__codelineno-30-14" href="#__codelineno-30-14"></a><span class="w">      </span><span class="nt">"tool"</span><span class="p">:</span><span class="w"> </span><span class="s2">"human_confirmation"</span><span class="p">,</span>
+<a id="__codelineno-30-15" name="__codelineno-30-15" href="#__codelineno-30-15"></a><span class="w">      </span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="nt">"endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="nt">"env"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="nt">"date_range"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="nt">"execution_scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">},</span>
+<a id="__codelineno-30-16" name="__codelineno-30-16" href="#__codelineno-30-16"></a><span class="w">      </span><span class="nt">"done_when"</span><span class="p">:</span><span class="w"> </span><span class="s2">"得到排障范围，或明确采用默认假设"</span><span class="p">,</span>
+<a id="__codelineno-30-17" name="__codelineno-30-17" href="#__codelineno-30-17"></a><span class="w">      </span><span class="nt">"failure_policy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"如果用户暂不确认，则只做只读诊断并标注假设"</span><span class="p">,</span>
+<a id="__codelineno-30-18" name="__codelineno-30-18" href="#__codelineno-30-18"></a><span class="w">      </span><span class="nt">"permission"</span><span class="p">:</span><span class="w"> </span><span class="s2">"requires_human_confirmation"</span><span class="p">,</span>
+<a id="__codelineno-30-19" name="__codelineno-30-19" href="#__codelineno-30-19"></a><span class="w">      </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span>
+<a id="__codelineno-30-20" name="__codelineno-30-20" href="#__codelineno-30-20"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-30-21" name="__codelineno-30-21" href="#__codelineno-30-21"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-30-22" name="__codelineno-30-22" href="#__codelineno-30-22"></a><span class="w">      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"collect_logs"</span><span class="p">,</span>
+<a id="__codelineno-30-23" name="__codelineno-30-23" href="#__codelineno-30-23"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"收集错误日志和 trace"</span><span class="p">,</span>
+<a id="__codelineno-30-24" name="__codelineno-30-24" href="#__codelineno-30-24"></a><span class="w">      </span><span class="nt">"goal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"找到登录接口 500 的主要失败模式和代表性证据"</span><span class="p">,</span>
+<a id="__codelineno-30-25" name="__codelineno-30-25" href="#__codelineno-30-25"></a><span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"collect"</span><span class="p">,</span>
+<a id="__codelineno-30-26" name="__codelineno-30-26" href="#__codelineno-30-26"></a><span class="w">      </span><span class="nt">"depends_on"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"confirm_scope"</span><span class="p">],</span>
+<a id="__codelineno-30-27" name="__codelineno-30-27" href="#__codelineno-30-27"></a><span class="w">      </span><span class="nt">"input"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"from confirm_scope"</span><span class="p">,</span><span class="w"> </span><span class="nt">"endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"from confirm_scope"</span><span class="p">,</span><span class="w"> </span><span class="nt">"date_range"</span><span class="p">:</span><span class="w"> </span><span class="s2">"from confirm_scope"</span><span class="p">},</span>
+<a id="__codelineno-30-28" name="__codelineno-30-28" href="#__codelineno-30-28"></a><span class="w">      </span><span class="nt">"action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"查询 500 日志、异常堆栈、trace id 和错误率曲线"</span><span class="p">,</span>
+<a id="__codelineno-30-29" name="__codelineno-30-29" href="#__codelineno-30-29"></a><span class="w">      </span><span class="nt">"tool"</span><span class="p">:</span><span class="w"> </span><span class="s2">"search_logs_and_traces"</span><span class="p">,</span>
+<a id="__codelineno-30-30" name="__codelineno-30-30" href="#__codelineno-30-30"></a><span class="w">      </span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"error_clusters"</span><span class="p">:</span><span class="w"> </span><span class="s2">"按堆栈聚类的失败样本"</span><span class="p">},</span>
+<a id="__codelineno-30-31" name="__codelineno-30-31" href="#__codelineno-30-31"></a><span class="w">      </span><span class="nt">"done_when"</span><span class="p">:</span><span class="w"> </span><span class="s2">"得到至少一个主要失败模式和代表性 trace id"</span><span class="p">,</span>
+<a id="__codelineno-30-32" name="__codelineno-30-32" href="#__codelineno-30-32"></a><span class="w">      </span><span class="nt">"failure_policy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"如果日志不可用，则改查网关日志、APM trace 和监控告警"</span><span class="p">,</span>
+<a id="__codelineno-30-33" name="__codelineno-30-33" href="#__codelineno-30-33"></a><span class="w">      </span><span class="nt">"permission"</span><span class="p">:</span><span class="w"> </span><span class="s2">"auto"</span><span class="p">,</span>
+<a id="__codelineno-30-34" name="__codelineno-30-34" href="#__codelineno-30-34"></a><span class="w">      </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span>
+<a id="__codelineno-30-35" name="__codelineno-30-35" href="#__codelineno-30-35"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-30-36" name="__codelineno-30-36" href="#__codelineno-30-36"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-30-37" name="__codelineno-30-37" href="#__codelineno-30-37"></a><span class="w">      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"verify_fix"</span><span class="p">,</span>
+<a id="__codelineno-30-38" name="__codelineno-30-38" href="#__codelineno-30-38"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"验证修复结果"</span><span class="p">,</span>
+<a id="__codelineno-30-39" name="__codelineno-30-39" href="#__codelineno-30-39"></a><span class="w">      </span><span class="nt">"goal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"确认修复命中根因，并且测试、风险说明和交付信息完整"</span><span class="p">,</span>
+<a id="__codelineno-30-40" name="__codelineno-30-40" href="#__codelineno-30-40"></a><span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"verify"</span><span class="p">,</span>
+<a id="__codelineno-30-41" name="__codelineno-30-41" href="#__codelineno-30-41"></a><span class="w">      </span><span class="nt">"depends_on"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"apply_fix"</span><span class="p">,</span><span class="w"> </span><span class="s2">"run_tests"</span><span class="p">],</span>
+<a id="__codelineno-30-42" name="__codelineno-30-42" href="#__codelineno-30-42"></a><span class="w">      </span><span class="nt">"input"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"test_result"</span><span class="p">:</span><span class="w"> </span><span class="s2">"from run_tests"</span><span class="p">,</span><span class="w"> </span><span class="nt">"change_summary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"from apply_fix"</span><span class="p">},</span>
+<a id="__codelineno-30-43" name="__codelineno-30-43" href="#__codelineno-30-43"></a><span class="w">      </span><span class="nt">"action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"检查测试是否通过，修复是否命中根因，是否存在未说明风险"</span><span class="p">,</span>
+<a id="__codelineno-30-44" name="__codelineno-30-44" href="#__codelineno-30-44"></a><span class="w">      </span><span class="nt">"tool"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rule_based_checker"</span><span class="p">,</span>
+<a id="__codelineno-30-45" name="__codelineno-30-45" href="#__codelineno-30-45"></a><span class="w">      </span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"quality_check"</span><span class="p">:</span><span class="w"> </span><span class="s2">"通过项和风险项"</span><span class="p">},</span>
+<a id="__codelineno-30-46" name="__codelineno-30-46" href="#__codelineno-30-46"></a><span class="w">      </span><span class="nt">"done_when"</span><span class="p">:</span><span class="w"> </span><span class="s2">"根因、修改点、测试结果和剩余风险都已说明"</span><span class="p">,</span>
+<a id="__codelineno-30-47" name="__codelineno-30-47" href="#__codelineno-30-47"></a><span class="w">      </span><span class="nt">"failure_policy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"如果验证失败，则回到失败用例和日志重新定位"</span><span class="p">,</span>
+<a id="__codelineno-30-48" name="__codelineno-30-48" href="#__codelineno-30-48"></a><span class="w">      </span><span class="nt">"permission"</span><span class="p">:</span><span class="w"> </span><span class="s2">"auto"</span><span class="p">,</span>
+<a id="__codelineno-30-49" name="__codelineno-30-49" href="#__codelineno-30-49"></a><span class="w">      </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span>
+<a id="__codelineno-30-50" name="__codelineno-30-50" href="#__codelineno-30-50"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-30-51" name="__codelineno-30-51" href="#__codelineno-30-51"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-30-52" name="__codelineno-30-52" href="#__codelineno-30-52"></a><span class="p">}</span>
+</code></pre></div>
+<p>这里有一个重要细节：Prompt 里要允许“不知道”。</p>
+<p>如果信息不足，可靠的 Planner 不应该编造服务名、trace id 或根因，而应该生成确认任务，或者在可接受的情况下使用默认假设并明确标注。</p>
+<p>因此，Prompt 工程的关键不是写更华丽的提示词，而是把拆解结果约束成可执行结构。</p>
+<hr />
+<h2 id="_6">九、结构化编程如何实现可靠拆解<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>Prompt 可以生成候选拆解，但生产系统不能只依赖 Prompt。</p>
+<p>真正可用的 Agent 还需要结构化程序来管理任务。</p>
+<p>至少要处理这些问题：</p>
+<ul>
+<li>Schema 校验：任务字段是否完整。</li>
+<li>依赖校验：依赖任务是否存在，是否形成环。</li>
+<li>权限校验：是否调用了高风险工具。</li>
+<li>工具校验：任务声明的工具是否可用。</li>
+<li>状态管理：任务是 pending、running、awaiting_confirmation、done、failed 还是 skipped。</li>
+<li>输出校验：任务产出是否符合下游需要。</li>
+<li>失败恢复：重试、降级、请求人工确认或重新规划。</li>
+<li>执行日志：记录每一步做了什么，方便复盘。</li>
+</ul>
+<p>一个与上面 JSON schema 对齐的简化任务对象可以这样设计：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="n">TaskType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"collect"</span><span class="p">,</span> <span class="s2">"analyze"</span><span class="p">,</span> <span class="s2">"execute"</span><span class="p">,</span> <span class="s2">"verify"</span><span class="p">,</span> <span class="s2">"confirm"</span><span class="p">]</span>
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="n">TaskStatus</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"pending"</span><span class="p">,</span> <span class="s2">"running"</span><span class="p">,</span> <span class="s2">"awaiting_confirmation"</span><span class="p">,</span> <span class="s2">"done"</span><span class="p">,</span> <span class="s2">"failed"</span><span class="p">,</span> <span class="s2">"skipped"</span><span class="p">]</span>
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="n">Permission</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"auto"</span><span class="p">,</span> <span class="s2">"requires_human_confirmation"</span><span class="p">]</span>
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a>
+<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a>
+<a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a><span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="p">:</span>
+<a id="__codelineno-31-12" name="__codelineno-31-12" href="#__codelineno-31-12"></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-31-13" name="__codelineno-31-13" href="#__codelineno-31-13"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-31-14" name="__codelineno-31-14" href="#__codelineno-31-14"></a>    <span class="n">goal</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-31-15" name="__codelineno-31-15" href="#__codelineno-31-15"></a>    <span class="nb">type</span><span class="p">:</span> <span class="n">TaskType</span>
+<a id="__codelineno-31-16" name="__codelineno-31-16" href="#__codelineno-31-16"></a>    <span class="n">depends_on</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+<a id="__codelineno-31-17" name="__codelineno-31-17" href="#__codelineno-31-17"></a>    <span class="nb">input</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+<a id="__codelineno-31-18" name="__codelineno-31-18" href="#__codelineno-31-18"></a>    <span class="n">action</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
+<a id="__codelineno-31-19" name="__codelineno-31-19" href="#__codelineno-31-19"></a>    <span class="n">tool</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-31-20" name="__codelineno-31-20" href="#__codelineno-31-20"></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+<a id="__codelineno-31-21" name="__codelineno-31-21" href="#__codelineno-31-21"></a>    <span class="n">done_when</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
+<a id="__codelineno-31-22" name="__codelineno-31-22" href="#__codelineno-31-22"></a>    <span class="n">failure_policy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
+<a id="__codelineno-31-23" name="__codelineno-31-23" href="#__codelineno-31-23"></a>    <span class="n">permission</span><span class="p">:</span> <span class="n">Permission</span> <span class="o">=</span> <span class="s2">"auto"</span>
+<a id="__codelineno-31-24" name="__codelineno-31-24" href="#__codelineno-31-24"></a>    <span class="n">status</span><span class="p">:</span> <span class="n">TaskStatus</span> <span class="o">=</span> <span class="s2">"pending"</span>
+</code></pre></div>
+<p>执行器的基本逻辑可以写成：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="k">while</span> <span class="ow">not</span> <span class="n">graph</span><span class="o">.</span><span class="n">done</span><span class="p">():</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>    <span class="n">ready_tasks</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_ready_tasks</span><span class="p">()</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">ready_tasks</span><span class="p">:</span>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>        <span class="n">replanner</span><span class="o">.</span><span class="n">resolve_blocked_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a>        <span class="k">continue</span>
+<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a>
+<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a>    <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">ready_tasks</span><span class="p">:</span>
+<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a>        <span class="k">if</span> <span class="n">permission</span><span class="o">.</span><span class="n">requires_confirmation</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
+<a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a>            <span class="n">graph</span><span class="o">.</span><span class="n">mark_awaiting_confirmation</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a>            <span class="n">request_human_confirmation</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+<a id="__codelineno-32-12" name="__codelineno-32-12" href="#__codelineno-32-12"></a>            <span class="k">continue</span>
+<a id="__codelineno-32-13" name="__codelineno-32-13" href="#__codelineno-32-13"></a>
+<a id="__codelineno-32-14" name="__codelineno-32-14" href="#__codelineno-32-14"></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+<a id="__codelineno-32-15" name="__codelineno-32-15" href="#__codelineno-32-15"></a>
+<a id="__codelineno-32-16" name="__codelineno-32-16" href="#__codelineno-32-16"></a>        <span class="k">if</span> <span class="n">verifier</span><span class="o">.</span><span class="n">pass_</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+<a id="__codelineno-32-17" name="__codelineno-32-17" href="#__codelineno-32-17"></a>            <span class="n">graph</span><span class="o">.</span><span class="n">mark_done</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+<a id="__codelineno-32-18" name="__codelineno-32-18" href="#__codelineno-32-18"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-32-19" name="__codelineno-32-19" href="#__codelineno-32-19"></a>            <span class="n">replanner</span><span class="o">.</span><span class="n">handle_failure</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<p>这里有一个容易忽略的细节：<code>get_ready_tasks()</code> 只能返回 <code>pending</code> 状态的任务。需要人工确认的任务一旦触发确认请求，就要先标记为 <code>awaiting_confirmation</code>，等用户确认后再由外部事件把它恢复为 <code>pending</code> 或直接推进到 <code>running</code>。否则下一轮循环会再次取到同一个任务，重复发起确认请求。</p>
+<p>这段伪代码背后的思想很简单：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>Prompt 负责生成候选拆解；
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>程序负责让拆解可执行、可校验、可恢复。
+</code></pre></div>
+<p>在真实系统里，还可以进一步拆出几个角色。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Planner</td>
+<td style="text-align: left;">根据目标生成任务图</td>
+</tr>
+<tr>
+<td style="text-align: left;">Scheduler</td>
+<td style="text-align: left;">根据依赖关系选择可执行任务</td>
+</tr>
+<tr>
+<td style="text-align: left;">Executor</td>
+<td style="text-align: left;">调用模型、工具或人工流程</td>
+</tr>
+<tr>
+<td style="text-align: left;">Verifier</td>
+<td style="text-align: left;">校验子任务输出是否达标</td>
+</tr>
+<tr>
+<td style="text-align: left;">Memory</td>
+<td style="text-align: left;">保存上下文、历史经验和中间结果</td>
+</tr>
+<tr>
+<td style="text-align: left;">Permission</td>
+<td style="text-align: left;">控制高风险动作是否需要确认</td>
+</tr>
+<tr>
+<td style="text-align: left;">Replanner</td>
+<td style="text-align: left;">失败时调整任务图或生成替代路径</td>
+</tr>
+<tr>
+<td style="text-align: left;">Observability</td>
+<td style="text-align: left;">记录日志、状态、耗时和错误</td>
+</tr>
+</tbody>
+</table>
+<p>如果没有这些结构化组件，Agent 很容易变成“模型一次性生成计划，然后按感觉执行”。这在 Demo 里可能有效，但进入复杂任务后会快速失控。</p>
+<p>比如登录接口排障中，如果 <code>collect_logs</code> 失败，系统不应该直接终止。它可以尝试三种恢复路径：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>1. 降级：从应用明细日志退化为网关日志和监控指标。
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>2. 替代：改用 APM trace、错误告警和最近发布记录推断高风险路径。
+<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a>3. 确认：请求用户补充日志权限、错误样本或部署记录。
+</code></pre></div>
+<p>这就是“可恢复”的意义。</p>
+<p>工程上，任务拆解不是单独存在的。它必须和状态、工具、验证、权限、记忆一起工作，才能形成一个稳定 Agent。</p>
+<hr />
+<h2 id="_7">十、如何评估任务拆解质量<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<p>到这里，还缺一个关键问题：怎样判断一次任务拆解是好是坏？</p>
+<p>如果没有评估指标，任务拆解很容易变成“看起来有条理”。模型列出十几个步骤，读者觉得完整，系统也照着执行，但真正运行时才发现：有些任务没有输入，有些任务没有输出，有些任务没有依赖顺序，有些任务需要权限却没有确认，有些任务失败后没有恢复路径。</p>
+<p>所以，任务拆解也需要质量评估。</p>
+<h3 id="101">10.1 一组可操作的评估指标<a class="headerlink" href="#101" title="Permanent link">&para;</a></h3>
+<p>可以把任务拆解质量拆成十个维度。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;">要问的问题</th>
+<th style="text-align: left;">登录接口 500 中的合格表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">目标覆盖度</td>
+<td style="text-align: left;">子任务是否覆盖最终交付目标</td>
+<td style="text-align: left;">覆盖错误范围、根因、修复、测试、风险说明</td>
+</tr>
+<tr>
+<td style="text-align: left;">可执行性</td>
+<td style="text-align: left;">每个任务是否能落到具体动作</td>
+<td style="text-align: left;">不是“排查问题”，而是“检索最近 24 小时登录 500 日志”</td>
+</tr>
+<tr>
+<td style="text-align: left;">输入完整性</td>
+<td style="text-align: left;">执行前是否知道需要哪些输入</td>
+<td style="text-align: left;">包含服务名、接口路径、环境、时间窗口、状态码</td>
+</tr>
+<tr>
+<td style="text-align: left;">输出明确性</td>
+<td style="text-align: left;">任务产出是否能被后续任务使用</td>
+<td style="text-align: left;">输出 trace id、异常堆栈、错误占比、首次出现时间</td>
+</tr>
+<tr>
+<td style="text-align: left;">依赖正确性</td>
+<td style="text-align: left;">是否先拿证据，再形成结论</td>
+<td style="text-align: left;">先日志和 trace，再根因假设，再修复代码</td>
+</tr>
+<tr>
+<td style="text-align: left;">粒度合理性</td>
+<td style="text-align: left;">任务是否既不太粗也不太碎</td>
+<td style="text-align: left;">“聚类错误日志”可独立交付，“点击查询按钮”不单独成任务</td>
+</tr>
+<tr>
+<td style="text-align: left;">工具匹配度</td>
+<td style="text-align: left;">每个任务是否能映射到工具、模型或人工确认</td>
+<td style="text-align: left;">日志查询用 <code>search_logs</code>，测试执行用 <code>run_tests</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">可验证性</td>
+<td style="text-align: left;">是否有明确完成标准</td>
+<td style="text-align: left;">“相关测试通过，并说明根因、修改点和剩余风险”</td>
+</tr>
+<tr>
+<td style="text-align: left;">可恢复性</td>
+<td style="text-align: left;">失败时是否有替代路径</td>
+<td style="text-align: left;">日志不可用时改查网关日志、APM trace 和监控告警</td>
+</tr>
+<tr>
+<td style="text-align: left;">权限安全性</td>
+<td style="text-align: left;">高风险动作是否需要确认</td>
+<td style="text-align: left;">发布服务、修改生产配置必须进入人工确认</td>
+</tr>
+</tbody>
+</table>
+<p>这十个指标不是为了写成一张漂亮表格，而是为了让 Agent 在执行前就能发现拆解缺陷。</p>
+<p>如果一个任务没有输入，它执行不了。<br />
+如果一个任务没有输出，它无法被下游依赖。<br />
+如果一个任务没有完成标准，它无法被验证。<br />
+如果一个任务没有失败路径，它无法恢复。<br />
+如果一个任务没有权限边界，它可能越权执行。</p>
+<h3 id="102">10.2 运行期指标：让拆解质量可观测<a class="headerlink" href="#102" title="Permanent link">&para;</a></h3>
+<p>上面的十个维度适合在执行前做静态检查。到了真实运行环境，还需要看运行期指标，因为很多拆解问题只有执行后才会暴露。</p>
+<p>可以重点观察三类指标。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">运行指标</th>
+<th style="text-align: left;">计算方式</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">子任务可执行率</td>
+<td style="text-align: left;">可直接进入 Executor 的任务数 / 总任务数</td>
+<td style="text-align: left;">如果比例低，说明任务过于抽象、缺少输入或工具映射不足</td>
+</tr>
+<tr>
+<td style="text-align: left;">平均重规划次数</td>
+<td style="text-align: left;">单个目标执行过程中的重规划次数 / 目标数</td>
+<td style="text-align: left;">如果过高，说明初始拆解不稳定，或任务边界和失败策略设计不好</td>
+</tr>
+<tr>
+<td style="text-align: left;">关键路径阻塞时长</td>
+<td style="text-align: left;">关键路径任务处于 blocked / awaiting_confirmation 的累计时间</td>
+<td style="text-align: left;">如果过长，说明依赖设计、权限确认或外部资源获取存在瓶颈</td>
+</tr>
+</tbody>
+</table>
+<p>以登录接口 500 为例，如果 12 个子任务里只有 5 个能直接执行，其他都需要临时补参数、补工具、补权限，那么“子任务可执行率”只有 41.7%。这说明问题不在 Executor，而在 Planner 拆出来的任务不够完整。</p>
+<p>如果一次排障过程中反复重规划 6 次以上，也不一定说明 Agent 很聪明，可能说明初始拆解没有先确认错误范围、日志入口和最近变更。动态重规划是必要能力，但平均重规划次数过高，通常意味着拆解质量偏低。</p>
+<p>关键路径阻塞时长则更接近工程管理指标。比如“等待生产日志权限”阻塞了后续所有根因分析任务，那么这个节点就是关键路径。系统应该把它标出来，而不是继续生成更多无法执行的下游任务。</p>
+<h3 id="103">10.3 一个简单评分方法<a class="headerlink" href="#103" title="Permanent link">&para;</a></h3>
+<p>工程上可以给每个指标打 0 到 2 分。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">分数</th>
+<th style="text-align: left;">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">0 分</td>
+<td style="text-align: left;">缺失或完全不可执行</td>
+</tr>
+<tr>
+<td style="text-align: left;">1 分</td>
+<td style="text-align: left;">有描述，但不够明确，执行时仍需大量猜测</td>
+</tr>
+<tr>
+<td style="text-align: left;">2 分</td>
+<td style="text-align: left;">清晰、可执行、可验证，可以进入调度系统</td>
+</tr>
+</tbody>
+</table>
+<p>总分可以简单计算为：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>拆解质量得分 = 实际得分 / (指标数量 * 2) * 100
+</code></pre></div>
+<p>比如一个登录接口 500 的坏拆解：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>1. 查看日志。
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a>2. 分析原因。
+<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a>3. 修复代码。
+<a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a>4. 测试一下。
+</code></pre></div>
+<p>这份拆解看起来有步骤，但质量很低。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;">评分</th>
+<th style="text-align: left;">原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">目标覆盖度</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">提到了修复和测试，但没有风险说明和交付标准</td>
+</tr>
+<tr>
+<td style="text-align: left;">可执行性</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">“查看日志”“分析原因”仍然过于抽象</td>
+</tr>
+<tr>
+<td style="text-align: left;">输入完整性</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">没有服务名、接口、环境、时间窗口</td>
+</tr>
+<tr>
+<td style="text-align: left;">输出明确性</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">不知道每一步产出什么</td>
+</tr>
+<tr>
+<td style="text-align: left;">依赖正确性</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">大方向顺序正确，但缺少证据到根因的连接</td>
+</tr>
+<tr>
+<td style="text-align: left;">粒度合理性</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">粒度偏粗</td>
+</tr>
+<tr>
+<td style="text-align: left;">工具匹配度</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">没有说明使用哪些工具</td>
+</tr>
+<tr>
+<td style="text-align: left;">可验证性</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">“测试一下”没有通过标准</td>
+</tr>
+<tr>
+<td style="text-align: left;">可恢复性</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">日志查不到、测试失败都没有处理策略</td>
+</tr>
+<tr>
+<td style="text-align: left;">权限安全性</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">没有区分本地修改、生产配置和发布动作</td>
+</tr>
+</tbody>
+</table>
+<p>它的得分只有 4 / 20，也就是 20 分。这样的拆解不应该直接进入执行。</p>
+<p>一份更好的拆解会写成：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>1. 确认 auth-service /api/login 在生产环境最近 24 小时的 500 错误范围，输出错误率、影响用户数和样本 trace id。
+<a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a>2. 检索这些 trace id 对应的应用日志、网关日志和 APM trace，按异常堆栈聚类，输出主要失败模式。
+<a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a>3. 对照最近 24 小时的发布记录、配置变更和依赖告警，形成根因假设，并标注证据来源。
+<a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a>4. 为最可信根因补充最小复现测试，确认测试在修复前失败。
+<a id="__codelineno-37-5" name="__codelineno-37-5" href="#__codelineno-37-5"></a>5. 执行最小代码修复或配置修复，避免无关重构。
+<a id="__codelineno-37-6" name="__codelineno-37-6" href="#__codelineno-37-6"></a>6. 运行登录相关测试，验证正常登录、无效 Token、Session 过期和异常依赖场景。
+<a id="__codelineno-37-7" name="__codelineno-37-7" href="#__codelineno-37-7"></a>7. 输出根因、修改点、测试结果、剩余风险；如需发布生产，先生成发布和回滚方案并等待人工确认。
+</code></pre></div>
+<p>这份拆解虽然也只有七步，但每一步都有输入、动作、输出和验收方向，也保留了权限边界。它更适合交给 Agent 执行。</p>
+<h3 id="104">10.4 比评分更重要的硬性门槛<a class="headerlink" href="#104" title="Permanent link">&para;</a></h3>
+<p>评分适合排序和比较，但生产系统还需要硬性门槛。</p>
+<p>有些问题不是“扣几分”，而是“不能执行”。</p>
+<p>可以设置几条拒绝规则：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>1. 高风险任务没有 permission 字段，拒绝执行。
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a>2. 任务依赖了不存在的 task id，拒绝执行。
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a>3. 依赖图存在环，拒绝执行。
+<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a>4. 子任务缺少 done_when，拒绝执行。
+<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a>5. 子任务缺少 output，拒绝进入下游依赖。
+<a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a>6. 工具任务没有 tool，拒绝进入 Executor。
+<a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a>7. 执行型任务没有 failure_policy，拒绝进入自动执行。
+</code></pre></div>
+<p>这类规则可以放在 Scheduler 或 Verifier 之前，作为任务图进入执行系统的质量门禁。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">validate_task_graph</span><span class="p">(</span><span class="n">tasks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Task</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a>    <span class="n">task_ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">task</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">}</span>
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a>
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a>    <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
+<a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a>        <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">permission</span> <span class="o">==</span> <span class="s2">"requires_human_confirmation"</span> <span class="ow">and</span> <span class="n">task</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="s2">"pending"</span><span class="p">:</span>
+<a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"high-risk task has invalid initial status: </span><span class="si">{</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-39-7" name="__codelineno-39-7" href="#__codelineno-39-7"></a>
+<a id="__codelineno-39-8" name="__codelineno-39-8" href="#__codelineno-39-8"></a>        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">dep</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">task_ids</span> <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">depends_on</span><span class="p">):</span>
+<a id="__codelineno-39-9" name="__codelineno-39-9" href="#__codelineno-39-9"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"task depends on missing task: </span><span class="si">{</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-39-10" name="__codelineno-39-10" href="#__codelineno-39-10"></a>
+<a id="__codelineno-39-11" name="__codelineno-39-11" href="#__codelineno-39-11"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">task</span><span class="o">.</span><span class="n">done_when</span><span class="p">:</span>
+<a id="__codelineno-39-12" name="__codelineno-39-12" href="#__codelineno-39-12"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"task has no completion criteria: </span><span class="si">{</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-39-13" name="__codelineno-39-13" href="#__codelineno-39-13"></a>
+<a id="__codelineno-39-14" name="__codelineno-39-14" href="#__codelineno-39-14"></a>        <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">"collect"</span><span class="p">,</span> <span class="s2">"execute"</span><span class="p">,</span> <span class="s2">"verify"</span><span class="p">}</span> <span class="ow">and</span> <span class="n">task</span><span class="o">.</span><span class="n">tool</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-39-15" name="__codelineno-39-15" href="#__codelineno-39-15"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"tool task has no tool: </span><span class="si">{</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-39-16" name="__codelineno-39-16" href="#__codelineno-39-16"></a>
+<a id="__codelineno-39-17" name="__codelineno-39-17" href="#__codelineno-39-17"></a>        <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">"execute"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">task</span><span class="o">.</span><span class="n">failure_policy</span><span class="p">:</span>
+<a id="__codelineno-39-18" name="__codelineno-39-18" href="#__codelineno-39-18"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"execute task has no failure policy: </span><span class="si">{</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+<p>这段伪代码并不完整，但它表达了一个重要思想：任务拆解质量不能只靠人读，也应该能被程序检查。</p>
+<h3 id="105">10.5 本节小结<a class="headerlink" href="#105" title="Permanent link">&para;</a></h3>
+<p>任务拆解质量可以用一句话判断：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>一个好的拆解，应该让 Executor 知道怎么做，让 Verifier 知道怎么验收，让 Replanner 知道失败后怎么恢复。
+</code></pre></div>
+<p>如果拆解只能让读者觉得“思路清楚”，但不能让系统稳定执行，它仍然只是大纲，不是工程化任务图。</p>
+<hr />
+<h2 id="_8">十一、任务拆解中的常见错误<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<p>任务拆解看起来简单，但真正做成可执行系统时，常见错误非常多。</p>
+<h3 id="111">11.1 把目标当任务<a class="headerlink" href="#111" title="Permanent link">&para;</a></h3>
+<p>反例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>任务：修复登录接口 500。
+</code></pre></div>
+<p>问题在于，“修复登录接口 500”是目标，不是可直接执行的任务。它没有说明先拿什么证据、怎么定位、改哪里、怎么验证。</p>
+<p>更好的拆法是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>1. 确认错误样本和时间窗口。
+<a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a>2. 收集日志、trace 和监控指标。
+<a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a>3. 聚类失败模式。
+<a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a>4. 定位命中堆栈的代码路径。
+<a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a>5. 补充复现测试。
+<a id="__codelineno-42-6" name="__codelineno-42-6" href="#__codelineno-42-6"></a>6. 执行最小修复。
+<a id="__codelineno-42-7" name="__codelineno-42-7" href="#__codelineno-42-7"></a>7. 运行测试并总结风险。
+</code></pre></div>
+<h3 id="112">11.2 把抽象动词当可执行动作<a class="headerlink" href="#112" title="Permanent link">&para;</a></h3>
+<p>反例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a>优化登录稳定性。
+</code></pre></div>
+<p>这句话没有动作边界。更好的写法是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a>针对登录接口中 Session 读取为空导致的异常路径，增加空值处理和错误分支测试，确认正常登录、无效 Token 和 Session 过期三类场景均通过。
+</code></pre></div>
+<h3 id="113">11.3 没有依赖顺序<a class="headerlink" href="#113" title="Permanent link">&para;</a></h3>
+<p>反例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a>先改登录代码，再看线上日志。
+</code></pre></div>
+<p>这会让 Agent 用猜测驱动修改，最后可能修错地方。</p>
+<p>更好的顺序是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a>先收集日志和 trace，再形成根因假设，然后补测试、做最小修复，最后验证。
+</code></pre></div>
+<h3 id="114">11.4 没有完成标准<a class="headerlink" href="#114" title="Permanent link">&para;</a></h3>
+<p>反例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a>排查登录报错。
+</code></pre></div>
+<p>更好的写法是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a>检索最近 24 小时登录接口 500 日志，输出 Top 3 异常堆栈、代表性 trace id、错误占比、首次出现时间和下一步定位建议。
+</code></pre></div>
+<h3 id="115">11.5 不考虑失败路径<a class="headerlink" href="#115" title="Permanent link">&para;</a></h3>
+<p>反例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a>如果日志查不到，就停止。
+</code></pre></div>
+<p>更好的策略是：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a>如果应用日志查不到，改查网关日志、APM trace、监控告警和最近部署记录，并标注根因置信度下降。
+</code></pre></div>
+<h3 id="116">11.6 拆得太碎，反而不可控<a class="headerlink" href="#116" title="Permanent link">&para;</a></h3>
+<p>过度拆解也是问题。</p>
+<p>比如把“检索登录错误日志”拆成“打开日志系统、选择环境、输入服务名、输入关键字、点击查询、复制第一条日志”这类步骤，在很多场景下没有必要。过细的任务会增加调度成本，也会让 Agent 在不重要的节点上消耗注意力。</p>
+<p>判断粒度是否合适，可以看三个问题：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a>这个子任务是否有独立输出？
+<a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a>这个输出是否会被后续任务依赖？
+<a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a>这个子任务失败时是否需要单独处理？
+</code></pre></div>
+<p>如果答案都是否定的，它可能不需要成为独立子任务。</p>
+<h3 id="117">11.7 忽略人工确认<a class="headerlink" href="#117" title="Permanent link">&para;</a></h3>
+<p>很多 Agent 任务不是纯自动化任务。</p>
+<p>比如修改生产配置、发布服务、删除数据、发送通知、提交代码，这些动作都可能需要人工确认。</p>
+<p>如果拆解时没有标注权限边界，Agent 就可能越权执行。</p>
+<p>更好的方式是把高风险动作拆成两个任务：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a>1. 生成执行方案、影响说明和回滚计划。
+<a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a>2. 等待用户确认后再执行。
+</code></pre></div>
+<p>这也是工程级 Agent 和普通自动化脚本的重要区别之一：Agent 不只是执行动作，还要理解动作的边界和风险。</p>
+<hr />
+<h2 id="skillmcp-agent">十二、从任务拆解回到 Skill、MCP、记忆和 Agent 工程<a class="headerlink" href="#skillmcp-agent" title="Permanent link">&para;</a></h2>
+<p>任务拆解不是孤立能力。它和 Skill、MCP、记忆系统、验证器、权限系统都有关。</p>
+<h3 id="121-skill">12.1 任务拆解和 Skill<a class="headerlink" href="#121-skill" title="Permanent link">&para;</a></h3>
+<p>Skill 本质上是可复用的任务拆解和执行规范。</p>
+<p>比如“定位线上接口异常”这个 Skill，可以预先沉淀一套流程：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a>确认问题范围 -&gt; 收集错误样本 -&gt; 检索日志和 trace -&gt; 检查最近变更 -&gt; 建立根因假设 -&gt; 设计复现测试 -&gt; 最小修复 -&gt; 运行验证 -&gt; 总结风险
+</code></pre></div>
+<p>当 Agent 下次遇到类似任务时，不需要从零规划，而是调用已经沉淀好的 Skill。</p>
+<p>这说明，稳定的 Skill 并不只是几句提示词，而是把专家经验固化成可执行任务结构。</p>
+<h3 id="122-mcp">12.2 任务拆解和 MCP<a class="headerlink" href="#122-mcp" title="Permanent link">&para;</a></h3>
+<p>MCP 提供标准化工具和资源，任务拆解决定如何使用这些能力。</p>
+<p>可以这样理解：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a>任务拆解：我需要查询登录接口错误日志。
+<a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a>MCP 工具：search_logs(service, endpoint, status_code, date_range)
+<a id="__codelineno-54-3" name="__codelineno-54-3" href="#__codelineno-54-3"></a>
+<a id="__codelineno-54-4" name="__codelineno-54-4" href="#__codelineno-54-4"></a>任务拆解：我需要读取相关代码。
+<a id="__codelineno-54-5" name="__codelineno-54-5" href="#__codelineno-54-5"></a>MCP Resource：repo://auth-service/src/login
+<a id="__codelineno-54-6" name="__codelineno-54-6" href="#__codelineno-54-6"></a>
+<a id="__codelineno-54-7" name="__codelineno-54-7" href="#__codelineno-54-7"></a>任务拆解：我需要运行登录相关测试。
+<a id="__codelineno-54-8" name="__codelineno-54-8" href="#__codelineno-54-8"></a>MCP 工具：run_tests(pattern)
+<a id="__codelineno-54-9" name="__codelineno-54-9" href="#__codelineno-54-9"></a>
+<a id="__codelineno-54-10" name="__codelineno-54-10" href="#__codelineno-54-10"></a>任务拆解：我需要发布修复。
+<a id="__codelineno-54-11" name="__codelineno-54-11" href="#__codelineno-54-11"></a>MCP 工具：deploy_service(service, version)
+<a id="__codelineno-54-12" name="__codelineno-54-12" href="#__codelineno-54-12"></a>权限系统：requires_human_confirmation
+</code></pre></div>
+<p>没有 MCP，任务拆解很难连接真实环境。<br />
+没有任务拆解，MCP 工具只是一堆可调用能力，Agent 不知道何时调用、为何调用、调用后给谁用。</p>
+<h3 id="123">12.3 任务拆解和记忆系统<a class="headerlink" href="#123" title="Permanent link">&para;</a></h3>
+<p>任务拆解也依赖记忆。</p>
+<p>同样是“登录接口偶发 500”，如果 Agent 记得这个项目上一次线上故障来自 Redis 连接池耗尽，那么本次拆解就应该优先检查 Redis 指标、连接池配置和最近流量变化。</p>
+<p>记忆不应该只是保存聊天记录，而应该影响任务拆解：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a>历史问题 -&gt; 当前假设
+<a id="__codelineno-55-2" name="__codelineno-55-2" href="#__codelineno-55-2"></a>历史失败 -&gt; 当前风险提示
+<a id="__codelineno-55-3" name="__codelineno-55-3" href="#__codelineno-55-3"></a>历史成功流程 -&gt; 当前 Skill 复用
+<a id="__codelineno-55-4" name="__codelineno-55-4" href="#__codelineno-55-4"></a>用户偏好 -&gt; 当前输出格式
+<a id="__codelineno-55-5" name="__codelineno-55-5" href="#__codelineno-55-5"></a>项目上下文 -&gt; 当前工具选择
+</code></pre></div>
+<p>这也是长期 Agent 和一次性问答最大的不同。它不是每次都重新开始，而是把过去的经验变成当前任务拆解的一部分。</p>
+<h3 id="124">12.4 任务拆解和验证器<a class="headerlink" href="#124" title="Permanent link">&para;</a></h3>
+<p>任务拆解必须和验证器配套。</p>
+<p>如果 Planner 生成了任务，Executor 执行了任务，但没有 Verifier 检查输出是否达标，Agent 仍然可能交付错误结果。</p>
+<p>比如登录接口修复的验证器可以检查：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a>是否说明错误范围和影响面？
+<a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a>是否提供日志、trace 或复现用例作为证据？
+<a id="__codelineno-56-3" name="__codelineno-56-3" href="#__codelineno-56-3"></a>是否说明根因，而不是只列可能原因？
+<a id="__codelineno-56-4" name="__codelineno-56-4" href="#__codelineno-56-4"></a>是否只修改了必要范围？
+<a id="__codelineno-56-5" name="__codelineno-56-5" href="#__codelineno-56-5"></a>是否补充了覆盖问题的测试？
+<a id="__codelineno-56-6" name="__codelineno-56-6" href="#__codelineno-56-6"></a>是否运行了相关测试？
+<a id="__codelineno-56-7" name="__codelineno-56-7" href="#__codelineno-56-7"></a>是否说明剩余风险和回滚方式？
+</code></pre></div>
+<p>这类验证规则越清楚，任务拆解就越有方向。</p>
+<h3 id="125-agent">12.5 任务拆解和多 Agent 分配<a class="headerlink" href="#125-agent" title="Permanent link">&para;</a></h3>
+<p>当任务由多个 Agent 协作完成时，拆解还要多回答一个问题：每个子任务归谁负责，完成后交给谁。</p>
+<p>多 Agent 分配不是把同一个目标扔给多个 Agent，让它们各自发挥。更可靠的方式是先把目标拆成有边界的子任务，再为每个子任务指定 owner、输入契约、输出契约和交接对象。</p>
+<p>以登录接口 500 为例，可以这样分配：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">子任务</th>
+<th style="text-align: left;">负责 Agent</th>
+<th style="text-align: left;">接收输入</th>
+<th style="text-align: left;">交付输出</th>
+<th style="text-align: left;">交接给</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">确认错误范围</td>
+<td style="text-align: left;">Coordinator Agent</td>
+<td style="text-align: left;">用户目标、环境信息</td>
+<td style="text-align: left;">服务名、接口路径、时间窗口、权限边界</td>
+<td style="text-align: left;">SRE Agent</td>
+</tr>
+<tr>
+<td style="text-align: left;">检索日志和监控</td>
+<td style="text-align: left;">SRE Agent</td>
+<td style="text-align: left;">错误范围、trace id</td>
+<td style="text-align: left;">错误聚类、监控异常、依赖状态</td>
+<td style="text-align: left;">Code Agent</td>
+</tr>
+<tr>
+<td style="text-align: left;">阅读代码并定位根因</td>
+<td style="text-align: left;">Code Agent</td>
+<td style="text-align: left;">错误聚类、堆栈、最近变更</td>
+<td style="text-align: left;">根因假设、最小修改点</td>
+<td style="text-align: left;">Test Agent</td>
+</tr>
+<tr>
+<td style="text-align: left;">补充复现测试</td>
+<td style="text-align: left;">Test Agent</td>
+<td style="text-align: left;">根因假设、失败路径</td>
+<td style="text-align: left;">失败用例、测试覆盖说明</td>
+<td style="text-align: left;">Code Agent</td>
+</tr>
+<tr>
+<td style="text-align: left;">验证修复与风险</td>
+<td style="text-align: left;">Review Agent</td>
+<td style="text-align: left;">修改 diff、测试结果</td>
+<td style="text-align: left;">验证结论、剩余风险、上线建议</td>
+<td style="text-align: left;">Coordinator Agent</td>
+</tr>
+</tbody>
+</table>
+<p>这里最重要的是交接协议。每次交接至少要包含：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a>task_id：交接的是哪个子任务。
+<a id="__codelineno-57-2" name="__codelineno-57-2" href="#__codelineno-57-2"></a>from_agent：上游 Agent 是谁。
+<a id="__codelineno-57-3" name="__codelineno-57-3" href="#__codelineno-57-3"></a>to_agent：下游 Agent 是谁。
+<a id="__codelineno-57-4" name="__codelineno-57-4" href="#__codelineno-57-4"></a>handoff_reason：为什么交给下游。
+<a id="__codelineno-57-5" name="__codelineno-57-5" href="#__codelineno-57-5"></a>input_artifacts：日志、trace、diff、测试结果等可引用产物。
+<a id="__codelineno-57-6" name="__codelineno-57-6" href="#__codelineno-57-6"></a>expected_output：下游必须交付什么。
+<a id="__codelineno-57-7" name="__codelineno-57-7" href="#__codelineno-57-7"></a>acceptance_check：上游或协调者如何验收。
+<a id="__codelineno-57-8" name="__codelineno-57-8" href="#__codelineno-57-8"></a>fallback：下游发现输入不足时退回给谁、补什么信息。
+</code></pre></div>
+<p>如果没有交接协议，多 Agent 协作很容易变成“多个模型同时聊天”：每个 Agent 都在做一点事，但没有清晰边界，也没有稳定交付物。任务拆解的价值，就是让多 Agent 协作从角色扮演变成可调度的工程流程。</p>
+<h3 id="126-agent">12.6 任务拆解和 Agent 工程闭环<a class="headerlink" href="#126-agent" title="Permanent link">&para;</a></h3>
+<p>把这些能力放在一起，Agent 的核心链路可以写成：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a>理解目标
+<a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a>  -&gt; 拆解任务
+<a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a>  -&gt; 建立依赖关系
+<a id="__codelineno-58-4" name="__codelineno-58-4" href="#__codelineno-58-4"></a>  -&gt; 匹配工具和资源
+<a id="__codelineno-58-5" name="__codelineno-58-5" href="#__codelineno-58-5"></a>  -&gt; 执行子任务
+<a id="__codelineno-58-6" name="__codelineno-58-6" href="#__codelineno-58-6"></a>  -&gt; 验证结果
+<a id="__codelineno-58-7" name="__codelineno-58-7" href="#__codelineno-58-7"></a>  -&gt; 写入记忆和状态
+<a id="__codelineno-58-8" name="__codelineno-58-8" href="#__codelineno-58-8"></a>  -&gt; 必要时重新规划
+<a id="__codelineno-58-9" name="__codelineno-58-9" href="#__codelineno-58-9"></a>  -&gt; 交付最终结果
+</code></pre></div>
+<p>也可以进一步展开成工程架构图：</p>
+<pre class="mermaid"><code>flowchart LR
+    A[用户目标] --&gt; B[Planner 生成任务图]
+    B --&gt; C[Task Graph 记录依赖和状态]
+    C --&gt; D[Scheduler 选择可执行任务]
+    D --&gt; E[Executor 执行子任务]
+    E --&gt; F{执行方式}
+    F --&gt; G[LLM 生成]
+    F --&gt; H[MCP 工具调用]
+    F --&gt; I[人工确认]
+    G --&gt; J[Verifier 校验输出]
+    H --&gt; J
+    I --&gt; J
+    J --&gt; K{是否达标}
+    K -- 是 --&gt; L[Memory / State 写入结果]
+    K -- 否 --&gt; M[Replanner 调整任务]
+    M --&gt; C
+    L --&gt; N[继续执行或最终交付]</code></pre>
+<p>在具体框架里，LangGraph 的 <code>StateGraph</code> + <code>add_conditional_edges</code>、CrewAI 的 <code>Task</code> / <code>Process</code>，都可以看作这种结构的工程落地形态。</p>
+<p>任务拆解是 Planner 的核心能力，也是 Agent 从“会回答”走向“能完成任务”的关键桥梁。</p>
+<hr />
+<h2 id="_9">十三、总结：任务拆解的本质<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<p>最后回到开头那个问题。</p>
+<p>用户说：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a>登录接口线上偶发 500，帮我定位并修复。
+</code></pre></div>
+<p>一个不可靠的 Agent 会直接回答常见原因。<br />
+一个稍微好一点的 Agent 会列一个排查大纲。<br />
+一个真正工程化的 Agent，会把这个目标拆成可执行、可验证、可恢复的任务图。</p>
+<p>它会先确认范围，再收集证据；先建立根因假设，再交叉验证；先补复现测试，再做最小修复；最后运行测试、总结风险，并在需要发布时请求人工确认。</p>
+<p>这才是任务拆解的核心。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a>任务拆解不是把一个目标拆成很多句话，
+<a id="__codelineno-60-2" name="__codelineno-60-2" href="#__codelineno-60-2"></a>而是把一个目标拆成可执行、可验证、可恢复的行动单元。
+</code></pre></div>
+<p>可以用三句话收束全文：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a>层级分解解决“目标如何展开”。
+<a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a>依赖图解决“任务如何排序和协作”。
+<a id="__codelineno-61-3" name="__codelineno-61-3" href="#__codelineno-61-3"></a>输入输出、工具映射和验证标准解决“子任务如何真正可执行”。
+</code></pre></div>
+<p>如果说规划解决“先做什么、后做什么”，任务拆解解决的就是“每一步具体怎么做”。<br />
+如果说记忆解决“过去什么信息仍然有用”，任务拆解决定这些信息会影响哪些子任务。<br />
+如果说 MCP 解决“工具如何连接”，任务拆解决定哪个任务应该调用哪个工具。<br />
+如果说 Skill 解决“同类任务如何稳定复用”，任务拆解就是 Skill 能否可靠执行的骨架。</p>
+<p>最终，一个成熟 Agent 的能力不是来自某一次聪明回答，而是来自持续稳定的执行闭环。</p>
+<p>而任务拆解，就是这个闭环里最容易被低估、也最决定上限的一环。</p>
+<hr />
+<h2 id="_10">参考与延伸<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<ul>
+<li>《Skill设计方法论：从专家经验到可复用能力》：https://blog.csdn.net/sinat_28228747/article/details/163827530</li>
+<li>《Agent的第一性原理：从概念到范式演进》：https://blog.csdn.net/sinat_28228747/article/details/164114906</li>
+<li>《Agent规划范式进化论：从CoT到Plan-and-Execute》：https://blog.csdn.net/sinat_28228747/article/details/164120351</li>
+<li>《MCP的第一性原理：从工具调用到能力协议》：https://blog.csdn.net/sinat_28228747/article/details/163638431</li>
+<li>《Agent工程实践指南：从最小闭环到生产级系统》：https://blog.csdn.net/sinat_28228747/article/details/164014253</li>
+<li>《Agent记忆系统设计：从上下文管理到长期经验复用》：https://blog.csdn.net/sinat_28228747/article/details/164092820</li>
+<li>《AI能力工程：从Skill、MCP到Agent》：https://blog.csdn.net/sinat_28228747/article/details/164061172</li>
+<li>LangGraph Graph API： https://docs.langchain.com/oss/python/langgraph/graph-api</li>
+<li>CrewAI Tasks / Processes： https://docs.crewai.com/</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.indexes", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
