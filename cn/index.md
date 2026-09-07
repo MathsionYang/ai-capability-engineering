@@ -50,6 +50,8 @@
 ### 协作编排
 
 - [多 Agent 协作模式深度解析：层级、流水线与群组](多Agent协作模式深度解析：层级、流水线与群组.md)
+- [从MCP到A2A：解读Agent互联协议的未来](从MCP到A2A：解读Agent互联协议的未来.md)
+  讲清 A2A 如何把多个 Agent 连成可发现、可委派、可回传的协作网络，重点放在 Agent Card、Task / Message、Artifact 以及与 MCP 的配合。
 
 ### 安全治理
 
