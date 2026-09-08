@@ -21,49 +21,53 @@
 
 ### 总纲
 
-- [AI 能力工程：从 Skill、MCP 到 Agent](AI能力工程：从Skill、MCP到Agent.md)
+- [AI 能力工程：从 Skill、MCP 到 Agent](总纲/AI能力工程：从Skill、MCP到Agent.md)
 
 ### Skill 方法层
 
-- [Skill 设计方法论：从专家经验到可复用能力](Skill设计方法论：从专家经验到可复用能力.md)
-- [从 Prompt 到 Skill：专家经验的标准化封装指南](从Prompt到Skill：专家经验的标准化封装指南.md)
+- [Skill 设计方法论：从专家经验到可复用能力](基础层/Skill设计方法论：从专家经验到可复用能力.md)
+- [从 Prompt 到 Skill：专家经验的标准化封装指南](基础层/从Prompt到Skill：专家经验的标准化封装指南.md)
 
 ### MCP 能力层
 
-- [MCP 的第一性原理：从工具调用到能力协议](MCP的第一性原理：从工具调用到能力协议.md)
+- [MCP 的第一性原理：从工具调用到能力协议](基础层/MCP的第一性原理：从工具调用到能力协议.md)
 
 ### 模型效率
 
-- [模型量化与蒸馏：原理、取舍与可跑实例](模型量化与蒸馏：原理、取舍与可跑实例.md)
+- [模型量化与蒸馏：原理、取舍与可跑实例](基础层/模型量化与蒸馏：原理、取舍与可跑实例.md)
 
 ### Agent 基础
 
-- [Agent 的第一性原理：从概念到范式演进](Agent的第一性原理：从概念到范式演进.md)
-- [Agent 工程实践指南：从最小闭环到生产级系统](Agent工程实践指南：从最小闭环到生产级系统.md)
+- [Agent 的第一性原理：从概念到范式演进](基础层/Agent的第一性原理：从概念到范式演进.md)
+- [Agent 工程实践指南：从最小闭环到生产级系统](执行层/Agent工程实践指南：从最小闭环到生产级系统.md)
 
 ### 执行能力
 
-- [Agent 规划范式进化论：从 CoT 到 Plan-and-Execute](Agent规划范式进化论：从CoT到Plan-and-Execute.md)
-- [Agent 的任务拆解艺术：从目标到可执行子任务](Agent的任务拆解艺术：从目标到可执行子任务.md)
-- [Agent 记忆系统设计：从上下文管理到长期经验复用](Agent记忆系统设计：从上下文管理到长期经验复用.md)
+- [Agent 规划范式进化论：从 CoT 到 Plan-and-Execute](执行层/Agent规划范式进化论：从CoT到Plan-and-Execute.md)
+- [Agent 的任务拆解艺术：从目标到可执行子任务](执行层/Agent的任务拆解艺术：从目标到可执行子任务.md)
+- [Agent 记忆系统设计：从上下文管理到长期经验复用](执行层/Agent记忆系统设计：从上下文管理到长期经验复用.md)
 
 ### 协作编排
 
-- [多 Agent 协作模式深度解析：层级、流水线与群组](多Agent协作模式深度解析：层级、流水线与群组.md)
-- [从MCP到A2A：解读Agent互联协议的未来](从MCP到A2A：解读Agent互联协议的未来.md)
+- [多 Agent 协作模式深度解析：层级、流水线与群组](协作层/多Agent协作模式深度解析：层级、流水线与群组.md)
+- [从MCP到A2A：解读Agent互联协议的未来](协作层/从MCP到A2A：解读Agent互联协议的未来.md)
   讲清 A2A 如何把多个 Agent 连成可发现、可委派、可回传的协作网络，重点放在 Agent Card、Task / Message、Artifact 以及与 MCP 的配合。
 
 ### 安全治理
 
-- [Agent 安全护栏设计：权限控制、对抗鲁棒性与人工确认环](Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环.md)
+- [Agent 安全护栏设计：权限控制、对抗鲁棒性与人工确认环](安全层/Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环.md)
 
-### 生产治理
+### 可靠性层
 
-- [Agent 可观测性实战：从日志、Trace 到 Replay](Agent可观测性实战：从日志、Trace到Replay.md)
-- [Agent 的可观测性实战：用 Tracing 看清你的 Agent“大脑”](Agent的可观测性实战：用Tracing看清你的Agent“大脑”.md)
-- [Agent 状态管理与断点续传：Checkpointer 机制深度解析](Agent状态管理与断点续传：Checkpointer机制深度解析.md)
-- [Agent 自我纠错与验证机制设计：从自信回答到可验证执行](Agent自我纠错与验证机制设计.md)
-- [Agent 的自动化评估体系（Evals）：从单元测试到集成评测](Agent的自动化评估体系（Evals）：从单元测试到集成评测.md)
+- [Agent 可观测性实战：从日志、Trace 到 Replay](可靠性层/Agent可观测性实战：从日志、Trace到Replay.md)
+- [Agent 的可观测性实战：用 Tracing 看清你的 Agent“大脑”](可靠性层/Agent的可观测性实战：用Tracing看清你的Agent“大脑”.md)
+- [Agent 状态管理与断点续传：Checkpointer 机制深度解析](可靠性层/Agent状态管理与断点续传：Checkpointer机制深度解析.md)
+- [Agent 自我纠错与验证机制设计：从自信回答到可验证执行](可靠性层/Agent自我纠错与验证机制设计.md)
+- [Agent 的自动化评估体系（Evals）：从单元测试到集成评测](可靠性层/Agent的自动化评估体系（Evals）：从单元测试到集成评测.md)
+
+### 生产治理层
+
+- [生产治理层](生产治理层/index.md)
 
 ## 推荐阅读顺序
 
@@ -71,6 +75,11 @@
 - **开发 MCP Server**：总纲 → Skill 设计方法论 → MCP 第一性原理 → Agent 可观测性实战
 - **模型压缩**：MCP 第一性原理 → 模型量化与蒸馏
 - **生产级 Agent**：按知识链路 1 → 2 → … → 生产治理完整阅读
+
+
+## 路线文档
+
+- [路线文档](路线/index.md)
 
 ## 发布主页
 
