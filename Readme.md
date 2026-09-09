@@ -13,13 +13,22 @@
 
 ## 新增文档
 
-- [多Agent协作模式深度解析：层级、流水线与群组](cn/协作层/多Agent协作模式深度解析：层级、流水线与群组.md)
+### 阶段 0 资产入口
+
+- [知识地图与文章-能力-资产矩阵](cn/assets/knowledge-map.md)
+- [采购 / 合同审批 Agent 案例线](cn/assets/examples/procurement-agent/README.md)
+- [代码修复 Agent 案例线](cn/assets/examples/code-repair-agent/README.md)
+- [Trace Event 模板](cn/assets/schemas/trace-event.md)、[Eval Case 模板](cn/assets/schemas/eval-case.yaml)、[Checkpoint State 模板](cn/assets/schemas/checkpoint-state.yaml)、[Permission Matrix 模板](cn/assets/checklists/permission-matrix.md)
+
+这些资产对应[阶段 0 落地清单](cn/路线/后续执行Checklist：AI能力工程路线落地清单.md)，用于统一文章入口、案例、字段和验收边界。
+
+- [多 Agent 协作模式深度解析：层级、流水线与群组](cn/协作层/多Agent协作模式深度解析：层级、流水线与群组.md)
   讲清主管-执行式层级协作、数据流水线协作和群组辩论协作，重点放在交接协议、证据包和混合编排。
 
-- [从MCP到A2A：解读Agent互联协议的未来](cn/协作层/从MCP到A2A：解读Agent互联协议的未来.md)
+- [从 MCP 到 A2A：解读 Agent 互联协议的未来](cn/协作层/从MCP到A2A：解读Agent互联协议的未来.md)
   讲清 A2A 如何把多个 Agent 连成可发现、可委派、可回传的协作网络，重点放在 Agent Card、Task / Message、Artifact 和 MCP 配合。
 
-- [Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环](cn/安全层/Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环.md)
+- [Agent 安全护栏设计：权限控制、对抗鲁棒性与人工确认环](cn/安全层/Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环.md)
   讲清最小权限、提示注入防御、输出过滤和人工确认环，适合作为生产安全设计起点。
 
 整套内容以 **Skill -> MCP -> Agent** 为主线展开：
@@ -247,3 +256,6 @@ AI 能力工程总纲
     ??? 路线/
     ??? assets/
 ```
+## Stage 1 trusted execution loop
+
+The implemented reference loop is documented in [Agent trusted execution loop](cn/可靠性层/Agent可信执行闭环：从Trace、Evals到可恢复执行.md). Run the offline code-repair demo from `cn/assets/examples/code-repair-agent` with `python run_demo.py --scenario success --out ./artifacts`, then run the 30-case golden set with `python run_evals.py --cases eval_cases.yaml --out ./eval-output`. The same directory contains the Trace, Checkpoint, Validator, regression-report, fixture, and test assets.
