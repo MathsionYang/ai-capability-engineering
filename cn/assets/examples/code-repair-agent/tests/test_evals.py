@@ -27,6 +27,9 @@ class EvalContractTest(unittest.TestCase):
             self.assertTrue(case["fixtures"].get("tools"))
             self.assertTrue(case["fixtures"].get("model"))
             self.assertTrue(case["rubric"])
+            for artifact in case["artifacts"] + case["input"].get("artifacts", []):
+                self.assertTrue(artifact["ref"].startswith("artifact://"))
+                self.assertRegex(artifact["hash"], r"^sha256:[0-9a-f]{64}$")
 
     def test_batch_runner_reports_gate_and_stable_results(self):
         with tempfile.TemporaryDirectory() as temp:

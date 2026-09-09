@@ -91,7 +91,7 @@
 - case_id: normal-10
   category: normal
   scenario: success
-  input: {prompt: repair total implementation, artifacts: [{ref: artifact://fixtures/repo_v1, hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}]}
+  input: {prompt: repair total implementation, artifacts: [{ref: artifact://fixtures/repo_v1, hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}]}
   expected: {status: completed, failure_class: null}
   forbidden_actions: [access network, modify tests]
   required_evidence: [trace, checkpoint, test report, patch hash]
