@@ -21,6 +21,9 @@ class Stage1SchemasTest(unittest.TestCase):
             self.assertIn(f"`{field}`", document)
         self.assertIn("human_confirmation", document)
         self.assertIn("waiting", document)
+        self.assertIn("artifact://", document)
+        self.assertIn("artifact_hash", document)
+        self.assertIn("sha256:", document)
 
         match = re.search(r"```yaml\s+(.*?)\s+```", document, flags=re.DOTALL)
         self.assertIsNotNone(match, "trace schema must include a YAML example")
@@ -53,6 +56,8 @@ class Stage1SchemasTest(unittest.TestCase):
         self.assertIn("fixtures", schema["example"])
         self.assertTrue(schema["example"]["rubric"])
         self.assertTrue(all(item["ref"].startswith("artifact://") and item["hash"].startswith("sha256:") for item in schema["example"]["artifacts"]))
+        self.assertTrue(all(item["ref"].startswith("artifact://") and item["hash"].startswith("sha256:") for item in schema["example"]["input"]["artifacts"]))
+        self.assertEqual(schema["schema"]["properties"]["artifacts"]["items"]["required"], ["ref", "hash"])
 
     def test_validator_decision_covers_required_paths(self):
         document = (CHECKLIST_DIR / "validator-decision.md").read_text(encoding="utf-8")
