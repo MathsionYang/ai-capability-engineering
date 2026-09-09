@@ -60,11 +60,14 @@ class RunnerContractTest(unittest.TestCase):
 
     def test_duplicate_replay_does_not_apply_patch_twice(self):
         with tempfile.TemporaryDirectory() as temp:
-            result = run_scenario("duplicate-replay", Path(temp))
-            self.assertEqual(result["status"], "completed")
-            self.assertEqual(result["failure_class"], "duplicate_execution")
-            self.assertEqual(result["side_effect_count"], 1)
-            self.assertTrue(any(item["ref"].endswith("patch.diff") for item in result["artifacts"]))
+            first = run_scenario("duplicate-replay", Path(temp))
+            second = run_scenario("duplicate-replay", Path(temp))
+            self.assertEqual(first["status"], "completed")
+            self.assertEqual(first["failure_class"], "duplicate_execution")
+            self.assertEqual(first["side_effect_count"], 1)
+            self.assertEqual(second["side_effect_count"], 0)
+            self.assertEqual(second["run_id"], first["run_id"])
+            self.assertTrue(any(item["ref"].endswith("patch.diff") for item in second["artifacts"]))
 
     def test_trace_and_checkpoint_helpers_produce_files(self):
         with tempfile.TemporaryDirectory() as temp:

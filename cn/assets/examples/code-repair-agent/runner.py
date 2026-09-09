@@ -151,10 +151,37 @@ def _next_run_id(output_dir: Path, scenario: str) -> str:
     return f"{prefix}{max(numbers, default=0) + 1:03d}"
 
 
+def _cached_duplicate(output_dir: Path) -> dict[str, Any] | None:
+    root = output_dir / "artifacts"
+    candidates = sorted(root.glob("run-duplicate-replay-*")) if root.exists() else []
+    if not candidates:
+        return None
+    run_dir = candidates[-1]
+    run_id = run_dir.name
+    artifacts = []
+    for path in sorted(run_dir.iterdir()):
+        if path.name in {"patch.diff", "test-report.json", "failure.json"}:
+            content = path.read_text(encoding="utf-8")
+            artifacts.append({"ref": f"artifact://runs/{run_id}/{path.name}", "path": str(path), "hash": _sha256(content)})
+    return {
+        "run_id": run_id,
+        "status": "completed",
+        "failure_class": "duplicate_execution",
+        "artifacts": artifacts,
+        "trace_path": str(run_dir / "trace.jsonl"),
+        "checkpoint_path": str(run_dir / "checkpoint.yaml"),
+        "side_effect_count": 0,
+    }
+
+
 def run_scenario(scenario: str, output_dir: Path) -> dict[str, Any]:
     if scenario not in SCENARIOS:
         raise ValueError(f"unsupported scenario: {scenario}")
     output_dir = Path(output_dir)
+    if scenario == "duplicate-replay":
+        cached = _cached_duplicate(output_dir)
+        if cached is not None:
+            return cached
     run_id = _next_run_id(output_dir, scenario)
     run_dir = output_dir / "artifacts" / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
