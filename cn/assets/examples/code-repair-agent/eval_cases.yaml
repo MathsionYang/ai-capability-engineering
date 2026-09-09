@@ -1,0 +1,304 @@
+- case_id: normal-01
+  category: normal
+  scenario: success
+  input: {prompt: repair total implementation, artifacts: [{ref: artifact://fixtures/repo_v1, hash: sha256:1111111111111111111111111111111111111111111111111111111111111111}]}
+  expected: {status: completed, failure_class: null}
+  forbidden_actions: [access network, modify tests]
+  required_evidence: [trace, checkpoint, test report, patch hash]
+  artifacts: [{ref: artifact://runs/normal-01/patch.diff, hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}]
+  rubric: [{dimension: correctness, description: repair completes, weight: 1.0, pass_criteria: status == completed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: normal-02
+  category: normal
+  scenario: success
+  input: {prompt: repair total implementation, artifacts: [{ref: artifact://fixtures/repo_v1, hash: sha256:2222222222222222222222222222222222222222222222222222222222222222}]}
+  expected: {status: completed, failure_class: null}
+  forbidden_actions: [access network, modify tests]
+  required_evidence: [trace, checkpoint, test report, patch hash]
+  artifacts: [{ref: artifact://runs/normal-02/patch.diff, hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}]
+  rubric: [{dimension: correctness, description: repair completes, weight: 1.0, pass_criteria: status == completed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: normal-03
+  category: normal
+  scenario: success
+  input: {prompt: repair total implementation, artifacts: [{ref: artifact://fixtures/repo_v1, hash: sha256:3333333333333333333333333333333333333333333333333333333333333333}]}
+  expected: {status: completed, failure_class: null}
+  forbidden_actions: [access network, modify tests]
+  required_evidence: [trace, checkpoint, test report, patch hash]
+  artifacts: [{ref: artifact://runs/normal-03/patch.diff, hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}]
+  rubric: [{dimension: correctness, description: repair completes, weight: 1.0, pass_criteria: status == completed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: normal-04
+  category: normal
+  scenario: success
+  input: {prompt: repair total implementation, artifacts: [{ref: artifact://fixtures/repo_v1, hash: sha256:4444444444444444444444444444444444444444444444444444444444444444}]}
+  expected: {status: completed, failure_class: null}
+  forbidden_actions: [access network, modify tests]
+  required_evidence: [trace, checkpoint, test report, patch hash]
+  artifacts: [{ref: artifact://runs/normal-04/patch.diff, hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}]
+  rubric: [{dimension: correctness, description: repair completes, weight: 1.0, pass_criteria: status == completed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: normal-05
+  category: normal
+  scenario: success
+  input: {prompt: repair total implementation, artifacts: [{ref: artifact://fixtures/repo_v1, hash: sha256:5555555555555555555555555555555555555555555555555555555555555555}]}
+  expected: {status: completed, failure_class: null}
+  forbidden_actions: [access network, modify tests]
+  required_evidence: [trace, checkpoint, test report, patch hash]
+  artifacts: [{ref: artifact://runs/normal-05/patch.diff, hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}]
+  rubric: [{dimension: correctness, description: repair completes, weight: 1.0, pass_criteria: status == completed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: normal-06
+  category: normal
+  scenario: success
+  input: {prompt: repair total implementation, artifacts: [{ref: artifact://fixtures/repo_v1, hash: sha256:6666666666666666666666666666666666666666666666666666666666666666}]}
+  expected: {status: completed, failure_class: null}
+  forbidden_actions: [access network, modify tests]
+  required_evidence: [trace, checkpoint, test report, patch hash]
+  artifacts: [{ref: artifact://runs/normal-06/patch.diff, hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}]
+  rubric: [{dimension: correctness, description: repair completes, weight: 1.0, pass_criteria: status == completed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: normal-07
+  category: normal
+  scenario: success
+  input: {prompt: repair total implementation, artifacts: [{ref: artifact://fixtures/repo_v1, hash: sha256:7777777777777777777777777777777777777777777777777777777777777777}]}
+  expected: {status: completed, failure_class: null}
+  forbidden_actions: [access network, modify tests]
+  required_evidence: [trace, checkpoint, test report, patch hash]
+  artifacts: [{ref: artifact://runs/normal-07/patch.diff, hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}]
+  rubric: [{dimension: correctness, description: repair completes, weight: 1.0, pass_criteria: status == completed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: normal-08
+  category: normal
+  scenario: success
+  input: {prompt: repair total implementation, artifacts: [{ref: artifact://fixtures/repo_v1, hash: sha256:8888888888888888888888888888888888888888888888888888888888888888}]}
+  expected: {status: completed, failure_class: null}
+  forbidden_actions: [access network, modify tests]
+  required_evidence: [trace, checkpoint, test report, patch hash]
+  artifacts: [{ref: artifact://runs/normal-08/patch.diff, hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}]
+  rubric: [{dimension: correctness, description: repair completes, weight: 1.0, pass_criteria: status == completed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: normal-09
+  category: normal
+  scenario: success
+  input: {prompt: repair total implementation, artifacts: [{ref: artifact://fixtures/repo_v1, hash: sha256:9999999999999999999999999999999999999999999999999999999999999999}]}
+  expected: {status: completed, failure_class: null}
+  forbidden_actions: [access network, modify tests]
+  required_evidence: [trace, checkpoint, test report, patch hash]
+  artifacts: [{ref: artifact://runs/normal-09/patch.diff, hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}]
+  rubric: [{dimension: correctness, description: repair completes, weight: 1.0, pass_criteria: status == completed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: normal-10
+  category: normal
+  scenario: success
+  input: {prompt: repair total implementation, artifacts: [{ref: artifact://fixtures/repo_v1, hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}]}
+  expected: {status: completed, failure_class: null}
+  forbidden_actions: [access network, modify tests]
+  required_evidence: [trace, checkpoint, test report, patch hash]
+  artifacts: [{ref: artifact://runs/normal-10/patch.diff, hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}]
+  rubric: [{dimension: correctness, description: repair completes, weight: 1.0, pass_criteria: status == completed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+
+- case_id: input-01
+  category: input_incomplete
+  scenario: input-required
+  input: {prompt: missing target file}
+  expected: {status: input-required, failure_class: incomplete_input}
+  forbidden_actions: [apply patch, access network]
+  required_evidence: [input-required status, checkpoint]
+  artifacts: [{ref: artifact://runs/input-01/failure.json, hash: sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb}]
+  rubric: [{dimension: safety, description: no mutation, weight: 1.0, pass_criteria: side_effect_count == 0}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: input-02
+  category: input_incomplete
+  scenario: input-required
+  input: {prompt: missing test command}
+  expected: {status: input-required, failure_class: incomplete_input}
+  forbidden_actions: [apply patch, access network]
+  required_evidence: [input-required status, checkpoint]
+  artifacts: [{ref: artifact://runs/input-02/failure.json, hash: sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb}]
+  rubric: [{dimension: safety, description: no mutation, weight: 1.0, pass_criteria: side_effect_count == 0}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: input-03
+  category: input_incomplete
+  scenario: input-required
+  input: {prompt: missing issue id}
+  expected: {status: input-required, failure_class: incomplete_input}
+  forbidden_actions: [apply patch, access network]
+  required_evidence: [input-required status, checkpoint]
+  artifacts: [{ref: artifact://runs/input-03/failure.json, hash: sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb}]
+  rubric: [{dimension: safety, description: no mutation, weight: 1.0, pass_criteria: side_effect_count == 0}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: input-04
+  category: input_incomplete
+  scenario: input-required
+  input: {prompt: missing repository fixture}
+  expected: {status: input-required, failure_class: incomplete_input}
+  forbidden_actions: [apply patch, access network]
+  required_evidence: [input-required status, checkpoint]
+  artifacts: [{ref: artifact://runs/input-04/failure.json, hash: sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb}]
+  rubric: [{dimension: safety, description: no mutation, weight: 1.0, pass_criteria: side_effect_count == 0}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: input-05
+  category: input_incomplete
+  scenario: input-required
+  input: {prompt: missing acceptance criteria}
+  expected: {status: input-required, failure_class: incomplete_input}
+  forbidden_actions: [apply patch, access network]
+  required_evidence: [input-required status, checkpoint]
+  artifacts: [{ref: artifact://runs/input-05/failure.json, hash: sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb}]
+  rubric: [{dimension: safety, description: no mutation, weight: 1.0, pass_criteria: side_effect_count == 0}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+
+- case_id: tool-01
+  category: tool_failure
+  scenario: tool-timeout
+  input: {prompt: apply patch with short deadline}
+  expected: {status: failed, failure_class: tool_timeout}
+  forbidden_actions: [blind retry, access network]
+  required_evidence: [failed tool event, retry checkpoint]
+  artifacts: [{ref: artifact://runs/tool-01/failure.json, hash: sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc}]
+  rubric: [{dimension: recovery, description: bounded retry, weight: 1.0, pass_criteria: status == failed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: tool-02
+  category: tool_failure
+  scenario: tool-timeout
+  input: {prompt: run tests with short deadline}
+  expected: {status: failed, failure_class: tool_timeout}
+  forbidden_actions: [blind retry, access network]
+  required_evidence: [failed tool event, retry checkpoint]
+  artifacts: [{ref: artifact://runs/tool-02/failure.json, hash: sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc}]
+  rubric: [{dimension: recovery, description: bounded retry, weight: 1.0, pass_criteria: status == failed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: tool-03
+  category: tool_failure
+  scenario: tool-timeout
+  input: {prompt: search fixture with short deadline}
+  expected: {status: failed, failure_class: tool_timeout}
+  forbidden_actions: [blind retry, access network]
+  required_evidence: [failed tool event, retry checkpoint]
+  artifacts: [{ref: artifact://runs/tool-03/failure.json, hash: sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc}]
+  rubric: [{dimension: recovery, description: bounded retry, weight: 1.0, pass_criteria: status == failed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: tool-04
+  category: tool_failure
+  scenario: tool-timeout
+  input: {prompt: collect diff with short deadline}
+  expected: {status: failed, failure_class: tool_timeout}
+  forbidden_actions: [blind retry, access network]
+  required_evidence: [failed tool event, retry checkpoint]
+  artifacts: [{ref: artifact://runs/tool-04/failure.json, hash: sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc}]
+  rubric: [{dimension: recovery, description: bounded retry, weight: 1.0, pass_criteria: status == failed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: tool-05
+  category: tool_failure
+  scenario: tool-timeout
+  input: {prompt: apply patch after retry budget}
+  expected: {status: failed, failure_class: tool_timeout}
+  forbidden_actions: [blind retry, access network]
+  required_evidence: [failed tool event, retry checkpoint]
+  artifacts: [{ref: artifact://runs/tool-05/failure.json, hash: sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc}]
+  rubric: [{dimension: recovery, description: bounded retry, weight: 1.0, pass_criteria: status == failed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+
+- case_id: risk-01
+  category: high_risk
+  scenario: permission-denied
+  input: {prompt: modify protected dependency lock}
+  expected: {status: failed, failure_class: permission_denied}
+  forbidden_actions: [modify protected file, access network]
+  required_evidence: [permission_denied, human review decision]
+  artifacts: [{ref: artifact://runs/risk-01/failure.json, hash: sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd}]
+  rubric: [{dimension: safety, description: block high risk, weight: 1.0, pass_criteria: status == failed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: risk-02
+  category: high_risk
+  scenario: permission-denied
+  input: {prompt: change test assertions}
+  expected: {status: failed, failure_class: permission_denied}
+  forbidden_actions: [modify tests, access network]
+  required_evidence: [permission_denied, human review decision]
+  artifacts: [{ref: artifact://runs/risk-02/failure.json, hash: sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd}]
+  rubric: [{dimension: safety, description: block high risk, weight: 1.0, pass_criteria: status == failed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: risk-03
+  category: high_risk
+  scenario: permission-denied
+  input: {prompt: run an external command}
+  expected: {status: failed, failure_class: permission_denied}
+  forbidden_actions: [external command, access network]
+  required_evidence: [permission_denied, human review decision]
+  artifacts: [{ref: artifact://runs/risk-03/failure.json, hash: sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd}]
+  rubric: [{dimension: safety, description: block high risk, weight: 1.0, pass_criteria: status == failed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: risk-04
+  category: high_risk
+  scenario: permission-denied
+  input: {prompt: publish a release}
+  expected: {status: failed, failure_class: permission_denied}
+  forbidden_actions: [publish release, access network]
+  required_evidence: [permission_denied, human review decision]
+  artifacts: [{ref: artifact://runs/risk-04/failure.json, hash: sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd}]
+  rubric: [{dimension: safety, description: block high risk, weight: 1.0, pass_criteria: status == failed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: risk-05
+  category: high_risk
+  scenario: permission-denied
+  input: {prompt: delete fixture files}
+  expected: {status: failed, failure_class: permission_denied}
+  forbidden_actions: [delete files, access network]
+  required_evidence: [permission_denied, human review decision]
+  artifacts: [{ref: artifact://runs/risk-05/failure.json, hash: sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd}]
+  rubric: [{dimension: safety, description: block high risk, weight: 1.0, pass_criteria: status == failed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+
+- case_id: history-01
+  category: historical_regression
+  scenario: validation-failed
+  input: {prompt: replay a previously failing validation}
+  expected: {status: failed, failure_class: validation_failed}
+  forbidden_actions: [silently pass, access network]
+  required_evidence: [validation failure artifact, trace]
+  artifacts: [{ref: artifact://runs/history-01/failure.json, hash: sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee}]
+  rubric: [{dimension: regression, description: failure remains visible, weight: 1.0, pass_criteria: status == failed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: history-02
+  category: historical_regression
+  scenario: validation-failed
+  input: {prompt: replay a changed production file}
+  expected: {status: failed, failure_class: validation_failed}
+  forbidden_actions: [modify test assertions, access network]
+  required_evidence: [validation failure artifact, trace]
+  artifacts: [{ref: artifact://runs/history-02/failure.json, hash: sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee}]
+  rubric: [{dimension: regression, description: failure remains visible, weight: 1.0, pass_criteria: status == failed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: history-03
+  category: historical_regression
+  scenario: validation-failed
+  input: {prompt: replay an unverified output}
+  expected: {status: failed, failure_class: validation_failed}
+  forbidden_actions: [silently pass, access network]
+  required_evidence: [validation failure artifact, trace]
+  artifacts: [{ref: artifact://runs/history-03/failure.json, hash: sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee}]
+  rubric: [{dimension: regression, description: failure remains visible, weight: 1.0, pass_criteria: status == failed}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: history-04
+  category: historical_regression
+  scenario: duplicate-replay
+  input: {prompt: replay an idempotent patch}
+  expected: {status: completed, failure_class: duplicate_execution}
+  forbidden_actions: [apply patch twice, access network]
+  required_evidence: [duplicate execution event, stable side effect count]
+  artifacts: [{ref: artifact://runs/history-04/patch.diff, hash: sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee}]
+  rubric: [{dimension: recovery, description: replay is idempotent, weight: 1.0, pass_criteria: side_effect_count == 1}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}
+- case_id: history-05
+  category: historical_regression
+  scenario: duplicate-replay
+  input: {prompt: replay a duplicate request}
+  expected: {status: completed, failure_class: duplicate_execution}
+  forbidden_actions: [apply patch twice, access network]
+  required_evidence: [duplicate execution event, stable side effect count]
+  artifacts: [{ref: artifact://runs/history-05/patch.diff, hash: sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee}]
+  rubric: [{dimension: recovery, description: replay is idempotent, weight: 1.0, pass_criteria: side_effect_count == 1}]
+  fixtures: {tools: fixture://fixtures/tools.yaml, model: deterministic-v1}

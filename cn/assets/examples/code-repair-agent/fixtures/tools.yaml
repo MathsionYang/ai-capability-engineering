@@ -1,0 +1,5 @@
+tools:
+  search_repo: {network: false, deterministic: true}
+  run_tests: {network: false, deterministic: true}
+  apply_patch: {network: false, deterministic: true, writes: fixture-artifact-only}
+  git_diff: {network: false, deterministic: true}
