@@ -36,6 +36,8 @@ class EvalContractTest(unittest.TestCase):
             self.assertEqual(first["category_counts"], EXPECTED_COUNTS)
             self.assertEqual(first["pass_rate"], 1.0)
             self.assertEqual(first["release_decision"], "blocked")
+            self.assertTrue((Path(temp) / "first" / "regression-report.md").exists())
+            self.assertIn("Failure Attribution", (Path(temp) / "first" / "regression-report.md").read_text(encoding="utf-8"))
             self.assertEqual(first["failure_classes"], second["failure_classes"])
             self.assertEqual(first["category_counts"], second["category_counts"])
             self.assertTrue(all(item["trace_path"] for item in first["cases"]))

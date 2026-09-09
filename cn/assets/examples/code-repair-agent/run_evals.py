@@ -58,6 +58,15 @@ def run_cases(cases_path: Path, output_dir: Path, baseline_success_rate: float =
     report = {"total": len(results), "category_counts": dict(counts), "pass_rate": pass_rate, "baseline_success_rate": baseline_success_rate, "failure_classes": dict(failure_classes), "gate_reasons": reasons, "release_decision": release_decision, "cases": results}
     output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir / "regression-report.json").write_text(json.dumps(report, ensure_ascii=True, indent=2, sort_keys=True), encoding="utf-8")
+    markdown = [
+        "# Regression Report", "", "## Baseline Comparison", "",
+        "| Metric | Baseline | Current | Gate |", "| --- | ---: | ---: | --- |",
+        f"| Success rate | {baseline_success_rate:.3f} | {pass_rate:.3f} | {'pass' if 'success_rate_regression' not in reasons else 'fail'} |",
+        "", "## Failure Attribution", "", "| Case ID | Category | Failure class | Decision |", "| --- | --- | --- | --- |",
+    ]
+    markdown.extend(f"| {item['case_id']} | {item['category']} | {item['failure_class'] or '-'} | {item['decision']} |" for item in results)
+    markdown.extend(["", "## Gate Decision", "", f"- Result: {release_decision}", f"- Reasons: {', '.join(reasons) if reasons else 'none'}", "- Artifacts: trace.jsonl, checkpoint.yaml, regression-report.json"])
+    (output_dir / "regression-report.md").write_text("\n".join(markdown) + "\n", encoding="utf-8")
     return report
 
 
