@@ -1,4 +1,4 @@
-# Agent状态管理与断点续传：Checkpointer机制深度解析
+# Agent 状态管理与断点续传：Checkpointer 机制深度解析
 
 > Agent 真正昂贵的，不是跑一遍。  
 > 真正昂贵的是，跑到一半断了，然后又把前面那一半重新跑一遍。
@@ -467,6 +467,6 @@ Agent 状态管理的目标，不是把系统做得更“健忘”。
 - [LangGraph Use Time-travel](https://docs.langchain.com/oss/python/langgraph/use-time-travel)
 - [LangGraph Memory](https://docs.langchain.com/oss/python/concepts/memory)
 - [LangGraph Subgraphs](https://docs.langchain.com/oss/python/langgraph/use-subgraphs)
-- [AI能力工程：从Skill、MCP到Agent](../基础层/AI能力工程：从Skill、MCP到Agent.md)
+- [AI能力工程：从Skill、MCP到Agent](AI能力工程：从Skill、MCP到Agent.md)
 - [Agent的可观测性实战：用Tracing看清你的Agent“大脑”](Agent的可观测性实战：用Tracing看清你的Agent“大脑”.md)
 - [Agent的自动化评估体系（Evals）：从单元测试到集成评测](Agent的自动化评估体系（Evals）：从单元测试到集成评测.md)

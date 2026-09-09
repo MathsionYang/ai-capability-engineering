@@ -1,4 +1,4 @@
-# 从MCP到A2A：解读Agent互联协议的未来
+# 从 MCP 到 A2A：解读 Agent 互联协议的未来
 
 > MCP 解决的是 Agent 怎么接工具。
 > A2A 解决的是 Agent 怎么接彼此。

@@ -4,6 +4,13 @@ site/
 # 预览缓存
 .preview/
 
+# Stage 1 local CLI verification outputs
+/stage1-demo/
+/stage1-eval/
+/stage1-demo-final/
+/stage1-eval-final/
+/stage1-eval-final-summary.json
+
 # Python
 __pycache__/
 *.pyc

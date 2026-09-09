@@ -36,7 +36,7 @@ Issue 描述、仓库 fixture、目标文件或模块（可选）和目标测试
 
 ## 状态
 
-`submitted` -> `working` -> `checkpointed`（关键步骤或人工接管前） -> `validating` -> `completed`，也可能进入 `input-required`、`retrying`、`failed` 或 `cancelled`。
+`submitted` -> `working` -> `validating` -> `completed`，也可能进入 `input-required`、`retrying`、`waiting-confirmation`、`failed` 或 `cancelled`。Checkpoint 记录这些任务状态，不另造 `checkpointed` 状态。
 
 ## 风险动作
 
@@ -81,7 +81,8 @@ python run_demo.py --scenario duplicate-replay --out ./artifacts
 
 Each invocation is offline and reads only `fixtures/repo_v1`. Results are
 written below `artifacts/<run-id>/`: `trace.jsonl`, `checkpoint.yaml`,
-`test-report.json`, `patch.diff`, and (for blocked paths) `failure.json`.
+`goal.json`, `search.json`, `test-report.json`, `patch.diff`, and (for blocked
+paths) `failure.json`.
 Artifact records contain an `artifact://` reference and SHA-256 hash. The
 `duplicate-replay` scenario emits the original patch once and reuses it on the
 replay, so its side-effect count remains one.

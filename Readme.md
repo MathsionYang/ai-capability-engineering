@@ -16,19 +16,20 @@
 ### 阶段 0 资产入口
 
 - [知识地图与文章-能力-资产矩阵](cn/assets/knowledge-map.md)
+- [中文文章目录说明](cn/articles/README.md)：解释六层归属、扁平文章目录和阶段交付物状态。
 - [采购 / 合同审批 Agent 案例线](cn/assets/examples/procurement-agent/README.md)
 - [代码修复 Agent 案例线](cn/assets/examples/code-repair-agent/README.md)
 - [Trace Event 模板](cn/assets/schemas/trace-event.md)、[Eval Case 模板](cn/assets/schemas/eval-case.yaml)、[Checkpoint State 模板](cn/assets/schemas/checkpoint-state.yaml)、[Permission Matrix 模板](cn/assets/checklists/permission-matrix.md)
 
 这些资产对应[阶段 0 落地清单](cn/路线/后续执行Checklist：AI能力工程路线落地清单.md)，用于统一文章入口、案例、字段和验收边界。
 
-- [多 Agent 协作模式深度解析：层级、流水线与群组](cn/协作层/多Agent协作模式深度解析：层级、流水线与群组.md)
+- [多 Agent 协作模式深度解析：层级、流水线与群组](cn/articles/多Agent协作模式深度解析：层级、流水线与群组.md)
   讲清主管-执行式层级协作、数据流水线协作和群组辩论协作，重点放在交接协议、证据包和混合编排。
 
-- [从 MCP 到 A2A：解读 Agent 互联协议的未来](cn/协作层/从MCP到A2A：解读Agent互联协议的未来.md)
+- [从 MCP 到 A2A：解读 Agent 互联协议的未来](cn/articles/从MCP到A2A：解读Agent互联协议的未来.md)
   讲清 A2A 如何把多个 Agent 连成可发现、可委派、可回传的协作网络，重点放在 Agent Card、Task / Message、Artifact 和 MCP 配合。
 
-- [Agent 安全护栏设计：权限控制、对抗鲁棒性与人工确认环](cn/安全层/Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环.md)
+- [Agent 安全护栏设计：权限控制、对抗鲁棒性与人工确认环](cn/articles/Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环.md)
   讲清最小权限、提示注入防御、输出过滤和人工确认环，适合作为生产安全设计起点。
 
 整套内容以 **Skill -> MCP -> Agent** 为主线展开：
@@ -87,55 +88,55 @@ AI 能力工程总纲
 
 如果是第一次阅读，建议按下面顺序走：
 
-1. [《AI 能力工程：从 Skill、MCP 到 Agent》](cn/总纲/AI能力工程：从Skill、MCP到Agent.md)  
+1. [《AI 能力工程：从 Skill、MCP 到 Agent》](cn/articles/AI能力工程：从Skill、MCP到Agent.md)  
    先建立总框架，理解 Skill、MCP、Agent 分别处在哪一层。
 
-2. [《Agent 的第一性原理：从概念到范式演进》](cn/基础层/Agent的第一性原理：从概念到范式演进.md)  
+2. [《Agent 的第一性原理：从概念到范式演进》](cn/articles/Agent的第一性原理：从概念到范式演进.md)  
    再理解 Agent 的底层定义、目标闭环、能力等级和边界，避免把 Agent 简化成“模型加工具”。
 
-3. [《Agent 工程实践指南：从最小闭环到生产级系统》](cn/执行层/Agent工程实践指南：从最小闭环到生产级系统.md)  
+3. [《Agent 工程实践指南：从最小闭环到生产级系统》](cn/articles/Agent工程实践指南：从最小闭环到生产级系统.md)  
    从实践角度看一个 Agent 如何从目标、上下文、计划、工具、执行、验证走向可用系统。
 
-4. [《Skill 设计方法论：从专家经验到可复用能力》](cn/基础层/Skill设计方法论：从专家经验到可复用能力.md)  
+4. [《Skill 设计方法论：从专家经验到可复用能力》](cn/articles/Skill设计方法论：从专家经验到可复用能力.md)  
    学会把高频、复杂、有专家差距的任务沉淀成稳定流程和质量标准。
 
-5. [《从 Prompt 到 Skill：专家经验的标准化封装指南》](cn/基础层/从Prompt到Skill：专家经验的标准化封装指南.md)  
+5. [《从 Prompt 到 Skill：专家经验的标准化封装指南》](cn/articles/从Prompt到Skill：专家经验的标准化封装指南.md)  
    用一个完整案例理解如何从高频 Prompt 出发，逐步封装成带工作流、资源、脚本、测试和迭代机制的 Skill。
 
-6. [《MCP 的第一性原理：从工具调用到能力协议》](cn/基础层/MCP的第一性原理：从工具调用到能力协议.md)  
+6. [《MCP 的第一性原理：从工具调用到能力协议》](cn/articles/MCP的第一性原理：从工具调用到能力协议.md)  
    理解工具调用如何从简单函数封装，升级为带 schema、权限、错误处理、测试和运维的能力协议。
 
-7. [《模型量化与蒸馏：原理、取舍与可跑实例》](cn/基础层/模型量化与蒸馏：原理、取舍与可跑实例.md)  
+7. [《模型量化与蒸馏：原理、取舍与可跑实例》](cn/articles/模型量化与蒸馏：原理、取舍与可跑实例.md)  
    先理解模型压缩如何在精度、体积和推理成本之间取平衡。
 
-8. [《Agent 规划范式进化论：从 CoT 到 Plan-and-Execute》](cn/执行层/Agent规划范式进化论：从CoT到Plan-and-Execute.md)  
+8. [《Agent 规划范式进化论：从 CoT 到 Plan-and-Execute》](cn/articles/Agent规划范式进化论：从CoT到Plan-and-Execute.md)  
    学习 Agent 如何从内部推理走向外部行动，再走向可管理的任务计划。
 
-9. [《Agent 的任务拆解艺术：从目标到可执行子任务》](cn/执行层/Agent的任务拆解艺术：从目标到可执行子任务.md)  
+9. [《Agent 的任务拆解艺术：从目标到可执行子任务》](cn/articles/Agent的任务拆解艺术：从目标到可执行子任务.md)  
    深入理解如何把模糊目标拆成有输入、有输出、有依赖、有验证标准的子任务。
 
-10. [《Agent 记忆系统设计：从上下文管理到长期经验复用》](cn/执行层/Agent记忆系统设计：从上下文管理到长期经验复用.md)  
+10. [《Agent 记忆系统设计：从上下文管理到长期经验复用》](cn/articles/Agent记忆系统设计：从上下文管理到长期经验复用.md)  
    学习什么时候记、记什么、什么时候查、查出来怎么用，以及如何处理记忆冲突和过期。
 
-11. [《Agent 可观测性实战：从日志、Trace 到 Replay》](cn/可靠性层/Agent可观测性实战：从日志、Trace到Replay.md)  
+11. [《Agent 可观测性实战：从日志、Trace 到 Replay》](cn/articles/Agent可观测性实战：从日志、Trace到Replay.md)  
    最后进入可靠性层，理解一次 Agent 任务如何被记录、追踪、验证、回放和成本管控。
 
-12. [《多Agent协作模式深度解析：层级、流水线与群组》](cn/协作层/多Agent协作模式深度解析：层级、流水线与群组.md)  
+12. [《多Agent协作模式深度解析：层级、流水线与群组》](cn/articles/多Agent协作模式深度解析：层级、流水线与群组.md)  
    理解多个 Agent 如何按层级、流水线和群组协作，避免把复杂任务变成一团消息接力。
 
-13. [《从MCP到A2A：解读Agent互联协议的未来》](cn/协作层/从MCP到A2A：解读Agent互联协议的未来.md)  
+13. [《从MCP到A2A：解读Agent互联协议的未来》](cn/articles/从MCP到A2A：解读Agent互联协议的未来.md)  
    理解 A2A 如何把多个 Agent 连成可发现、可委派、可回传的协作网络，并与 MCP 形成前后分层。
 
-14. [《Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环》](cn/安全层/Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环.md)  
+14. [《Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环》](cn/articles/Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环.md)  
    讲清怎么把 Agent 的权限、输入、输出和高风险动作控制在可治理范围内。
 
-15. [《Agent 状态管理与断点续传：Checkpointer 机制深度解析》](cn/可靠性层/Agent状态管理与断点续传：Checkpointer机制深度解析.md)  
+15. [《Agent 状态管理与断点续传：Checkpointer 机制深度解析》](cn/articles/Agent状态管理与断点续传：Checkpointer机制深度解析.md)  
    作为状态恢复层的专项实战补充，聚焦 thread_id / cursor / state_version 持久化、Checkpointer 恢复、幂等键和 Trace 回流 Evals。
 
-16. [《Agent 自我纠错与验证机制设计：从自信回答到可验证执行》](cn/可靠性层/Agent自我纠错与验证机制设计.md)  
+16. [《Agent 自我纠错与验证机制设计：从自信回答到可验证执行》](cn/articles/Agent自我纠错与验证机制设计.md)  
    进一步理解 Validator、事实核查和 Reflection 如何让 Agent 从“看起来完成”走向“能够证明自己做对”。
 
-17. [《Agent 的自动化评估体系（Evals）：从单元测试到集成评测》](cn/可靠性层/Agent的自动化评估体系（Evals）：从单元测试到集成评测.md)
+17. [《Agent 的自动化评估体系（Evals）：从单元测试到集成评测》](cn/articles/Agent的自动化评估体系（Evals）：从单元测试到集成评测.md)
    把测试集、评分器、Trace 回流、CI/CD 门禁和版本对比组织成可持续运行的 Agent 评测体系。
 
 如果只想快速建立认知，可以读 1、2、3。  
@@ -145,22 +146,22 @@ AI 能力工程总纲
 
 ## 专项实战补充
 
-- [《Agent 的可观测性实战：用 Tracing 看清你的 Agent“大脑”》](cn/可靠性层/Agent的可观测性实战：用Tracing看清你的Agent“大脑”.md)
+- [《Agent 的可观测性实战：用 Tracing 看清你的 Agent“大脑”》](cn/articles/Agent的可观测性实战：用Tracing看清你的Agent“大脑”.md)
   作为《Agent 可观测性实战：从日志、Trace 到 Replay》的专项实战补充，聚焦 Thought / Action / Observation 链路埋点、`trace_id` 跨 Agent / MCP / Tool 贯穿、Langfuse / Phoenix 接入映射、DuckDB 轻量查询和失败 Trace 回流 Evals。
 
-- [《模型量化与蒸馏：原理、取舍与可跑实例》](cn/基础层/模型量化与蒸馏：原理、取舍与可跑实例.md)
+- [《模型量化与蒸馏：原理、取舍与可跑实例》](cn/articles/模型量化与蒸馏：原理、取舍与可跑实例.md)
   作为模型效率方向的专项补充，聚焦量化、蒸馏、推理成本和一个可直接运行的 CPU 示例。
 
-- [《多Agent协作模式深度解析：层级、流水线与群组》](cn/协作层/多Agent协作模式深度解析：层级、流水线与群组.md)
+- [《多Agent协作模式深度解析：层级、流水线与群组》](cn/articles/多Agent协作模式深度解析：层级、流水线与群组.md)
   作为多 Agent 协作方向的专项补充，聚焦主管-员工式层级协作、流水线式传递和群组辩论式收敛，帮助把复杂任务拆成更稳的编排结构。
 
-- [《Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环》](cn/安全层/Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环.md)
+- [《Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环》](cn/articles/Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环.md)
   作为安全治理方向的专项补充，聚焦最小权限、提示注入防御、输出过滤和高风险动作人工确认。
 
-- [《Agent 状态管理与断点续传：Checkpointer 机制深度解析》](cn/可靠性层/Agent状态管理与断点续传：Checkpointer机制深度解析.md)
+- [《Agent 状态管理与断点续传：Checkpointer 机制深度解析》](cn/articles/Agent状态管理与断点续传：Checkpointer机制深度解析.md)
   作为状态恢复层的专项实战补充，聚焦 `task_id`、`cursor`、`state_version`、Checkpoint 恢复、幂等键和断点续传闭环。
 
-- [《Agent 的自动化评估体系（Evals）：从单元测试到集成评测》](cn/可靠性层/Agent的自动化评估体系（Evals）：从单元测试到集成评测.md)
+- [《Agent 的自动化评估体系（Evals）：从单元测试到集成评测》](cn/articles/Agent的自动化评估体系（Evals）：从单元测试到集成评测.md)
   作为可靠性层的 Evals 专项实战补充，聚焦 Eval Case、评分器、Runner、CI/CD 门禁、历史 Trace 回归和测试集版本管理。
 
 ## 文档逐篇摘要
@@ -201,7 +202,7 @@ AI 能力工程总纲
 
 这篇文章讲 Agent 记忆系统的设计方法，区分短期记忆、长期记忆、中间层摘要和缓存，并重点回答什么时候写入、什么时候检索、检索后如何注入上下文。它还讨论记忆冲突、过期、隐私、评估指标和最小可用架构，是理解 Agent 如何跨会话复用经验的重要文章。
 
-### [模型量化与蒸馏：原理、取舍与可跑实例](cn/基础层/模型量化与蒸馏：原理、取舍与可跑实例.md)
+### [模型量化与蒸馏：原理、取舍与可跑实例](cn/articles/模型量化与蒸馏：原理、取舍与可跑实例.md)
 
 这篇文章把模型压缩拆成两条主线：量化负责把参数表示变小，蒸馏负责把 teacher 的行为迁移给 student。文章还给出一个只依赖 PyTorch 的 CPU 可跑示例，展示 teacher、student baseline、蒸馏 student 和动态量化 student 的效果对比。
 
@@ -209,15 +210,15 @@ AI 能力工程总纲
 
 这篇文章面向生产级 Agent 的可观测性建设，讲清一次任务的 Goal、Plan、Step、Tool Call、Observation、Interpretation、Validation、Output、Cost 如何形成证据链。文章给出结构化事件、Trace、Replay、指标阈值、存储开销估算和埋点代码，帮助定位目标误解、工具错误、观察误读、验证缺失和成本失控等问题。
 
-### [多Agent协作模式深度解析：层级、流水线与群组](cn/协作层/多Agent协作模式深度解析：层级、流水线与群组.md)
+### [多Agent协作模式深度解析：层级、流水线与群组](cn/articles/多Agent协作模式深度解析：层级、流水线与群组.md)
 
 这篇文章讲三种最常见的多 Agent 协作形态：层级协作、流水线协作和群组辩论。它重点说明什么时候该用哪种结构、交接协议该怎么写，以及怎样避免多 Agent 退化成消息接力或闲聊。
 
-### [从MCP到A2A：解读Agent互联协议的未来](cn/协作层/从MCP到A2A：解读Agent互联协议的未来.md)
+### [从MCP到A2A：解读Agent互联协议的未来](cn/articles/从MCP到A2A：解读Agent互联协议的未来.md)
 
 这篇文章在 MCP 之后继续往上走，讲清 Agent Card、Task / Message、Artifact 和协作网络如何把多个 Agent 连成可发现、可委派、可回传的系统，并说明它和 MCP 的分层关系。
 
-### [Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环](cn/安全层/Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环.md)
+### [Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环](cn/articles/Agent安全护栏设计：权限控制、对抗鲁棒性与人工确认环.md)
 
 这篇文章聚焦 Agent 安全治理，围绕提示注入、权限越界、敏感信息泄露和工具链污染四类风险，系统说明如何通过最小权限、上下文隔离、输出过滤和人工确认环把高风险动作关进笼子里。
 
@@ -240,22 +241,18 @@ AI 能力工程总纲
 
 ```text
 .
-??? Readme.md
-??? mkdocs.yml
-??? requirements.txt
-??? 文章-能力-资产矩阵.json
-??? 文章-能力-资产矩阵.xlsx
-??? cn/
-    ??? 总纲/
-    ??? 基础层/
-    ??? 执行层/
-    ??? 可靠性层/
-    ??? 协作层/
-    ??? 安全层/
-    ??? 生产治理层/
-    ??? 路线/
-    ??? assets/
+|-- Readme.md
+|-- mkdocs.yml
+|-- requirements.txt
+|-- cn/
+|   |-- index.md
+|   |-- articles/
+|   |-- assets/
+|   |-- 路线/
+|   `-- 生产治理层说明.md
+|-- en/
+`-- tests/
 ```
 ## Stage 1 trusted execution loop
 
-The implemented reference loop is documented in [Agent trusted execution loop](cn/可靠性层/Agent可信执行闭环：从Trace、Evals到可恢复执行.md). Run the offline code-repair demo from `cn/assets/examples/code-repair-agent` with `python run_demo.py --scenario success --out ./artifacts`, then run the 30-case golden set with `python run_evals.py --cases eval_cases.yaml --out ./eval-output`. The same directory contains the Trace, Checkpoint, Validator, regression-report, fixture, and test assets.
+The implemented reference loop is documented in [Agent trusted execution loop](cn/articles/Agent可信执行闭环：从Trace、Evals到可恢复执行.md). Run the offline code-repair demo from `cn/assets/examples/code-repair-agent` with `python run_demo.py --scenario success --out ./artifacts`, then run the 30-case golden set with `python run_evals.py --cases eval_cases.yaml --out ./eval-output`. The same directory contains the Trace, Checkpoint, Validator, regression-report, fixture, and test assets.

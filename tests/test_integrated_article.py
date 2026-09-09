@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).parents[1]
-ARTICLE = ROOT / "cn" / "可靠性层" / "Agent可信执行闭环：从Trace、Evals到可恢复执行.md"
+ARTICLE = ROOT / "cn" / "articles" / "Agent可信执行闭环：从Trace、Evals到可恢复执行.md"
 
 
 class IntegratedArticleTest(unittest.TestCase):

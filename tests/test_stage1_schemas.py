@@ -21,17 +21,23 @@ class Stage1SchemasTest(unittest.TestCase):
             self.assertIn(f"`{field}`", document)
         self.assertIn("human_confirmation", document)
         self.assertIn("waiting", document)
+        self.assertIn("artifact", document)
+        self.assertIn("span_id", document)
         self.assertIn("artifact://", document)
         self.assertIn("artifact_hash", document)
         self.assertIn("sha256:", document)
+        self.assertIn("input_hash", document)
+        self.assertIn("output_hash", document)
 
         match = re.search(r"```yaml\s+(.*?)\s+```", document, flags=re.DOTALL)
         self.assertIsNotNone(match, "trace schema must include a YAML example")
         example = yaml.safe_load(match.group(1))
         event = example["trace"]["spans"][0]["events"][0]
         self.assertTrue({"trace_id", "event_id", "task_id", "timestamp", "event_type", "name", "status"}.issubset(event))
+        self.assertIn("span_id", event)
         self.assertEqual(example["trace"]["spans"][0]["events"][0]["event_type"], "goal")
         self.assertIn("parent_event_id", example["trace"]["spans"][0]["events"][1])
+        self.assertRegex(example["trace"]["spans"][0]["events"][0]["output_hash"], r"^sha256:[0-9a-f]{64}$")
 
     def test_checkpoint_schema_has_resume_contract_and_allowed_statuses(self):
         schema = yaml.safe_load((SCHEMA_DIR / "checkpoint-state.yaml").read_text(encoding="utf-8"))
@@ -39,6 +45,7 @@ class Stage1SchemasTest(unittest.TestCase):
         self.assertTrue(required.issubset(schema["schema"]["required"]))
         self.assertEqual(schema["schema"]["properties"]["resume_policy"]["required"], ["idempotency_key"])
         self.assertEqual(schema["schema"]["properties"]["status"]["enum"], ["submitted", "working", "validating", "retrying", "input-required", "waiting-confirmation", "completed", "failed", "cancelled"])
+        self.assertEqual(schema["schema"]["properties"]["state"]["required"], ["side_effects", "side_effect_log", "retry_count", "input_artifacts", "output_artifacts"])
         self.assertIn("permission_denied", schema["schema"]["properties"]["failure"]["properties"]["code"]["enum"])
         self.assertIn("checkpoint_id", schema["example"])
 
@@ -55,8 +62,10 @@ class Stage1SchemasTest(unittest.TestCase):
         self.assertIn("required_evidence", schema["example"])
         self.assertIn("fixtures", schema["example"])
         self.assertTrue(schema["example"]["rubric"])
-        self.assertTrue(all(item["ref"].startswith("artifact://") and item["hash"].startswith("sha256:") for item in schema["example"]["artifacts"]))
+        self.assertTrue(all(item["ref"].startswith("artifact://") for item in schema["example"]["artifacts"]))
+        self.assertTrue(all(re.fullmatch(r"sha256:[0-9a-f]{64}", item["hash"]) for item in schema["example"]["artifacts"]))
         self.assertTrue(all(item["ref"].startswith("artifact://") and item["hash"].startswith("sha256:") for item in schema["example"]["input"]["artifacts"]))
+        self.assertEqual(schema["schema"]["properties"]["input"]["properties"]["artifacts"]["items"]["required"], ["ref", "hash"])
         self.assertEqual(schema["schema"]["properties"]["artifacts"]["items"]["required"], ["ref", "hash"])
 
     def test_validator_decision_covers_required_paths(self):

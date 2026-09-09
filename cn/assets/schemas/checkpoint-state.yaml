@@ -15,7 +15,16 @@ schema:
       type: object
       required: [idempotency_key]
       properties: {idempotency_key: {type: string}, replay_mode: {type: string, enum: [deterministic, guarded, manual]}, max_retries: {type: integer}}
-    state: {type: object}
+    state:
+      type: object
+      required: [side_effects, side_effect_log, retry_count, input_artifacts, output_artifacts]
+      properties:
+        side_effects: {type: integer, minimum: 0}
+        side_effect_log: {type: array, items: {type: string}}
+        retry_count: {type: integer, minimum: 0}
+        fixture: {type: string}
+        input_artifacts: {type: array, items: {type: object, required: [ref, hash], properties: {ref: {type: string, pattern: '^artifact://'}, hash: {type: string, pattern: '^sha256:[0-9a-f]{64}$'}}}}
+        output_artifacts: {type: array, items: {type: object, required: [ref, hash], properties: {ref: {type: string, pattern: '^artifact://'}, hash: {type: string, pattern: '^sha256:[0-9a-f]{64}$'}}}}
     failure:
       type: object
       required: [code, message, retryable, failed_at]
@@ -33,6 +42,13 @@ example:
   status: waiting-confirmation
   cursor: {step_id: apply_patch, step_index: 2, completed_steps: [inspect, propose]}
   resume_policy: {idempotency_key: fix-issue-42:apply_patch:1, replay_mode: deterministic, max_retries: 1}
-  state: {goal: repair failing test, input_artifacts: [], output_artifacts: [], side_effects: [], pending_confirmation: true}
+  state:
+    goal: repair failing test
+    input_artifacts: []
+    output_artifacts: []
+    side_effects: 0
+    side_effect_log: []
+    retry_count: 0
+    pending_confirmation: true
   failure: {code: null, message: null, retryable: false, failed_at: null}
   owner: {agent_id: code-repair-agent, graph_version: v1}

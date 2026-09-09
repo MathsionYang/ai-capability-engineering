@@ -12,7 +12,7 @@ import yaml
 
 EVENT_TYPES = {
     "goal", "plan", "tool_call", "observation", "validation", "checkpoint",
-    "human_confirmation", "final_output",
+    "artifact", "human_confirmation", "final_output",
 }
 EVENT_STATUSES = {"started", "succeeded", "failed", "skipped", "waiting"}
 TASK_STATUSES = {
@@ -35,11 +35,12 @@ def _sha256(value: str | bytes) -> str:
 class TraceWriter:
     """Write canonical JSONL events with stable identifiers and ordering."""
 
-    def __init__(self, path: Path, trace_id: str, task_id: str):
+    def __init__(self, path: Path, trace_id: str, task_id: str, span_id: str | None = None):
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.trace_id = trace_id
         self.task_id = task_id
+        self.span_id = span_id or f"{trace_id}-span-001"
         self._sequence = 0
         self._last_event_id: str | None = None
         self._handle = self.path.open("w", encoding="utf-8", newline="\n")
@@ -49,10 +50,14 @@ class TraceWriter:
             raise ValueError(f"unsupported event_type: {event_type}")
         if status not in EVENT_STATUSES:
             raise ValueError(f"unsupported event status: {status}")
+        protected = {"trace_id", "span_id", "event_id", "task_id", "timestamp", "sequence"}
+        if protected.intersection(fields):
+            raise ValueError("canonical trace fields cannot be overridden")
         self._sequence += 1
         event_id = f"{self.trace_id}-ev-{self._sequence:03d}"
         event = {
             "trace_id": self.trace_id,
+            "span_id": self.span_id,
             "event_id": event_id,
             "parent_event_id": fields.pop("parent_event_id", self._last_event_id),
             "task_id": self.task_id,
@@ -116,13 +121,43 @@ def git_diff() -> str:
 
 def _artifact(run_id: str, run_dir: Path, name: str, content: str) -> dict[str, str]:
     path = run_dir / name
-    path.write_text(content, encoding="utf-8")
-    digest = _sha256(content)
+    data = content.encode("utf-8")
+    path.write_bytes(data)
+    digest = _sha256(data)
     return {"ref": f"artifact://runs/{run_id}/{name}", "path": str(path), "hash": digest}
 
 
-def _checkpoint(run_id: str, store: CheckpointStore, status: str, step_id: str, index: int,
-                completed: list[str], side_effects: int, failure_class: str | None = None) -> dict[str, Any]:
+def _emit_artifact(trace: TraceWriter, artifact: dict[str, str], name: str) -> None:
+    trace.emit(
+        "artifact",
+        name,
+        "succeeded",
+        output_ref=artifact["ref"],
+        output_hash=artifact["hash"],
+        artifact_hash=artifact["hash"],
+    )
+
+
+def _checkpoint(
+    run_id: str,
+    store: CheckpointStore,
+    status: str,
+    step_id: str,
+    index: int,
+    completed: list[str],
+    side_effects: int,
+    failure_class: str | None = None,
+    *,
+    input_artifacts: list[dict[str, str]] | None = None,
+    output_artifacts: list[dict[str, str]] | None = None,
+    retry_count: int = 0,
+    side_effect_log: list[str] | None = None,
+) -> dict[str, Any]:
+    fixture_path = FIXTURE_DIR / "README.md"
+    fixture_artifact = {
+        "ref": "artifact://fixtures/repo_v1/README.md",
+        "hash": _sha256(fixture_path.read_bytes()),
+    }
     state = {
         "checkpoint_id": f"{run_id}-cp-{index:03d}",
         "task_id": run_id,
@@ -131,7 +166,14 @@ def _checkpoint(run_id: str, store: CheckpointStore, status: str, step_id: str, 
         "status": status,
         "cursor": {"step_id": step_id, "step_index": index, "completed_steps": completed},
         "resume_policy": {"idempotency_key": f"{run_id}:{step_id}:1", "replay_mode": "deterministic", "max_retries": 1},
-        "state": {"side_effects": side_effects, "fixture": "repo_v1"},
+        "state": {
+            "side_effects": side_effects,
+            "side_effect_log": list(side_effect_log or ([] if side_effects == 0 else ["apply_patch"])),
+            "retry_count": retry_count,
+            "fixture": "repo_v1",
+            "input_artifacts": list(input_artifacts or [fixture_artifact]),
+            "output_artifacts": list(output_artifacts or []),
+        },
         "failure": {"code": failure_class, "message": failure_class, "retryable": failure_class == "tool_timeout", "failed_at": FIXED_TIMESTAMP if failure_class else None},
         "owner": {"agent_id": "code-repair-agent", "graph_version": "v1"},
     }
@@ -160,9 +202,8 @@ def _cached_duplicate(output_dir: Path) -> dict[str, Any] | None:
     run_id = run_dir.name
     artifacts = []
     for path in sorted(run_dir.iterdir()):
-        if path.name in {"patch.diff", "test-report.json", "failure.json"}:
-            content = path.read_text(encoding="utf-8")
-            artifacts.append({"ref": f"artifact://runs/{run_id}/{path.name}", "path": str(path), "hash": _sha256(content)})
+        if path.name not in {"trace.jsonl", "checkpoint.yaml"}:
+            artifacts.append({"ref": f"artifact://runs/{run_id}/{path.name}", "path": str(path), "hash": _sha256(path.read_bytes())})
     return {
         "run_id": run_id,
         "status": "completed",
@@ -171,13 +212,57 @@ def _cached_duplicate(output_dir: Path) -> dict[str, Any] | None:
         "trace_path": str(run_dir / "trace.jsonl"),
         "checkpoint_path": str(run_dir / "checkpoint.yaml"),
         "side_effect_count": 0,
+        "cost": 30.0,
+        "latency_ms": 12.0,
     }
 
 
-def run_scenario(scenario: str, output_dir: Path) -> dict[str, Any]:
+def _result_from_run_dir(run_dir: Path, side_effect_count: int = 0) -> dict[str, Any]:
+    run_dir = Path(run_dir)
+    run_id = run_dir.name
+    checkpoint = CheckpointStore(run_dir / "checkpoint.yaml").load()
+    failure_class = (checkpoint.get("failure") or {}).get("code")
+    artifacts = []
+    for path in sorted(run_dir.iterdir()):
+        if path.name not in {"trace.jsonl", "checkpoint.yaml"}:
+            artifacts.append({"ref": f"artifact://runs/{run_id}/{path.name}", "path": str(path), "hash": _sha256(path.read_bytes())})
+    return {
+        "run_id": run_id,
+        "status": checkpoint.get("status", "failed"),
+        "failure_class": failure_class,
+        "artifacts": artifacts,
+        "trace_path": str(run_dir / "trace.jsonl"),
+        "checkpoint_path": str(run_dir / "checkpoint.yaml"),
+        "side_effect_count": side_effect_count,
+        "cost": 30.0,
+        "latency_ms": 12.0,
+    }
+
+
+def _final_artifact_fields(artifacts: list[dict[str, str]]) -> dict[str, str]:
+    for filename in ("test-report.json", "patch.diff", "failure.json", "goal.json"):
+        artifact = next((item for item in artifacts if item["ref"].endswith("/" + filename)), None)
+        if artifact:
+            return {
+                "output_ref": artifact["ref"],
+                "output_hash": artifact["hash"],
+                "artifact_hash": artifact["hash"],
+            }
+    return {}
+
+
+def run_scenario(scenario: str, output_dir: Path, *, resume_from: Path | None = None) -> dict[str, Any]:
     if scenario not in SCENARIOS:
         raise ValueError(f"unsupported scenario: {scenario}")
     output_dir = Path(output_dir)
+    if resume_from is not None:
+        checkpoint_path = Path(resume_from)
+        if not checkpoint_path.exists():
+            raise FileNotFoundError(checkpoint_path)
+        run_dir = checkpoint_path.parent
+        checkpoint = CheckpointStore(checkpoint_path).load()
+        if checkpoint.get("status") in {"completed", "failed", "cancelled", "input-required"}:
+            return _result_from_run_dir(run_dir)
     if scenario == "duplicate-replay":
         cached = _cached_duplicate(output_dir)
         if cached is not None:
@@ -193,50 +278,65 @@ def run_scenario(scenario: str, output_dir: Path) -> dict[str, Any]:
     artifacts: list[dict[str, str]] = []
 
     with TraceWriter(trace_path, run_id, run_id) as trace:
-        trace.emit("goal", "receive_goal", "succeeded", output_ref=f"artifact://runs/{run_id}/goal.json", output_hash=_sha256(run_id), artifact_hash=_sha256(run_id))
+        goal_artifact = _artifact(run_id, run_dir, "goal.json", json.dumps({"run_id": run_id, "scenario": scenario}, sort_keys=True))
+        artifacts.append(goal_artifact)
+        trace.emit("goal", "receive_goal", "succeeded", output_ref=goal_artifact["ref"], output_hash=goal_artifact["hash"], artifact_hash=goal_artifact["hash"])
         trace.emit("plan", "create_repair_plan", "succeeded")
+        _emit_artifact(trace, goal_artifact, "goal_artifact")
         if scenario == "input-required":
             failure_class = "incomplete_input"
-            state = _checkpoint(run_id, store, "input-required", "input_received", 1, ["goal", "plan"], 0, failure_class)
+            state = _checkpoint(run_id, store, "input-required", "input_received", 1, ["goal", "plan"], 0, failure_class, output_artifacts=artifacts)
             trace.emit("checkpoint", "save_checkpoint", "succeeded", checkpoint_id=state["checkpoint_id"])
-            artifacts.append(_artifact(run_id, run_dir, "failure.json", json.dumps({"failure_class": failure_class}, sort_keys=True)))
-            trace.emit("final_output", "await_input", "waiting", failure_class=failure_class)
+            failure_artifact = _artifact(run_id, run_dir, "failure.json", json.dumps({"failure_class": failure_class}, sort_keys=True))
+            artifacts.append(failure_artifact)
+            _emit_artifact(trace, failure_artifact, "failure_artifact")
+            trace.emit("final_output", "await_input", "waiting", failure_class=failure_class, **_final_artifact_fields(artifacts))
         elif scenario == "permission-denied":
-            trace.emit("tool_call", "apply_patch", "started", idempotency_key=f"{run_id}:apply_patch:1")
+            trace.emit("human_confirmation", "confirm_high_risk", "waiting", decision="blocked", reason="permission policy requires human review")
+            trace.emit("tool_call", "apply_patch", "skipped", idempotency_key=f"{run_id}:apply_patch:1", skip_reason="human_review_required")
             failure_class = "permission_denied"
-            trace.emit("observation", "apply_patch_result", "failed", failure_class=failure_class)
-            state = _checkpoint(run_id, store, "failed", "apply_patch", 1, ["goal", "plan"], 0, failure_class)
+            trace.emit("observation", "apply_patch_result", "failed", failure_class=failure_class, duration_ms=12, elapsed_ms=12)
+            state = _checkpoint(run_id, store, "failed", "apply_patch", 1, ["goal", "plan"], 0, failure_class, output_artifacts=artifacts)
             trace.emit("checkpoint", "save_checkpoint", "succeeded", checkpoint_id=state["checkpoint_id"])
-            artifacts.append(_artifact(run_id, run_dir, "failure.json", json.dumps({"failure_class": failure_class}, sort_keys=True)))
-            trace.emit("final_output", "stop_for_permission", "failed", failure_class=failure_class)
+            failure_artifact = _artifact(run_id, run_dir, "failure.json", json.dumps({"failure_class": failure_class}, sort_keys=True))
+            artifacts.append(failure_artifact)
+            _emit_artifact(trace, failure_artifact, "failure_artifact")
+            trace.emit("final_output", "stop_for_permission", "failed", failure_class=failure_class, **_final_artifact_fields(artifacts))
         else:
             search = search_repo()
             trace.emit("tool_call", "search_repo", "started", input_ref=f"artifact://fixtures/repo_v1/README.md", input_hash=search["fixture_hash"])
-            trace.emit("observation", "search_repo_result", "succeeded", output_ref=f"artifact://runs/{run_id}/search.json", output_hash=_sha256(json.dumps(search, sort_keys=True)), artifact_hash=_sha256(json.dumps(search, sort_keys=True)))
-            state = _checkpoint(run_id, store, "working", "apply_patch", 1, ["goal", "plan", "search_repo"], 0)
+            search_artifact = _artifact(run_id, run_dir, "search.json", json.dumps(search, sort_keys=True))
+            artifacts.append(search_artifact)
+            _emit_artifact(trace, search_artifact, "search_artifact")
+            trace.emit("observation", "search_repo_result", "succeeded", output_ref=search_artifact["ref"], output_hash=search_artifact["hash"], artifact_hash=search_artifact["hash"])
+            state = _checkpoint(run_id, store, "working", "apply_patch", 1, ["goal", "plan", "search_repo"], 0, output_artifacts=artifacts)
             trace.emit("checkpoint", "save_checkpoint", "succeeded", checkpoint_id=state["checkpoint_id"])
             trace.emit("tool_call", "apply_patch", "started", idempotency_key=f"{run_id}:apply_patch:1")
             if scenario == "tool-timeout":
                 failure_class = "tool_timeout"
-                trace.emit("observation", "apply_patch_result", "failed", failure_class=failure_class, error_code="DEADLINE_EXCEEDED")
-                retry_state = _checkpoint(run_id, store, "retrying", "apply_patch", 2, ["goal", "plan", "search_repo"], 0, failure_class)
+                trace.emit("observation", "apply_patch_result", "failed", failure_class=failure_class, error_code="DEADLINE_EXCEEDED", duration_ms=12, elapsed_ms=12)
+                retry_state = _checkpoint(run_id, store, "retrying", "apply_patch", 2, ["goal", "plan", "search_repo"], 0, failure_class, output_artifacts=artifacts, retry_count=1)
                 trace.emit("checkpoint", "save_retry_checkpoint", "succeeded", checkpoint_id=retry_state["checkpoint_id"])
                 trace.emit("tool_call", "apply_patch_retry", "started", idempotency_key=f"{run_id}:apply_patch:1", retry_count=1)
-                trace.emit("observation", "apply_patch_retry_result", "failed", failure_class=failure_class, error_code="DEADLINE_EXCEEDED")
-                _checkpoint(run_id, store, "failed", "apply_patch", 3, ["goal", "plan", "search_repo"], 0, failure_class)
+                trace.emit("observation", "apply_patch_retry_result", "failed", failure_class=failure_class, error_code="DEADLINE_EXCEEDED", duration_ms=12, elapsed_ms=12)
+                _checkpoint(run_id, store, "failed", "apply_patch", 3, ["goal", "plan", "search_repo"], 0, failure_class, output_artifacts=artifacts, retry_count=1)
                 trace.emit("checkpoint", "save_checkpoint", "succeeded", checkpoint_id=store.load()["checkpoint_id"])
-                artifacts.append(_artifact(run_id, run_dir, "failure.json", json.dumps({"failure_class": failure_class}, sort_keys=True)))
-                trace.emit("final_output", "retry_exhausted", "failed", failure_class=failure_class)
+                failure_artifact = _artifact(run_id, run_dir, "failure.json", json.dumps({"failure_class": failure_class}, sort_keys=True))
+                artifacts.append(failure_artifact)
+                _emit_artifact(trace, failure_artifact, "failure_artifact")
+                trace.emit("final_output", "retry_exhausted", "failed", failure_class=failure_class, **_final_artifact_fields(artifacts))
             else:
                 patch = apply_patch()
                 side_effects = 1
                 patch_artifact = _artifact(run_id, run_dir, "patch.diff", git_diff())
                 artifacts.append(patch_artifact)
+                _emit_artifact(trace, patch_artifact, "patch_artifact")
                 trace.emit("observation", "apply_patch_result", "succeeded", output_ref=patch_artifact["ref"], output_hash=patch_artifact["hash"], artifact_hash=patch_artifact["hash"])
                 trace.emit("tool_call", "run_tests", "started")
                 test_result = run_tests(patched=scenario != "validation-failed")
                 report_artifact = _artifact(run_id, run_dir, "test-report.json", json.dumps(test_result, sort_keys=True))
                 artifacts.append(report_artifact)
+                _emit_artifact(trace, report_artifact, "test_report_artifact")
                 trace.emit("observation", "run_tests_result", "succeeded" if test_result["exit_code"] == 0 else "failed", output_ref=report_artifact["ref"], output_hash=report_artifact["hash"], artifact_hash=report_artifact["hash"], exit_code=test_result["exit_code"])
                 trace.emit("validation", "validate_repair", "succeeded" if test_result["exit_code"] == 0 else "failed")
                 if scenario == "validation-failed":
@@ -249,12 +349,23 @@ def run_scenario(scenario: str, output_dir: Path) -> dict[str, Any]:
                     trace.emit("observation", "duplicate_result", "succeeded", output_ref=patch_artifact["ref"], output_hash=patch_artifact["hash"], artifact_hash=patch_artifact["hash"])
                 else:
                     final_status = "completed"
-                state = _checkpoint(run_id, store, final_status, "final_output", 3, ["goal", "plan", "search_repo", "apply_patch", "run_tests", "validation"], side_effects, failure_class)
+                state = _checkpoint(
+                    run_id,
+                    store,
+                    final_status,
+                    "final_output",
+                    3,
+                    ["goal", "plan", "search_repo", "apply_patch", "run_tests", "validation"],
+                    side_effects,
+                    failure_class,
+                    output_artifacts=artifacts,
+                )
                 trace.emit("checkpoint", "save_checkpoint", "succeeded", checkpoint_id=state["checkpoint_id"])
                 if failure_class:
                     failure_artifact = _artifact(run_id, run_dir, "failure.json", json.dumps({"failure_class": failure_class}, sort_keys=True))
                     artifacts.append(failure_artifact)
-                trace.emit("final_output", "return_result", "succeeded" if final_status == "completed" else "failed", failure_class=failure_class)
+                    _emit_artifact(trace, failure_artifact, "failure_artifact")
+                trace.emit("final_output", "return_result", "succeeded" if final_status == "completed" else "failed", failure_class=failure_class, **_final_artifact_fields(artifacts))
 
     return {
         "run_id": run_id,
@@ -264,4 +375,6 @@ def run_scenario(scenario: str, output_dir: Path) -> dict[str, Any]:
         "trace_path": str(trace_path),
         "checkpoint_path": str(checkpoint_path),
         "side_effect_count": side_effects,
+        "cost": 30.0,
+        "latency_ms": 12.0,
     }

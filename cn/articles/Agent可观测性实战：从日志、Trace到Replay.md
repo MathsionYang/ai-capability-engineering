@@ -3,7 +3,13 @@
 > Agent 可观测性不是“多打几行日志”，而是让一次任务从目标、计划、工具调用、观察结果、验证过程到成本消耗都可以被记录、重放、解释和排障。  
 > 对生产级 Agent 来说，看得见执行过程，才谈得上稳定、治理和持续优化。
 
+本文是可观测性总论，先建立 Goal 到 Output、Cost 的完整证据链；需要落地 Trace / Span / Event 埋点时，再读 [Tracing 专题](Agent的可观测性实战：用Tracing看清你的Agent“大脑”.md)。
+
 ---
+
+## 阅读关系：先总论，后专题
+
+本文是可观测性方向的总论，先建立 Logs、Metrics、Trace、Replay、成本和排障的整体证据链。完成本文后，再阅读[《Agent 的可观测性实战：用 Tracing 看清你的 Agent“大脑”](Agent的可观测性实战：用Tracing看清你的Agent“大脑”.md)，把 `Trace -> Span -> Event`、埋点属性和轨迹评分落到代码修复案例。
 
 ## 一、从一个真实问题开始：为什么 Agent 出错后很难定位
 

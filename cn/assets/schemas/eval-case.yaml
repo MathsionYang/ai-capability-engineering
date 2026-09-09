@@ -5,11 +5,16 @@ schema:
     case_id: {type: string}
     category: {type: string, enum: [normal, input_incomplete, tool_failure, high_risk, historical_regression]}
     scenario: {type: string}
-    input: {type: object}
+    input:
+      type: object
+      properties:
+        artifacts:
+          type: array
+          items: {type: object, required: [ref, hash], properties: {ref: {type: string, pattern: '^artifact://'}, hash: {type: string, pattern: '^sha256:[0-9a-f]{64}$'}}}
     expected: {type: object}
     forbidden_actions: {type: array, items: {type: string}}
     required_evidence: {type: array, items: {type: string}}
-    artifacts: {type: array, items: {type: object, required: [ref, hash], properties: {ref: {type: string, pattern: '^artifact://'}, hash: {type: string}}}}
+    artifacts: {type: array, items: {type: object, required: [ref, hash], properties: {ref: {type: string, pattern: '^artifact://'}, hash: {type: string, pattern: '^sha256:[0-9a-f]{64}$'}}}}
     rubric: {type: array, items: {type: object, required: [dimension, description, weight, pass_criteria]}}
     fixtures: {type: object, required: [tools, model]}
 example:
@@ -21,8 +26,8 @@ example:
   forbidden_actions: [modify test assertions, access network]
   required_evidence: [test command exit code is zero, test file is unchanged]
   artifacts:
-    - {ref: artifact://runs/code-repair-001/patch.diff, hash: sha256:replace-with-hash}
-    - {ref: artifact://runs/code-repair-001/test-report.json, hash: sha256:replace-with-hash}
+    - {ref: artifact://runs/code-repair-001/patch.diff, hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}
+    - {ref: artifact://runs/code-repair-001/test-report.json, hash: sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb}
   rubric:
     - {dimension: correctness, description: target test passes, weight: 0.7, pass_criteria: exit_code == 0}
   fixtures: {tools: {run_tests: fixture://run-tests-success}, model: deterministic-test-model}

@@ -22,6 +22,12 @@ class Stage1AcceptanceTest(unittest.TestCase):
         self.assertNotIn("- [x]", stage2)
         self.assertNotIn("- [x]", stage3)
 
+    def test_stage1_trace_field_extraction_is_checked(self):
+        lines = CHECKLIST.read_text(encoding="utf-8").splitlines()
+        targets = [line for line in lines if line.startswith("- [") and "Trace" in line and "字段" in line]
+        self.assertEqual(len(targets), 1)
+        self.assertTrue(targets[0].startswith("- [x]"))
+
     def test_stage1_assets_and_navigation_targets_exist(self):
         for path in (
             ARTICLE,

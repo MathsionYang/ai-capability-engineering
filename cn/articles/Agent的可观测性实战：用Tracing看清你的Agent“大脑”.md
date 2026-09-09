@@ -3,6 +3,8 @@
 > 这篇不再重复解释“Agent 可观测性是什么”。
 > 它只回答一个更具体的问题：当 Agent 在线上跑偏、变慢、变贵时，如何用 Tracing 把 Thought / Action / Observation 链路拆开，看清问题到底发生在哪一步。
 
+本文是可观测性总论之后的 Trace 专题，聚焦 Trace / Span / Event 的落地与排障；首次了解范围、Replay 和治理关系，请先读 [可观测性总论](Agent可观测性实战：从日志、Trace到Replay.md)。
+
 ---
 
 ## 一、从一次线上 Trace 事故开始
@@ -54,6 +56,8 @@ Tracing 不是记录 Agent 做过什么，而是记录 Agent 为什么走到这�
 ---
 
 ## 二、这篇文章和已有可观测性文章的分工
+
+阅读顺序建议是：先读[《Agent 可观测性实战：从日志、Trace 到 Replay》](Agent可观测性实战：从日志、Trace到Replay.md)掌握总论，再读本文完成 Tracing 专题。本文不重复总论中的 Replay 和指标体系，而是把统一事件模型、`trace_id` 贯穿和埋点实现具体化。
 
 已有文章《Agent 可观测性实战：从日志、Trace 到 Replay》第二章“Agent 可观测性的第一性原理：把执行过程变成证据链”、第五章“Trace：把分散事件串成一条执行链”和第六章“Replay：让一次失败可以被重放”，讲的是总框架：
 
