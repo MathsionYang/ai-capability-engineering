@@ -1,0 +1,38 @@
+schema:
+  type: object
+  required: [checkpoint_id, task_id, schema_version, created_at, status, cursor, resume_policy, state, failure, owner]
+  properties:
+    checkpoint_id: {type: string}
+    task_id: {type: string}
+    schema_version: {type: integer}
+    created_at: {type: string, format: date-time}
+    status: {type: string, enum: [pending, running, waiting_confirmation, succeeded, failed, cancelled]}
+    cursor:
+      type: object
+      required: [step_id, step_index, completed_steps]
+      properties: {step_id: {type: string}, step_index: {type: integer}, completed_steps: {type: array, items: {type: string}}}
+    resume_policy:
+      type: object
+      required: [idempotency_key]
+      properties: {idempotency_key: {type: string}, replay_mode: {type: string, enum: [deterministic, guarded, manual]}, max_retries: {type: integer}}
+    state: {type: object}
+    failure:
+      type: object
+      required: [code, message, retryable, failed_at]
+      properties:
+        code: {type: [string, "null"], enum: [incomplete_input, tool_timeout, validation_failed, permission_denied, duplicate_execution, "null"]}
+        message: {type: [string, "null"]}
+        retryable: {type: boolean}
+        failed_at: {type: [string, "null"]}
+    owner: {type: object, required: [agent_id, graph_version], properties: {agent_id: {type: string}, graph_version: {type: string}}}
+example:
+  checkpoint_id: cp_fix_042_002
+  task_id: fix-issue-42
+  schema_version: 1
+  created_at: 2026-09-09T10:15:00+08:00
+  status: waiting_confirmation
+  cursor: {step_id: apply_patch, step_index: 2, completed_steps: [inspect, propose]}
+  resume_policy: {idempotency_key: fix-issue-42:apply_patch:1, replay_mode: deterministic, max_retries: 1}
+  state: {goal: repair failing test, input_artifacts: [], output_artifacts: [], side_effects: [], pending_confirmation: true}
+  failure: {code: null, message: null, retryable: false, failed_at: null}
+  owner: {agent_id: code-repair-agent, graph_version: v1}

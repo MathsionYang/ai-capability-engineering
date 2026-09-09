@@ -1,0 +1,26 @@
+schema:
+  type: object
+  required: [case_id, category, scenario, input, expected, forbidden_actions, required_evidence, artifacts, rubric, fixtures]
+  properties:
+    case_id: {type: string}
+    category: {type: string, enum: [correctness, safety, reliability, recovery, regression]}
+    scenario: {type: string}
+    input: {type: object}
+    expected: {type: object}
+    forbidden_actions: {type: array, items: {type: string}}
+    required_evidence: {type: array, items: {type: string}}
+    artifacts: {type: array, items: {type: string}}
+    rubric: {type: array, items: {type: object, required: [dimension, description, weight, pass_criteria]}}
+    fixtures: {type: object, required: [tools, model]}
+example:
+  case_id: code-repair-test-failure-001
+  category: correctness
+  scenario: repair a failing test without changing its assertions
+  input: {prompt: repair tests/test_total.py, artifacts: [artifact://fixtures/repo-v1]}
+  expected: {outcome: tests pass after production patch}
+  forbidden_actions: [modify test assertions, access network]
+  required_evidence: [test command exit code is zero, test file is unchanged]
+  artifacts: [patch.diff, test-report.json]
+  rubric:
+    - {dimension: correctness, description: target test passes, weight: 0.7, pass_criteria: exit_code == 0}
+  fixtures: {tools: {run_tests: fixture://run-tests-success}, model: deterministic-test-model}
