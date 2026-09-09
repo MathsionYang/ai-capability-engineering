@@ -129,3 +129,4 @@ nav:
       - Validator decision: 'assets/checklists/validator-decision.md'
       - Regression report: 'assets/checklists/regression-report.md'
       - Code repair Runner: 'assets/examples/code-repair-agent/README.md'
+      - Code repair fixture: 'assets/examples/code-repair-agent/fixtures/repo_v1/README.md'
