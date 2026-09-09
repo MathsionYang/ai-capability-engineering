@@ -1,0 +1,22 @@
+/* AI 能力工程站点自定义样式 */
+
+/* Mermaid 图居中并留白 */
+.mermaid {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+/* 正文图片圆角 */
+.md-content img {
+  border-radius: 6px;
+}
+
+/* 表格更紧凑 */
+.md-typeset table:not([class]) {
+  font-size: 0.8rem;
+}
+
+/* 首页英雄块 */
+.md-content .md-typeset h1 {
+  margin-top: 0.5rem;
+}
