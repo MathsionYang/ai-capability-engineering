@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">Minimal Agent Loop</title>
+  <desc id="desc">A minimal agent observes, plans, acts, evaluates, and updates memory in a closed loop.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+    <style>
+      .node{fill:#f8fafc;stroke:#334155;stroke-width:2;rx:18;ry:18}.core{fill:#dbeafe;stroke:#1d4ed8}.check{fill:#dcfce7;stroke:#15803d}.act{fill:#ffedd5;stroke:#c2410c}.memory{fill:#f1f5f9;stroke:#64748b}
+      .title{font:700 22px Arial,sans-serif;fill:#0f172a}.label{font:700 18px Arial,sans-serif;fill:#0f172a}.small{font:14px Arial,sans-serif;fill:#475569}.line{stroke:#2563eb;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="960" height="420" fill="#ffffff"/>
+  <text x="480" y="42" text-anchor="middle" class="title">Agent Minimal Loop</text>
+  <rect x="390" y="76" width="180" height="70" class="node core"/><text x="480" y="119" text-anchor="middle" class="label">Observe</text>
+  <rect x="655" y="176" width="180" height="70" class="node core"/><text x="745" y="219" text-anchor="middle" class="label">Plan</text>
+  <rect x="500" y="300" width="180" height="70" class="node act"/><text x="590" y="343" text-anchor="middle" class="label">Act</text>
+  <rect x="280" y="300" width="180" height="70" class="node check"/><text x="370" y="343" text-anchor="middle" class="label">Evaluate</text>
+  <rect x="125" y="176" width="180" height="70" class="node memory"/><text x="215" y="204" text-anchor="middle" class="label">Memory</text><text x="215" y="228" text-anchor="middle" class="small">state and context</text>
+  <path d="M570 112 C650 125 705 145 740 176" class="line"/>
+  <path d="M720 246 C690 282 655 305 680 335" class="line"/>
+  <path d="M500 335 L460 335" class="line"/>
+  <path d="M330 304 C275 280 240 250 220 246" class="line"/>
+  <path d="M255 176 C300 125 345 112 390 112" class="line"/>
+</svg>

@@ -1,0 +1,3058 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="构建可复用、可调用、可验证的 AI 执行系统 —— Skill · MCP · Agent 三层知识链路">
+      
+      
+        <meta name="author" content="ai-capability-engineering">
+      
+      
+      
+        <link rel="prev" href="../../%E8%B7%AF%E7%BA%BF/AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%E4%BB%98%E8%B4%B9%E4%B8%93%E6%A0%8F%E5%A4%A7%E7%BA%B2%EF%BC%88%E6%A0%87%E9%A2%98%E7%89%88%EF%BC%89/">
+      
+      
+        <link rel="next" href="../../assets/checklists/validator-decision/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Agent 可信执行闭环：从 Trace、Evals 到可恢复执行 - AI 能力工程：从 Skill、MCP 到 Agent</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/custom.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agent-traceevals" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="AI 能力工程：从 Skill、MCP 到 Agent" class="md-header__button md-logo" aria-label="AI 能力工程：从 Skill、MCP 到 Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.41 4 16 6.41v.18L18.41 9H22v2h-4.41L16 9.41V12h-1a2 2 0 0 1-2-2V7.5H9.86c-.09.37-.24.72-.44 1.05L15.18 19H20a2 2 0 0 1 2 2v1H2v-1a2 2 0 0 1 2-2h6.61l-4.69-8.5a4.006 4.006 0 0 1-3.81-3A4 4 0 0 1 5 2.63c2.13-.55 4.31.73 4.86 2.87H13V3a2 2 0 0 1 2-2h1v2.59L17.59 2H22v2zM6 4.5a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AI 能力工程：从 Skill、MCP 到 Agent
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Agent 可信执行闭环：从 Trace、Evals 到可恢复执行
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../" class="md-tabs__link">
+        
+  
+  
+    
+  
+  文章目录说明
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%EF%BC%9A%E4%BB%8ESkill%E3%80%81MCP%E5%88%B0Agent/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  总纲
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E6%A6%82%E5%BF%B5%E5%88%B0%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  基础层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E6%9C%80%E5%B0%8F%E9%97%AD%E7%8E%AF%E5%88%B0%E7%94%9F%E4%BA%A7%E7%BA%A7%E7%B3%BB%E7%BB%9F/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  执行层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E4%BB%8E%E6%97%A5%E5%BF%97%E3%80%81Trace%E5%88%B0Replay/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  可靠性层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../%E4%BB%8EMCP%E5%88%B0A2A%EF%BC%9A%E8%A7%A3%E8%AF%BBAgent%E4%BA%92%E8%81%94%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%9C%AA%E6%9D%A5/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  协作层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  安全层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../%E7%94%9F%E4%BA%A7%E6%B2%BB%E7%90%86%E5%B1%82%E8%AF%B4%E6%98%8E/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  生产治理层
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../assets/knowledge-map/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  阶段 0 资产
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../%E8%B7%AF%E7%BA%BF/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  路线
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Stage 1 trusted execution
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="AI 能力工程：从 Skill、MCP 到 Agent" class="md-nav__button md-logo" aria-label="AI 能力工程：从 Skill、MCP 到 Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.41 4 16 6.41v.18L18.41 9H22v2h-4.41L16 9.41V12h-1a2 2 0 0 1-2-2V7.5H9.86c-.09.37-.24.72-.44 1.05L15.18 19H20a2 2 0 0 1 2 2v1H2v-1a2 2 0 0 1 2-2h6.61l-4.69-8.5a4.006 4.006 0 0 1-3.81-3A4 4 0 0 1 5 2.63c2.13-.55 4.31.73 4.86 2.87H13V3a2 2 0 0 1 2-2h1v2.59L17.59 2H22v2zM6 4.5a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2"/></svg>
+
+    </a>
+    AI 能力工程：从 Skill、MCP 到 Agent
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    文章目录说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    总纲
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    总纲
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%EF%BC%9A%E4%BB%8ESkill%E3%80%81MCP%E5%88%B0Agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 能力工程：从 Skill、MCP 到 Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E6%A6%82%E5%BF%B5%E5%88%B0%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的第一性原理：从概念到范式演进
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MCP%E7%9A%84%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%88%B0%E8%83%BD%E5%8A%9B%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP 的第一性原理：从工具调用到能力协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Skill%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA%EF%BC%9A%E4%BB%8E%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E5%88%B0%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skill 设计方法论：从专家经验到可复用能力
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E4%BB%8EPrompt%E5%88%B0Skill%EF%BC%9A%E4%B8%93%E5%AE%B6%E7%BB%8F%E9%AA%8C%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96%E5%B0%81%E8%A3%85%E6%8C%87%E5%8D%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从 Prompt 到 Skill：专家经验的标准化封装指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%8E%E8%92%B8%E9%A6%8F%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%8F%96%E8%88%8D%E4%B8%8E%E5%8F%AF%E8%B7%91%E5%AE%9E%E4%BE%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模型量化与蒸馏：原理、取舍与可跑实例
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    执行层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    执行层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E6%9C%80%E5%B0%8F%E9%97%AD%E7%8E%AF%E5%88%B0%E7%94%9F%E4%BA%A7%E7%BA%A7%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 工程实践指南：从最小闭环到生产级系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E4%BB%BB%E5%8A%A1%E6%8B%86%E8%A7%A3%E8%89%BA%E6%9C%AF%EF%BC%9A%E4%BB%8E%E7%9B%AE%E6%A0%87%E5%88%B0%E5%8F%AF%E6%89%A7%E8%A1%8C%E5%AD%90%E4%BB%BB%E5%8A%A1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的任务拆解艺术：从目标到可执行子任务
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%A7%84%E5%88%92%E8%8C%83%E5%BC%8F%E8%BF%9B%E5%8C%96%E8%AE%BA%EF%BC%9A%E4%BB%8ECoT%E5%88%B0Plan-and-Execute/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 规划范式进化论：从 CoT 到 Plan-and-Execute
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E4%BB%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%88%B0%E9%95%BF%E6%9C%9F%E7%BB%8F%E9%AA%8C%E5%A4%8D%E7%94%A8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 记忆系统设计：从上下文管理到长期经验复用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    可靠性层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    可靠性层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E4%BB%8E%E6%97%A5%E5%BF%97%E3%80%81Trace%E5%88%B0Replay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 可观测性实战：从日志、Trace 到 Replay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E4%B8%8E%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%EF%BC%9ACheckpointer%E6%9C%BA%E5%88%B6%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 状态管理与断点续传：Checkpointer 机制深度解析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E7%94%A8Tracing%E7%9C%8B%E6%B8%85%E4%BD%A0%E7%9A%84Agent%E2%80%9C%E5%A4%A7%E8%84%91%E2%80%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的可观测性实战：用 Tracing 看清你的 Agent“大脑”
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E8%AF%84%E4%BC%B0%E4%BD%93%E7%B3%BB%EF%BC%88Evals%EF%BC%89%EF%BC%9A%E4%BB%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%88%B0%E9%9B%86%E6%88%90%E8%AF%84%E6%B5%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 的自动化评估体系（Evals）：从单元测试到集成评测
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E8%87%AA%E6%88%91%E7%BA%A0%E9%94%99%E4%B8%8E%E9%AA%8C%E8%AF%81%E6%9C%BA%E5%88%B6%E8%AE%BE%E8%AE%A1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 自我纠错与验证机制设计：从自信回答到可验证执行
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 可信执行闭环：从 Trace、Evals 到可恢复执行
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 可信执行闭环：从 Trace、Evals 到可恢复执行
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        目标与边界
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、统一执行模型
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、可运行案例：代码修复 Agent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、Trace：把执行变成证据链
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、Checkpoint：恢复状态，不重复副作用
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、Validator：让失败改变行为
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、四类失败恢复
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、四类失败恢复">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 输入不完整
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 工具超时
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 验证失败
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 权限拒绝与重复执行
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、Evals 与发布门禁
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、从一次运行到发布的闭环
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、复用清单
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        结语
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    协作层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    协作层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E4%BB%8EMCP%E5%88%B0A2A%EF%BC%9A%E8%A7%A3%E8%AF%BBAgent%E4%BA%92%E8%81%94%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%9C%AA%E6%9D%A5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从 MCP 到 A2A：解读 Agent 互联协议的未来
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E5%A4%9AAgent%E5%8D%8F%E4%BD%9C%E6%A8%A1%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B1%82%E7%BA%A7%E3%80%81%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E7%BE%A4%E7%BB%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    多 Agent 协作模式深度解析：层级、流水线与群组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    安全层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    安全层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Agent%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E3%80%81%E5%AF%B9%E6%8A%97%E9%B2%81%E6%A3%92%E6%80%A7%E4%B8%8E%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E7%8E%AF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 安全护栏设计：权限控制、对抗鲁棒性与人工确认环
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    生产治理层
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    生产治理层
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%E7%94%9F%E4%BA%A7%E6%B2%BB%E7%90%86%E5%B1%82%E8%AF%B4%E6%98%8E/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    生产治理层说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../assets/examples/procurement-agent/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    阶段 0 资产
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    阶段 0 资产
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assets/knowledge-map/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    知识地图与文章-能力-资产矩阵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assets/examples/code-repair-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    代码修复 Agent 案例线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assets/schemas/trace-event/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trace Event 模板
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assets/schemas/eval-case.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Eval Case 模板
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assets/schemas/checkpoint-state.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Checkpoint State 模板
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assets/checklists/permission-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Permission Matrix 模板
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../%E8%B7%AF%E7%BA%BF/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    路线
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_11" id="__nav_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    路线
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%E8%B7%AF%E7%BA%BF/%E5%90%8E%E7%BB%AD%E6%96%B9%E5%90%91%E4%B8%8E%E5%AE%9E%E6%96%BD%E8%B7%AF%E7%BA%BF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    后续方向与实施路线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%E8%B7%AF%E7%BA%BF/%E5%90%8E%E7%BB%AD%E6%89%A7%E8%A1%8CChecklist%EF%BC%9AAI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%E8%B7%AF%E7%BA%BF%E8%90%BD%E5%9C%B0%E6%B8%85%E5%8D%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    后续执行 Checklist
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../路线/后续行文.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    后续行文
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%E8%B7%AF%E7%BA%BF/AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%E4%BB%98%E8%B4%B9%E4%B8%93%E6%A0%8F%E8%A7%84%E5%88%92%E4%B8%8E%E5%90%8E%E7%BB%AD%E8%A1%8C%E6%96%87%E8%B7%AF%E7%BA%BF/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付费专栏规划与后续行文路线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%E8%B7%AF%E7%BA%BF/AI%E8%83%BD%E5%8A%9B%E5%B7%A5%E7%A8%8B%E4%BB%98%E8%B4%B9%E4%B8%93%E6%A0%8F%E5%A4%A7%E7%BA%B2%EF%BC%88%E6%A0%87%E9%A2%98%E7%89%88%EF%BC%89/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付费专栏大纲
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../路线/原文链接.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    原文链接
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../assets/examples/code-repair-agent/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 trusted execution
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stage 1 trusted execution
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 可信执行闭环：从 Trace、Evals 到可恢复执行
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent 可信执行闭环：从 Trace、Evals 到可恢复执行
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        目标与边界
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、统一执行模型
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、可运行案例：代码修复 Agent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、Trace：把执行变成证据链
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、Checkpoint：恢复状态，不重复副作用
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、Validator：让失败改变行为
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、四类失败恢复
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、四类失败恢复">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 输入不完整
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 工具超时
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 验证失败
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 权限拒绝与重复执行
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、Evals 与发布门禁
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、从一次运行到发布的闭环
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、复用清单
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        结语
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assets/checklists/validator-decision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Validator decision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assets/checklists/regression-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Regression report
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assets/examples/code-repair-agent/fixtures/repo_v1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code repair fixture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="agent-traceevals">Agent 可信执行闭环：从 Trace、Evals 到可恢复执行<a class="headerlink" href="#agent-traceevals" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Agent 的“完成”不能只由最终文本证明。可信执行需要一条可审计的证据链：目标如何理解、计划如何推进、工具做了什么、结果如何验证、失败从哪里恢复，以及发布前是否通过回归门禁。</p>
+</blockquote>
+<h2 id="_1">目标与边界<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>本章把可靠性层的五个主题整合成一条可运行路径：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Goal -&gt; Plan -&gt; Tool Call -&gt; Observation -&gt; Validation
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>     -&gt; Checkpoint -&gt; Artifact -&gt; Evals -&gt; Replay
+</code></pre></div>
+<p>参考实现是离线的代码修复 Agent。它只读取固定 fixture，不访问网络，不修改真实仓库；所有过程证据写入运行目录。本文聚焦阶段 1 的可信执行闭环，不展开多 Agent Handoff、A2A、Context Engineering 或企业平台治理。</p>
+<h2 id="_2">一、统一执行模型<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>一次任务由七类执行动作组成。</p>
+<table>
+<thead>
+<tr>
+<th>动作</th>
+<th>要回答的问题</th>
+<th>主要证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Goal</td>
+<td>用户要完成什么？</td>
+<td>目标 Artifact、约束</td>
+</tr>
+<tr>
+<td>Plan</td>
+<td>准备按什么顺序完成？</td>
+<td>计划事件、步骤游标</td>
+</tr>
+<tr>
+<td>Tool Call</td>
+<td>调用了什么工具，是否允许？</td>
+<td>工具名、幂等键、边界</td>
+</tr>
+<tr>
+<td>Observation</td>
+<td>工具实际返回了什么？</td>
+<td>结果 Artifact 和 hash</td>
+</tr>
+<tr>
+<td>Validation</td>
+<td>结果是否满足成功条件？</td>
+<td>测试退出码、验证事件</td>
+</tr>
+<tr>
+<td>Checkpoint</td>
+<td>中断后从哪里继续？</td>
+<td>状态、游标、重试计数</td>
+</tr>
+<tr>
+<td>Artifact</td>
+<td>哪些结果可审计、可回放？</td>
+<td><code>artifact://</code> URI、SHA-256</td>
+</tr>
+</tbody>
+</table>
+<p>事件层级固定为 <code>Trace -&gt; Span -&gt; Event</code>。每个 Event 至少包含 <code>trace_id</code>、<code>span_id</code>、<code>event_id</code>、<code>task_id</code>、<code>timestamp</code>、<code>sequence</code>、<code>event_type</code>、<code>name</code> 和 <code>status</code>，通过 <code>parent_event_id</code> 串起父子关系。大对象不直接塞进日志，而是用 <code>artifact://</code> 引用；引用必须同时带匹配的 SHA-256 hash。敏感凭据、令牌和个人数据在持久化前必须脱敏。</p>
+<p>统一契约见：</p>
+<ul>
+<li><a href="../../assets/schemas/trace-event/">Trace Event Schema</a></li>
+<li><a href="../../assets/schemas/checkpoint-state.yaml">Checkpoint State Schema</a></li>
+<li><a href="../../assets/schemas/eval-case.yaml">Eval Case Schema</a></li>
+<li><a href="../../assets/checklists/validator-decision/">Validator 决策表</a></li>
+<li><a href="../../assets/checklists/regression-report/">Regression Report 模板</a></li>
+</ul>
+<h2 id="agent">二、可运行案例：代码修复 Agent<a class="headerlink" href="#agent" title="Permanent link">&para;</a></h2>
+<p>案例位于 <a href="../../assets/examples/code-repair-agent/">代码修复 Agent README</a>。Runner 固定提供四个离线工具：<code>search_repo</code>、<code>run_tests</code>、<code>apply_patch</code> 和 <code>git_diff</code>。本 fixture 的工具只返回生产代码路径；通用 Runner 仍需在工具层实施路径 containment 和权限策略，具体边界可参考 <a href="../../assets/checklists/permission-matrix/">权限矩阵</a>。</p>
+<p>从案例目录运行六条确定性场景：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cd cn/assets/examples/code-repair-agent
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>python run_demo.py --scenario success --out ./stage1-output
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>python run_demo.py --scenario input-required --out ./stage1-output
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>python run_demo.py --scenario tool-timeout --out ./stage1-output
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>python run_demo.py --scenario validation-failed --out ./stage1-output
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>python run_demo.py --scenario permission-denied --out ./stage1-output
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>python run_demo.py --scenario duplicate-replay --out ./stage1-output
+</code></pre></div>
+<p><code>--out</code> 是输出根目录，Runner 在其下创建 <code>artifacts/run-&lt;scenario&gt;-&lt;n&gt;/</code>；以上命令的实际目录是 <code>./stage1-output/artifacts/run-&lt;scenario&gt;-&lt;n&gt;/</code>。一次运行通常包含：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>trace.jsonl       # 按 sequence 排序的 Trace Event
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>checkpoint.yaml   # 状态、游标、幂等键和失败原因
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>goal.json         # 目标输入 Artifact
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>search.json       # 搜索结果 Artifact
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>patch.diff        # 成功修复的补丁
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>test-report.json  # 测试命令和退出码
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>failure.json      # 失败或阻断说明
+</code></pre></div>
+<p>每个 Artifact 返回 <code>ref</code>、<code>path</code> 和 <code>hash</code> 三元组。<code>trace.jsonl</code> 中的 <code>artifact</code>、<code>observation</code> 和 <code>final_output</code> 事件会引用这些结果，因此审计者可以从一个 <code>trace_id</code> 找到完整执行链。</p>
+<h2 id="trace">三、Trace：把执行变成证据链<a class="headerlink" href="#trace" title="Permanent link">&para;</a></h2>
+<p>Trace 不是工具日志的集合，而是一次任务的因果路径。案例中的最小顺序如下：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>receive_goal
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  -&gt; create_repair_plan
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  -&gt; search_repo
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  -&gt; save_checkpoint
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  -&gt; apply_patch
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  -&gt; run_tests
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  -&gt; validate_repair
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>  -&gt; save_checkpoint
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>  -&gt; final_output
+</code></pre></div>
+<p>Goal 和 Plan 解释意图与步骤；Tool Call 记录工具边界和幂等键；Observation 只保留可复现的结果引用；Validation 绑定测试退出码；Checkpoint 记录可恢复游标；最终 <code>final_output</code> 事件指向交付 Artifact。</p>
+<p>Trace 的层级和结果引用关系可以单独画成：</p>
+<pre class="mermaid"><code>flowchart TD
+    T[Trace: trace_id] --&gt; S[Span: span_id]
+    S --&gt; E1[Event: sequence 1]
+    S --&gt; E2[Event: sequence 2]
+    E1 --&gt;|parent_event_id| E2
+    E2 --&gt;|output_ref + output_hash| A[Artifact: artifact://]
+    C[Checkpoint: cursor + idempotency_key] --&gt; E2</code></pre>
+<p>这张图表达的是数据契约，不代表每个业务步骤都必须创建新的 Span；同一 Span 内的 Event 仍需保持唯一 <code>sequence</code> 和可追溯的父事件。</p>
+<p>相关专题的分工是：</p>
+<ul>
+<li><a href="../Agent%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E4%BB%8E%E6%97%A5%E5%BF%97%E3%80%81Trace%E5%88%B0Replay/">Agent 可观测性实战：从日志、Trace 到 Replay</a> 讨论事件检索、成本与 Replay。</li>
+<li><a href="../Agent%E7%9A%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E5%AE%9E%E6%88%98%EF%BC%9A%E7%94%A8Tracing%E7%9C%8B%E6%B8%85%E4%BD%A0%E7%9A%84Agent%E2%80%9C%E5%A4%A7%E8%84%91%E2%80%9D/">Agent 的可观测性实战：用 Tracing 看清你的 Agent“大脑”</a> 深入 <code>Trace -&gt; Span -&gt; Event</code> 和埋点属性。</li>
+<li><a href="../Agent%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E8%AF%84%E4%BC%B0%E4%BD%93%E7%B3%BB%EF%BC%88Evals%EF%BC%89%EF%BC%9A%E4%BB%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%88%B0%E9%9B%86%E6%88%90%E8%AF%84%E6%B5%8B/">Agent 的自动化评估体系（Evals）</a> 讨论评估分层、Golden Set 和证据要求。</li>
+<li><a href="../Agent%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E4%B8%8E%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%EF%BC%9ACheckpointer%E6%9C%BA%E5%88%B6%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">Agent 状态管理与断点续传</a> 讨论游标、状态版本和幂等恢复。</li>
+<li><a href="../Agent%E8%87%AA%E6%88%91%E7%BA%A0%E9%94%99%E4%B8%8E%E9%AA%8C%E8%AF%81%E6%9C%BA%E5%88%B6%E8%AE%BE%E8%AE%A1/">Agent 自我纠错与验证机制</a> 讨论 Validator、事实核查和失败归因。</li>
+</ul>
+<h2 id="checkpoint">四、Checkpoint：恢复状态，不重复副作用<a class="headerlink" href="#checkpoint" title="Permanent link">&para;</a></h2>
+<p>Checkpoint 不是 Trace 的替代品。Trace 记录发生过什么，Checkpoint 保存某个恢复点需要的最小状态：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">working</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">cursor</span><span class="p">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">step_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apply_patch</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">step_index</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">completed_steps</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">goal</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">plan</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">search_repo</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="nt">resume_policy</span><span class="p">:</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="nt">idempotency_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run-001:apply_patch:1</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="nt">replay_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deterministic</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="nt">max_retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="nt">state</span><span class="p">:</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="nt">side_effects</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span><span class="nt">retry_count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">  </span><span class="nt">input_artifacts</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">  </span><span class="nt">output_artifacts</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="nt">failure</span><span class="p">:</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">  </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+</code></pre></div>
+<p>副作用步骤前先落盘 Checkpoint；恢复时检查 <code>task_id</code>、状态、游标、幂等键、重试次数和已有 Artifact。当前示例 Runner 对终态 Checkpoint 提供只读 <code>resume_from</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">tempfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemporaryDirectory</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">runner_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"cn/assets/examples/code-repair-agent"</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">runner_dir</span><span class="p">))</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">runner</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_scenario</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="k">with</span> <span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_dir</span><span class="p">:</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="n">output_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    <span class="n">first</span> <span class="o">=</span> <span class="n">run_scenario</span><span class="p">(</span><span class="s2">"success"</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>    <span class="n">resumed</span> <span class="o">=</span> <span class="n">run_scenario</span><span class="p">(</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>        <span class="s2">"success"</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">resume_from</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">first</span><span class="p">[</span><span class="s2">"checkpoint_path"</span><span class="p">])</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>    <span class="p">)</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">resumed</span><span class="p">[</span><span class="s2">"side_effect_count"</span><span class="p">])</span>
+</code></pre></div>
+<p>这条路径只读取已有结果，副作用计数不会增加。<code>input-required</code> 的补充输入和非终态从游标继续，是协议层约定的后续接入点；接入真实执行器时必须保留原 Trace，并从 <code>input_received</code> 或最近 Checkpoint 继续，而不是重新执行已成功步骤。</p>
+<h2 id="validator">五、Validator：让失败改变行为<a class="headerlink" href="#validator" title="Permanent link">&para;</a></h2>
+<p>Validator 至少检查四件事：输入是否完整、工具结果是否成功、补丁和测试证据是否匹配、动作是否越过权限边界。确定性规则优先于模型判断，高风险动作必须阻断或等待人工确认。</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>Trace 信号</th>
+<th>任务状态</th>
+<th>处理动作</th>
+<th>恢复点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>输入不完整</td>
+<td>缺少目标文件或测试命令</td>
+<td><code>input-required</code></td>
+<td>请求补充输入，不调用 <code>apply_patch</code></td>
+<td><code>input_received</code></td>
+</tr>
+<tr>
+<td>工具超时</td>
+<td><code>DEADLINE_EXCEEDED</code>、工具事件 <code>failed</code></td>
+<td><code>retrying</code> -&gt; <code>failed</code></td>
+<td>同一幂等键最多重试一次</td>
+<td>最近 Checkpoint</td>
+</tr>
+<tr>
+<td>验证失败</td>
+<td>测试退出码非零</td>
+<td><code>failed</code></td>
+<td>保留补丁和测试报告，生成失败说明</td>
+<td><code>validation_failed</code></td>
+</tr>
+<tr>
+<td>权限拒绝</td>
+<td>policy deny、人工确认 <code>waiting</code></td>
+<td><code>failed</code> 或 <code>waiting-confirmation</code></td>
+<td>立即阻断并转人工</td>
+<td><code>permission_denied</code></td>
+</tr>
+<tr>
+<td>重复执行</td>
+<td>幂等键已存在</td>
+<td>原终态</td>
+<td>读取已有 Artifact，不再产生副作用</td>
+<td>已完成事件</td>
+</tr>
+</tbody>
+</table>
+<p>失败不是把结果改写成“成功”，而是要留下可解释的分类、证据和下一步动作。Validator 决策细节见 <a href="../../assets/checklists/validator-decision/">Validator 决策表</a>。</p>
+<h2 id="_3">六、四类失败恢复<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h3 id="1">1. 输入不完整<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
+<p>任务进入 <code>input-required</code>，只写目标、Checkpoint 和 <code>failure.json</code>，不修改工作区。补齐输入后，生产级 Runner 应沿原 Trace 的 <code>input_received</code> 游标继续。</p>
+<h3 id="2">2. 工具超时<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
+<p>工具事件记录失败码和耗时，Checkpoint 状态变为 <code>retrying</code>。使用同一幂等键重试一次；再次失败后进入 <code>failed</code>，不生成补丁副作用，失败分类为 <code>tool_timeout</code>。</p>
+<h3 id="3">3. 验证失败<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<p>补丁已生成但测试退出码非零时，保留 <code>patch.diff</code>、<code>test-report.json</code> 和 <code>failure.json</code>，状态为 <code>failed</code>，分类为 <code>validation_failed</code>。后续可以重规划或人工接管，但不能把缺失证据解释成通过。</p>
+<h3 id="4">4. 权限拒绝与重复执行<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<p>修改测试、访问网络、写入越权路径或执行外部命令都应触发 <code>permission_denied</code>。案例会写入真实的 <code>human_confirmation</code> 等待事件，并将高风险 <code>apply_patch</code> 标记为 <code>skipped</code>。重复幂等键只读取已有结果；<code>duplicate-replay</code> 的重放不会再次执行补丁，副作用计数保持稳定。</p>
+<h2 id="evals">七、Evals 与发布门禁<a class="headerlink" href="#evals" title="Permanent link">&para;</a></h2>
+<p>固定 Golden Set 有 30 条 Case：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>normal                  10
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>input_incomplete         5
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>tool_failure              5
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>high_risk                 5
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>historical_regression    5
+</code></pre></div>
+<p>批量评估复用同一个 <code>run_scenario</code> 入口：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>python run_evals.py --cases eval_cases.yaml --out ./eval-output
+</code></pre></div>
+<p>评估器逐条检查：</p>
+<ol>
+<li>Trace 字段、事件顺序、父子关系和 Artifact hash。</li>
+<li>Checkpoint 状态、游标、幂等键和输入/输出 Artifact 摘要。</li>
+<li>Case 声明的 fixture 与期望 Artifact hash。</li>
+<li>required evidence、失败分类和禁止动作。</li>
+<li>成功率、成本、延迟与基线的变化。</li>
+</ol>
+<p>输出为 <code>regression-report.json</code> 和 <code>regression-report.md</code>。报告应能回答“哪个 Case 失败、失败发生在哪个事件、是否产生了禁止动作、从哪个 Checkpoint 恢复”。高风险样本必须阻断或转人工；成功率相对基线下降超过 5 个百分点，或成本/延迟回归达到 20%，发布决策为 <code>blocked</code>。报告格式见 <a href="../../assets/checklists/regression-report/">Regression Report 模板</a>。Evals 用于证明是否发生回归，而不是预先保证所有 Case 通过。</p>
+<p>当前工作区的 30 条 Case 实测为 <code>pass_rate=0.7667</code>、<code>cost_regression=0.0</code>、<code>latency_regression=0.0</code>，发布决策为 <code>blocked</code>。阻断原因包括 <code>tool-01</code> 到 <code>tool-05</code> 的超时 <code>failure.json</code> hash 拼写错误，以及 <code>history-04</code> 和 <code>history-05</code> 使用了错误的 <code>patch.diff</code> hash；修正数据后必须重新执行批跑，不能用本段结果替代新的回归证据。</p>
+<h2 id="_4">八、从一次运行到发布的闭环<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    A[固定输入与 fixture] --&gt; B[run_scenario]
+    B --&gt; C[Trace + Artifact]
+    B --&gt; D[Checkpoint]
+    C --&gt; E[Validator]
+    D --&gt; E
+    E --&gt;|通过| F[候选发布]
+    E --&gt;|失败/高风险| G[阻断或人工确认]
+    G --&gt; H[修复、重试或重规划]
+    H --&gt; B
+    F --&gt; I[30 条 Golden Set]
+    I --&gt; J[Regression Report]
+    J --&gt;|门禁通过| K[发布]
+    J --&gt;|门禁失败| G</code></pre>
+<p>这条链路把运行时可靠性和发布时可靠性接在一起：Trace 解释路径，Checkpoint 保证可恢复，Validator 约束行为，Evals 检验是否回归，Artifact 让结论可审计。</p>
+<h2 id="_5">九、复用清单<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<ol>
+<li>先复用 <code>trace-event.md</code> 的 canonical 字段，再添加业务字段。</li>
+<li>每个可能产生副作用的步骤前写 Checkpoint，并生成稳定幂等键。</li>
+<li>每条 Eval Case 固定输入、fixture、期望状态、禁止动作和 required evidence。</li>
+<li>Validator 决策必须能回指 Trace 事件和最终 Artifact，并填写失败分类。</li>
+<li>发布前运行 30 条 Golden Set，审阅 <code>regression-report.md</code>，高风险路径不得静默放行。</li>
+</ol>
+<h2 id="_6">结语<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>可信执行不是再加一个“更聪明的 Agent”，而是把不确定的智能行为约束成可观察、可验证、可恢复、可回归的工程流程。先用离线 fixture 跑通一条闭环，再逐步替换真实工具和存储；每次扩展都必须保留同样的 Trace、Checkpoint、Validator 和 Eval 契约。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.indexes", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">Boundary Between MCP Layer and Worker Layer</title>
+  <desc id="desc">The MCP layer exposes a capability contract while the worker layer owns execution, retries, credentials, and domain logic.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+    <style>
+      .panel{fill:#f8fafc;stroke:#334155;stroke-width:2;rx:18;ry:18}.mcp{fill:#e0f2fe;stroke:#0369a1}.worker{fill:#fef3c7;stroke:#b45309}
+      .boundary{stroke:#ef4444;stroke-width:3;stroke-dasharray:9 8}.title{font:700 22px Arial,sans-serif;fill:#0f172a}.label{font:700 18px Arial,sans-serif;fill:#0f172a}.small{font:14px Arial,sans-serif;fill:#475569}.line{stroke:#2563eb;stroke-width:2.5;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="960" height="420" fill="#ffffff"/>
+  <text x="480" y="42" text-anchor="middle" class="title">MCP Layer vs Worker Layer Boundary</text>
+  <rect x="70" y="95" width="340" height="240" class="panel mcp"/>
+  <text x="240" y="135" text-anchor="middle" class="label">MCP Layer</text>
+  <text x="240" y="170" text-anchor="middle" class="small">capability schema</text>
+  <text x="240" y="200" text-anchor="middle" class="small">request validation</text>
+  <text x="240" y="230" text-anchor="middle" class="small">transport and sessions</text>
+  <text x="240" y="260" text-anchor="middle" class="small">tool result envelope</text>
+  <line x1="480" y1="82" x2="480" y2="360" class="boundary"/>
+  <text x="480" y="382" text-anchor="middle" class="small">stable contract boundary</text>
+  <rect x="550" y="95" width="340" height="240" class="panel worker"/>
+  <text x="720" y="135" text-anchor="middle" class="label">Worker Layer</text>
+  <text x="720" y="170" text-anchor="middle" class="small">business logic</text>
+  <text x="720" y="200" text-anchor="middle" class="small">credentials and auth</text>
+  <text x="720" y="230" text-anchor="middle" class="small">retries and queues</text>
+  <text x="720" y="260" text-anchor="middle" class="small">external API adapters</text>
+  <line x1="410" y1="215" x2="550" y2="215" class="line"/>
+</svg>

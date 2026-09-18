@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">MCP Four Layer Call Structure</title>
+  <desc id="desc">A four-layer flow from user intent through host, MCP protocol, server capabilities, and external systems.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+    <style>
+      .layer{stroke:#1e293b;stroke-width:2;rx:16;ry:16}
+      .l1{fill:#dbeafe}.l2{fill:#dcfce7}.l3{fill:#ffedd5}.l4{fill:#f1f5f9}
+      .title{font:700 22px Arial,sans-serif;fill:#0f172a}.label{font:700 18px Arial,sans-serif;fill:#0f172a}.small{font:14px Arial,sans-serif;fill:#475569}
+      .line{stroke:#2563eb;stroke-width:2.5;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="960" height="420" fill="#ffffff"/>
+  <text x="480" y="42" text-anchor="middle" class="title">MCP Four-Layer Call Structure</text>
+  <rect x="135" y="78" width="690" height="64" class="layer l1"/>
+  <text x="178" y="116" class="label">1. Intent and Host</text>
+  <text x="520" y="116" text-anchor="middle" class="small">user request, policy, orchestration</text>
+  <rect x="135" y="164" width="690" height="64" class="layer l2"/>
+  <text x="178" y="202" class="label">2. MCP Client and Protocol</text>
+  <text x="545" y="202" text-anchor="middle" class="small">capability discovery, typed messages, sessions</text>
+  <rect x="135" y="250" width="690" height="64" class="layer l3"/>
+  <text x="178" y="288" class="label">3. MCP Server Capabilities</text>
+  <text x="560" y="288" text-anchor="middle" class="small">tools, resources, prompts, sampling boundaries</text>
+  <rect x="135" y="336" width="690" height="54" class="layer l4"/>
+  <text x="178" y="370" class="label">4. Systems of Record</text>
+  <text x="560" y="370" text-anchor="middle" class="small">files, databases, APIs, enterprise apps</text>
+  <line x1="480" y1="142" x2="480" y2="164" class="line"/>
+  <line x1="480" y1="228" x2="480" y2="250" class="line"/>
+  <line x1="480" y1="314" x2="480" y2="336" class="line"/>
+</svg>
